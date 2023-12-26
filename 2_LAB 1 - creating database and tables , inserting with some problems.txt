@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-LAB 1 - creating database and tables , inserting with some problems
+LAB 1 - creating database and tables , inserting with some data (and view problems)
 -----------------------------------------------------------------------------------------
 mysql> show databases;
 mysql> create database db1;
