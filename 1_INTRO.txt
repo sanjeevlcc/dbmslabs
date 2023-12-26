@@ -1,7 +1,7 @@
 
-================
-MYSQL
-===============
+						================
+							MYSQL
+						===============
 
   It is databasse management software.
   A database is a collection of data stored in a format that can easily be accessed.
