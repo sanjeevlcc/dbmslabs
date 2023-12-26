@@ -1,7 +1,7 @@
 
-						================
-							MYSQL
-						===============
+						================================
+							      MYSQL
+						================================
 
   It is databasse management software.
   A database is a collection of data stored in a format that can easily be accessed.
@@ -18,8 +18,16 @@
 	SQL can set permissions on tables, procedures, and views
 
 
+
+
+
 -----------------------------------------------------------------------------------------------
 Website from ==> submit ==> dynamic content ==> as a data (but organized)==> in database
+
+
+https://github.com/sanjeevlcc/crud.git
+
+
 
 Static		vs 		Dynamic(dbms)
 stateless			sateful	(set)
@@ -29,19 +37,19 @@ stateless			sateful	(set)
 ---------------------
 DBMS software
  
-oracle 
-mysql
-ms sql server
-postgreSQL
-MongoDB
+	oracle 
+	mysql
+	ms sql server
+	postgreSQL
+	MongoDB
 ---------------------
 
 
 
 ---------------------
 Types of database
-1. relation- RDBMS
-2. nosql
+	1. relation- RDBMS
+	2. nosql
 ---------------------
 
 
@@ -57,13 +65,13 @@ Types of database
 ------------------------------------------------
 Advantage of Mysql
 
-  crossplatform
-  multiple language as PHP, nodeJS, Python , C#
-  openSource
-  Mysql is RDBMS
-  fast, reliable, 
-  scalable (small or v v huge vauge production)
-  easy to use(client side or server side or embedded systems)
+	  crossplatform
+	  multiple language as PHP, nodeJS, Python , C#
+	  openSource
+	  Mysql is RDBMS
+	  fast, reliable, 
+	  scalable (small or v v huge vauge production)
+	  easy to use(client side or server side or embedded systems)
 ------------------------------------------------
 
 
@@ -71,13 +79,13 @@ Advantage of Mysql
 -----------------------------------
 Website used by mysql
 
-facebook
-twitter
-google
-wikipedia
-flicker
-youtube
-pinintreast
+	facebook
+	twitter
+	google
+	wikipedia
+	flicker
+	youtube
+	pinintreast
 -----------------------------------
 
 
@@ -86,13 +94,13 @@ pinintreast
 -----------------------------------
 CMS using mysql
 
-wordpress
-joomla
-durpal
-magento
-phpBB
-TYPO3
-MODx
+	wordpress
+	joomla
+	durpal
+	magento
+	phpBB
+	TYPO3
+	MODx
 -----------------------------------
 
 
@@ -100,11 +108,11 @@ MODx
 -----------------------------------
 Objectives
 
-Create DB and tables
-add data in DB
-Update dta in DB
-read sata from DB
-delete data fromDB
+	Create DB and tables
+	add data in DB
+	Update dta in DB
+	read sata from DB
+	delete data fromDB
 -----------------------------------
 
 
@@ -120,6 +128,7 @@ install xaamp, wamp , maamp
 	....................
 	
 METHOD 2 mysql workbench
+		https://dev.mysql.com/downloads/workbench/
 
 METHOD 3 killer koda
 ----------------------------------------------------------------------
