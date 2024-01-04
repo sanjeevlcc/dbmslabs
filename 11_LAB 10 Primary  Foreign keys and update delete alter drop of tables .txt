@@ -750,3 +750,78 @@ LIMIT 5;
 
 
 
+
+
+
+-----------------------------------------------------------------------------------------
+LAB 10 A - REMOTE CONNECTIONS of Database
+-----------------------------------------------------------------------------------------
+
+Allow Remote Connections:
+By default, the MySQL container will bind to the localhost interface. 
+To allow remote connections, you'll need to modify the MySQL configuration.
+
+
+[root@server ~]# mkdir remote
+
+
+a. Find the IP address of your Docker host machine. If you are on Linux, you can use the following command:
+------------------------------
+[root@server remote]# mkdir  mysql_data
+
+[root@server remote]# cat  > docker-compose.yaml
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: remote1234
+      MYSQL_DATABASE: db2024
+      MYSQL_USER: sanjeev
+      MYSQL_PASSWORD: sanjeev1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+
+
+
+
+[root@server remote]# docker-compose up -d
+
+
+
+
+
+b. List the running container
+------------------------------
+[root@server remote]# docker ps
+CONTAINER ID   IMAGE                            COMMAND                  CREATED              STATUS              PORTS                                                  NAMES
+9fdd5a3b945d   mysql:latest                     "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:3306->3306/tcp, :::3306->3306/tcp, 33060/tcp   remote_mysql_1
+
+
+
+
+
+c. Connect to the MySQL container:
+[root@server ~]# docker exec -ti mysql-remote bash
+bash-4.4#
+
+
+bash-4.4# mysql -u root -p1234
+bash-4.4# mysql -u sanjeev -psanjeev1234
+
+
+mysql -h your_docker_host_ip -u your_user -p
+
+
+
+
+
+
+
