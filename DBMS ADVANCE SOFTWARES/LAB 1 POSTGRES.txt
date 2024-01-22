@@ -65,8 +65,30 @@ These commands are just a basic introduction;
 PostgreSQL supports many more advanced features and commands for managing and querying data 
 in a relational database environment.
 
+	CHECK: https://www3.ntu.edu.sg/home/ehchua/programming/sql/PostgreSQL_GetStarted.html
 
 
+
+	More on psql commands
+	---------------------------
+
+	\?: show all psql commands.
+	\h sql-command: show syntax on SQL command.
+	\c dbname [username]: Connect to database, with an optional username (or \connect).
+	
+
+	Display Commands: You can append + to show more details.
+	-----------------------------------------------------------
+	\l: List all database (or \list).
+	\d: Display all tables, indexes, views, and sequences.
+	\dt: Display all tables.
+	\di: Display all indexes.
+	\dv: Display all views.
+	\ds: Display all sequences.
+	\dT: Display all types.
+	\dS: Display all system tables.
+	\du: Display all users.
+	\x auto|on|off: Toggle|On|Off expanded output mode.
 
 ***************************************************************************
 
@@ -653,4 +675,217 @@ GROUP BY
 
 *******************************
 EXAMPLE 3
+
+Using Utility "createuser" and "createdb"
 *******************************
+
+
+
+As an example, let's create a PostgreSQL user called testuser, 
+and a new database called testdb owned by testuser.
+
+
+# Create a new PostgreSQL user called testuser, allow user to login, but NOT creating databases
+------------------------------------------------------------------------------------------------
+$ sudo -u postgres createuser --login --pwprompt testuser
+Enter password for new role: xxxx
+
+
+# Create a new database called testdb, owned by testuser.
+------------------------------------------------------------------------------------------------
+$ sudo -u postgres createdb --owner=testuser testdb
+
+
+
+
+
+Tailor the PostgreSQL configuration 
+file /etc/postgresql/10/main/pg_hba.conf to allow 
+non-default user testuser to login to PostgreSQL server, 
+by adding the following entry:
+--------------------------------------------------------
+# TYPE  DATABASE    USER        ADDRESS          METHOD
+local   testdb      testuser                     md5
+
+
+
+Restart PostgreSQL server:
+--------------------------------------------------------
+$ sudo service postgresql restart
+
+
+
+Login to PostgreSQL server:
+--------------------------------------------------------
+
+	# Login to PostgreSQL: psql -U user database
+	-------------------------------------------
+	$ psql -U testuser testdb
+	Password for user testuser: ......
+	psql (9.3.10)
+	Type "help" for help.
+
+
+# List all databases (\list or \l)
+-------------------------------------------
+testdb=>\list
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ testdb    | testuser | UTF8     | en_SG.UTF-8 | en_SG.UTF-8 |
+......
+
+# Create table
+----------------
+testdb=> create table if not exists cafe (
+           name varchar(50),
+           price numeric(5,2),
+           primary key (name));
+CREATE TABLE
+
+# Insert rows
+----------------
+testdb=> insert into cafe values
+           ('Espresso', 3.99),
+           ('Green Tea', 2.99);
+INSERT 0 2
+
+# Select query
+----------------
+testdb=> select * from cafe;
+   name    | price 
+-----------+-------
+ Espresso  |  3.99
+ Green Tea |  2.99
+(2 rows)
+
+# To change password for the current user
+-------------------------------------------
+testdb=> \password
+......
+
+testdb=> \q
+You can also use other utilities like dropuser, dropdb, and etc.
+
+
+
+
+
+
+
+
+
+
+
+
+*******************************
+EXAMPLE 
+
+Installing PostgreSQL 10.6
+*******************************
+
+
+// Refresh the apt-get repository
+controlplane $  sudo apt-get update
+
+
+
+
+// Install PostgreSQL
+controlplane $ sudo apt-get install postgresql postgresql-contrib
+
+
+
+
+// Verify the installation
+$ dpkg --status postgresql
+Package: postgresql
+Version: 10+190
+......
+
+
+controlplane $ whereis postgresql
+postgresql: /etc/postgresql /usr/lib/postgresql /usr/share/postgresql ...
+
+
+controlplane $ which psql     // psql is an interactive PostgreSQL client
+/usr/bin/psql
+
+
+controlplane $ ll /usr/bin/psql
+lrwxrwxrwx 1 root root 37 Aug 24  2020 /usr/bin/psql -> ../share/postgresql-common/pg_wrapper*
+
+
+
+
+	The following packages will be installed:
+	----------------------------------------
+	postgresql, postgresql-common, postgresql-10: Core database server.
+	postgresql-client-common, postgresql-client-10: Client binaries and libraries.
+	postgresql-contrib-10: Additional supplied modules.
+
+
+
+
+
+
+
+
+
+	PostgreSQL Configuration Files
+	------------------------------
+	The PostgreSQL configuration files are stored in 
+	directory /etc/postgresql/10/main (for Ubuntu). 
+	The main configuration file is called "postgresql.conf".
+
+
+	controlplane $ less /etc/postgresql/12/main/postgresql.conf
+
+		......
+		data_directory = '/var/lib/postgresql/10/main'
+		hba_file = '/etc/postgresql/10/main/pg_hba.conf'     # host-based authentication file
+		ident_file = '/etc/postgresql/10/main/pg_ident.conf' # ident configuration file
+		#listen_addresses = 'localhost'   # what IP address(es) to listen on;
+                                  # comma-separated list of addresses;
+                                  # defaults to 'localhost', '*' = all
+			port = 5432
+			max_connections = 100
+		......
+		
+
+
+
+
+	PostgreSQL Server
+	----------------------
+	In Ubuntu, the server is run as a service called postgresql (configured 
+	in /etc/init.d/postgresql). The postgresql service is started 
+	automatically upon startup. Like all other services, you could:
+
+		$ sudo systemctl start postgresql
+		$ sudo systemctl stop postgresql
+		$ sudo systemctl restart postgresql
+		$ sudo systemctl reload postgresql
+		$ sudo systemctl status postgresql   // Show th status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
