@@ -876,7 +876,14 @@ lrwxrwxrwx 1 root root 37 Aug 24  2020 /usr/bin/psql -> ../share/postgresql-comm
 
 
 
-
+*******************************
+EXAMPLE 1
+Design a system under
+user name = sita 
+user pw= sita1234
+db name = db11
+table name = tb11
+*******************************
 
 
 
