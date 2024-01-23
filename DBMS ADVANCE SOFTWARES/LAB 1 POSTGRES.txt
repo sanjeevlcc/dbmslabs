@@ -883,9 +883,63 @@ user name = sita
 user pw= sita1234
 db name = db11
 table name = tb11
+
+technology: docker - compose 
 *******************************
 
 
+
+
+
+
+controlplane $ cat > docker-compose.yaml 
+
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: sita
+      POSTGRES_PASSWORD: sita1234
+      POSTGRES_DB: db11
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+
+
+controlplane $ mkdir postgres_data
+
+
+
+
+ontrolplane $ docker ps
+CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS         PORTS                                       NAMES
+5d95f67f48bd   postgres:latest   "docker-entrypoint.s…"   11 seconds ago   Up 9 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   root_postgres_1
+
+
+
+
+controlplane $ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+postgres     latest    75b7bff7c3ad   2 weeks ago   425MB
+
+
+controlplane $ docker exec -ti root_postgres_1 bash
+root@5d95f67f48bd:/# psql -U sita -d db11 
+
+			OR
+
+controlplane $ docker exec -ti root_postgres_1 psql -U sita -d db11
+
+controlplane $ docker exec -ti root_postgres_1 psql -U sita -d db11 -a -1 -c "ALTER USER sita WITH SUPERUSER;"
+ALTER USER sita WITH SUPERUSER;
+ALTER ROLE
 
 
 
