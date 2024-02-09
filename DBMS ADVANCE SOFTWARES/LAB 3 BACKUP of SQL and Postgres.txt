@@ -1,4 +1,10 @@
 
+
+DATABASE / internal TABLES backup ???
+====================================
+
+
+
 ====================================
 Backup Tables:
 ====================================
@@ -58,10 +64,10 @@ psql -U [username] -d [database_name] -f backup_file.sql
 Exaample 1:
 ====================================
 
--- Create database db11
+-- Create database db_makalu
 CREATE DATABASE db_makalu;
 
--- Switch to database db11
+-- Switch to database db_makalu
 USE db_makalu;
 
 -- Create table for patients
@@ -100,6 +106,10 @@ INSERT INTO patients (patient_id, patient_name, patient_age) VALUES
 (7, 'Raju Bhattarai', 40),
 (8, 'Mina Rai', 45);
 
+
+
+
+
 -- Insert data into the doctors table
 INSERT INTO doctors (doctor_id, doctor_name, specialty) VALUES
 (101, 'Dr. Anil Basnet', 'Cardiology'),
@@ -110,6 +120,11 @@ INSERT INTO doctors (doctor_id, doctor_name, specialty) VALUES
 (106, 'Dr. Priya Thapa', 'Dermatology'),
 (107, 'Dr. Rajesh Sharma', 'Oncology'),
 (108, 'Dr. Anjana Singh', 'ENT');
+
+
+
+
+
 
 -- Insert data into the appointments table
 INSERT INTO appointments (appointment_id, patient_id, doctor_id, appointment_date) VALUES
@@ -286,17 +301,189 @@ mysql> select * from doctor_patient_cartesian;
 
 
 ====================================
-aio - all in one
+adding more data
 ====================================
 
 
 
+-- Insert 20 more data into the patients table
+INSERT INTO patients (patient_id, patient_name, patient_age) VALUES
+(9, 'Nabin Bhandari', 33),
+(10, 'Rita Maharjan', 55),
+(11, 'Bibek Ghimire', 29),
+(12, 'Anita Shakya', 48),
+(13, 'Prakash Dhakal', 36),
+(14, 'Sunita Karki', 41),
+(15, 'Rajendra Thapa', 47),
+(16, 'Kamala Acharya', 24),
+(17, 'Binod Lama', 38),
+(18, 'Sarita Rai', 32),
+(19, 'Suresh Poudel', 50),
+(20, 'Sangeeta Tamang', 27),
+(21, 'Bishnu Adhikari', 44),
+(22, 'Rekha Subedi', 39),
+(23, 'Roshan Shrestha', 30),
+(24, 'Priyanka KC', 26),
+(25, 'Bikram Gurung', 34),
+(26, 'Uma Devi', 43),
+(27, 'Nischal Shrestha', 37),
+(28, 'Kalpana Oli', 49);
+
+
+
+
+-- Insert 20 more data into the doctors table
+INSERT INTO doctors (doctor_id, doctor_name, specialty) VALUES
+(109, 'Dr. Manish Maharjan', 'Cardiology'),
+(110, 'Dr. Maya Shrestha', 'Orthopedics'),
+(111, 'Dr. Bikash Singh', 'Neurology'),
+(112, 'Dr. Anju Sharma', 'Pediatrics'),
+(113, 'Dr. Narayan Thapa', 'Gynecology'),
+(114, 'Dr. Anisha Pradhan', 'Dermatology'),
+(115, 'Dr. Ramesh Acharya', 'Oncology'),
+(116, 'Dr. Mamata KC', 'ENT'),
+(117, 'Dr. Prabin Bajracharya', 'Cardiology'),
+(118, 'Dr. Sumitra Adhikari', 'Orthopedics'),
+(119, 'Dr. Raj Kumar Gurung', 'Neurology'),
+(120, 'Dr. Shanti Rai', 'Pediatrics'),
+(121, 'Dr. Prakash Tamang', 'Gynecology'),
+(122, 'Dr. Sujata Shakya', 'Dermatology'),
+(123, 'Dr. Hari Shrestha', 'Oncology'),
+(124, 'Dr. Laxmi Maharjan', 'ENT'),
+(125, 'Dr. Rina Lama', 'Cardiology'),
+(126, 'Dr. Dinesh Thapa', 'Orthopedics'),
+(127, 'Dr. Nisha Bhandari', 'Neurology'),
+(128, 'Dr. Ashish Shrestha', 'Pediatrics');
+
+
+
+
+
+-- Insert 30 more data into the patients table
+INSERT INTO patients (patient_id, patient_name, patient_age) VALUES
+(29, 'Alisha Limbu', 31),
+(30, 'Sanjay Rai', 42),
+(31, 'Sangita Thapa', 36),
+(32, 'Rajesh Lama', 48),
+(33, 'Anita Magar', 27),
+(34, 'Rabin Shrestha', 39),
+(35, 'Sushma Koirala', 33),
+(36, 'Manoj Bista', 45),
+(37, 'Anjana Shah', 40),
+(38, 'Prakash Subedi', 54),
+(39, 'Sunita Maharjan', 29),
+(40, 'Ramesh Chhetri', 37),
+(41, 'Sabita Singh', 43),
+(42, 'Rajeshwari Gurung', 38),
+(43, 'Sanjay Thapa', 47),
+(44, 'Sarita Shrestha', 32),
+(45, 'Rajendra Magar', 35),
+(46, 'Sangeeta Rana', 41),
+(47, 'Anil Bhattarai', 30),
+(48, 'Saraswati Thapa', 44),
+(49, 'Raj Kumar Shrestha', 39),
+(50, 'Anjali Tamang', 36),
+(51, 'Suman Sharma', 28),
+(52, 'Bibek Neupane', 33),
+(53, 'Sujan Adhikari', 46),
+(54, 'Rita Gurung', 31),
+(55, 'Rajiv Shrestha', 49),
+(56, 'Anita Bhandari', 37),
+(57, 'Roshan Tamang', 40);
+
+
+
+
+
+
+
+
+-- Insert 30 more data into the doctors table
+INSERT INTO doctors (doctor_id, doctor_name, specialty) VALUES
+(129, 'Dr. Anil Singh', 'Cardiology'),
+(130, 'Dr. Sunita Tamang', 'Orthopedics'),
+(131, 'Dr. Rajesh Koirala', 'Neurology'),
+(132, 'Dr. Anjali Joshi', 'Pediatrics'),
+(133, 'Dr. Ramesh Sharma', 'Gynecology'),
+(134, 'Dr. Sangeeta KC', 'Dermatology'),
+(135, 'Dr. Prakash Shrestha', 'Oncology'),
+(136, 'Dr. Rekha Lama', 'ENT'),
+(137, 'Dr. Nabin Sharma', 'Cardiology'),
+(138, 'Dr. Anita Khadka', 'Orthopedics'),
+(139, 'Dr. Santosh Gurung', 'Neurology'),
+(140, 'Dr. Mamata Thapa', 'Pediatrics'),
+(141, 'Dr. Rajendra Karki', 'Gynecology'),
+(142, 'Dr. Sita Acharya', 'Dermatology'),
+(143, 'Dr. Binod Adhikari', 'Oncology'),
+(144, 'Dr. Kalpana Shrestha', 'ENT'),
+(145, 'Dr. Pramod Joshi', 'Cardiology'),
+(146, 'Dr. Sandhya Lama', 'Orthopedics'),
+(147, 'Dr. Raj Kumar Thapa', 'Neurology'),
+(148, 'Dr. Anita Ghimire', 'Pediatrics'),
+(149, 'Dr. Bikash Shrestha', 'Gynecology'),
+(150, 'Dr. Nisha Bajracharya', 'Dermatology'),
+(151, 'Dr. Roshan Shrestha', 'Oncology'),
+(152, 'Dr. Sujata Bhattarai', 'ENT'),
+(153, 'Dr. Sanjay Shrestha', 'Cardiology'),
+(154, 'Dr. Maya Shrestha', 'Orthopedics'),
+(155, 'Dr. Anil Bhandari', 'Neurology'),
+(156, 'Dr. Sunita Lama', 'Pediatrics'),
+(157, 'Dr. Rajesh Magar', 'Gynecology');
+
+
+
+
+
+mysql> show tables;
++---------------------+
+| Tables_in_db_makalu |
++---------------------+
+| appointments        |
+| doctors             |
+| patients            |
++---------------------+
+
+
+mysql> select * from doctors;
+mysql> select * from patients;
+
+
+
 -- Create a new table to store the Cartesian product
-CREATE TABLE aio_cartesian AS
-SELECT *
-FROM doctors, patients,doctors;
+mysql> create table barsha AS 
+select * from patients,doctors;
 
 
 
 
+mysql> show tables;
++---------------------+
+| Tables_in_db_makalu |
++---------------------+
+| appointments        |
+| barsha              |
+| cp_doc_pat          |
+| doctors             |
+| patients            |
++---------------------+
+
+
+
+mysqldump -u [username] -p [database_name] [table1 table2 ...] > backup_tables.sql
+
+	bash-4.4# mysqldump -u root -p db_makalu  appointments  doctors  > backup2tables.sql
+	Enter password:
+
+	bash-4.4# ls -lh backup2tables.sql
+	-rw-r--r-- 1 root root 3.4K Feb  9 12:57 backup2tables.sql
+
+
+----------------------------------------
+mysqldump -u [username] -p --all-databases > backup_database.sql
+
+
+	bash-4.4# mysqldump -u root -p1234 db_makalu > db_makalu_backup.sql
+
+	bash-4.4# ls -lh db_makalu_backup.sql
+	-rw-r--r-- 1 root root 4.3K Feb  9 12:54 db_makalu_backup.sql
 
