@@ -209,7 +209,7 @@ mysql> exit
 Bye
 bash-4.4#
 
----------------------------------------
+------------BACKUP FOR TABLES---------------------------
 
 mysqldump -u [username] -p [database_name] [table1 table2 ...] > backup_tables.sql
 
@@ -220,7 +220,7 @@ mysqldump -u [username] -p [database_name] [table1 table2 ...] > backup_tables.s
 	-rw-r--r-- 1 root root 3.4K Feb  9 12:57 backup2tables.sql
 
 
-----------------------------------------
+------------BACKUP FOR DATABASE----------------------------
 mysqldump -u [username] -p --all-databases > backup_database.sql
 
 
@@ -236,7 +236,7 @@ mysqldump -u [username] -p --all-databases > backup_database.sql
 
 
 ====================================
-make cartesian product of doctor and patients and store in new table
+make cartesian product of doctor and patients and store them in new table
 ====================================
 
 
@@ -451,9 +451,12 @@ mysql> select * from patients;
 
 -- Create a new table to store the Cartesian product
 mysql> create table barsha AS 
-select * from patients,doctors;
+	select * from patients, doctors;
 
+or 
 
+mysql> create table barsha2 AS 
+	select * from patients,doctors, appointments;
 
 
 mysql> show tables;
