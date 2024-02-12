@@ -544,52 +544,120 @@ at bank
 
 
 ----------------------------------------------------------------------------------------
-x
+Find the names of all customers who have accounts but no loan from the bank
 
-							PI/SI   . ()
+							PI/SI   set-difference  ()
 ----------------------------------------------------------------------------------------
 
 	RA:
 	-----
-
+		PI customer_name (Depositor)    -  PI customer_name (Borrower)	
 
 	SQL:
 	-----
+		SELECT customer_name FROM depositor
+		EXCEPT
+		SELECT borrower.customer_name
+		FROM borrower;
+		
+		+---------------+
+		| customer_name |
+		+---------------+
+		| Brooks        |
+		| Glenn         |
+		| Johnson       |
+		+---------------+
+		
+		
+		OR
+		
+		
+		
+		SELECT DISTINCT customer.customer_name
+		FROM customer
+		JOIN depositor ON customer.customer_name = depositor.customer_name
+		LEFT JOIN borrower ON customer.customer_name = borrower.customer_name
+		WHERE borrower.customer_name IS NULL;
+
 
 
 
 
 ----------------------------------------------------------------------------------------
-x
+Find all the names of customers who have a loan at the Perryridage Branch
 
-							PI/SI   . ()
+							PI/SI   X ()
 ----------------------------------------------------------------------------------------
 
 	RA:
 	-----
-
+		PI customer_name ( SI branch_name = 'Perryridge' ( SI borrower.loan_number = loan.loan_number (Borrower * Loan) ) )	
 
 	SQL:
 	-----
+		SELECT DISTINCT customer.customer_name
+		FROM customer, borrower, loan
+		WHERE customer.customer_name = borrower.customer_name
+		  AND borrower.loan_number = loan.loan_number
+		  AND loan.branch_name = 'Perryridge';
+		
+		+---------------+
+		| customer_name |
+		+---------------+
+		| Hayes         |
+		+---------------+
+		
+		
+		OR
+		
+		
+		SELECT DISTINCT customer.customer_name
+		FROM customer
+		JOIN borrower ON customer.customer_name = borrower.customer_name
+		JOIN loan ON borrower.loan_number = loan.loan_number
+		WHERE loan.branch_name = 'Perryridge';
+
 
 
 
 
 ----------------------------------------------------------------------------------------
-x
+Find  the names of all customers who have a loan at the Perryridage Branch but do not 
+have an account at any branch of the bank.
 
-							PI/SI   . ()
+							PI/SI   X ()
 ----------------------------------------------------------------------------------------
 
 	RA:
 	-----
-
+		PI customer_name ( SI branch_name = 'Perryridge' ( SI borrower.loan_number = loan.loan_number 			(Borrower * Loan) ) )  -	PI customer_name (Depositor)    
 
 	SQL:
 	-----
-
-
-
+		SELECT DISTINCT customer.customer_name
+		    -> FROM customer, borrower, loan, depositor, account
+		    -> WHERE customer.customer_name = borrower.customer_name
+		    ->   AND borrower.loan_number = loan.loan_number
+		    ->   AND loan.branch_name = 'Perryridge'
+		    ->   AND customer.customer_name = depositor.customer_name
+		    ->   AND depositor.account_number = account.account_number
+		    ->   AND account.account_number IS NULL;
+		Empty set (0.00 sec)
+		
+		
+		
+		OR 
+		
+		
+		
+		SELECT DISTINCT customer.customer_name
+		FROM customer
+		JOIN borrower ON customer.customer_name = borrower.customer_name
+		JOIN loan ON borrower.loan_number = loan.loan_number
+		LEFT JOIN depositor ON customer.customer_name = depositor.customer_name
+		LEFT JOIN account ON depositor.account_number = account.account_number
+		WHERE loan.branch_name = 'Perryridge' AND account.account_number IS NULL;
+		
 
 ----------------------------------------------------------------------------------------
 x
