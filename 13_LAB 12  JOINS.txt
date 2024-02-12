@@ -382,7 +382,7 @@ mysql> select * from B;
 +---------+
 
 
-mysql> select * from A,B;
+mysql>create table t1 as  select m,f,r from A,B;
 +---------+---------+
 | element | element |
 +---------+---------+
@@ -776,6 +776,447 @@ as the lack of explicit join conditions may make it unclear why certain combinat
 
 
 
+
+
+
+*******************************************************************
+SQL/ DBMS JOINS
+*******************************************************************
+
+	INNER JOIN is used when you only want rows with matching values, 
+
+	OUTER JOINs are used when you want to include unmatched rows along with matching ones. 
+
+
+
+
+
+	INNER JOIN:
+	------------
+	Returns only matching rows from both tables.
+	Excludes unmatched rows.
+	THETHA, EQUI, NATURAL
+
+
+	OUTER JOIN:
+	------------
+	Returns matching rows and all rows from one table, even if there is no match in the other table.
+	Includes unmatched rows with NULL values.
+	LEFT, RIGHT, or FULL
+	determines which table's unmatched rows are included in the result
+
+
+
+
+
+=============
+Inner Join
+============
+	Inner Join is used to return rows from both tables which 
+	satisfy the given condition. 
+	It is the most widely used join operation and can be considered 
+	as a default join-type
+
+	An Inner join or equijoin is a comparator-based join which uses 
+	equality comparisons in the join-predicate. 
+	However, if you use other comparison operators like “>” it can’t 
+	be called equijoin.
+
+
+	Inner Join further divided into three subtypes:
+	
+		Theta join
+		Natural join
+		EQUI join
+
+
+
+
+
+
+Theta Join
+************
+Theta Join allows you to merge two tables based on the condition 
+represented by theta. Theta joins work for all comparison operators. 
+It is denoted by symbol θ. 
+
+	A ⋈θ B
+
+
+		Table A					Table B
+		---------				---------
+	column 1	column 2		column 1	column 2
+	1		1			1		1
+	1		2			1		3
+
+
+	A ⋈  A.column 2 >  B.column 2 (B)
+
+
+	column 1	column 2
+	1		2
+
+
+
+
+
+EQUI Join
+************
+EQUI Join is done when a Theta join uses only the equivalence condition. 
+EQUI join is the most difficult operation to implement efficiently in 
+an RDBMS, and one reason why RDBMS have essential performance problems.
+
+
+	A ⋈ A.column 2 =  B.column 2 (B)
+
+	column 1	column 2
+	1		1
+
+
+
+
+
+
+
+
+Natural Join (⋈)
+************
+Natural Join does not utilize any of the comparison operators. 
+In this type of join, the attributes should have the same name and domain. 
+In Natural Join, there should be at least one common attribute 
+between two relations.
+
+It performs selection forming equality on those attributes which appear 
+in both relations and eliminates the duplicate attributes.
+
+
+
+Example:
+
+	Consider the following two tables
+
+		C		     D
+	-------------		------------			
+	Num	Square		Num	Cube
+	2	4		2	8
+	3	9		3	18
+
+
+
+		C ⋈ D
+	-------------------
+	Num	Square	Cube
+	2	4	8
+	3	9	18
+
+
+
+
+
+
+
+
+
+
+
+
+
+================
+Outer Join
+================
+An Outer Join doesn’t require each record in the two join tables to have 
+a matching record. 
+In this type of join, the table retains each record even if no other 
+matching record exists.
+
+	Three types of Outer Joins are:
+		Left Outer Join
+		Right Outer Join
+		Full Outer Join
+
+
+
+
+Left Outer Join (A ⟕ B)
+************
+Left Outer Join returns all the rows from the table on the left even 
+if no matching rows have been found in the table on the right. 
+When no matching record is found in the table on the right, NULL is 
+returned
+
+
+Consider the following 2 Tables
+
+	A		      B
+-------------		-------------
+Num	Square		Num	Cube
+2	4		2	8
+3	9		3	18
+4	16		5	75
+
+
+		A ⋈ B
+	Num	Square	Cube
+	2	4	8
+	3	9	18
+	4	16	–
+
+
+
+
+
+Right Outer Join ( A ⟖ B )
+************
+Right Outer Join ( A ⟖ B )
+Right Outer Join returns all the columns from the table on the right 
+even if no matching rows have been found in the table on the left. 
+Where no matches have been found in the table on the left, NULL is returned.
+RIGHT outer JOIN is the opposite of LEFT JOIN
+
+	A Right Outer Join B
+		A ⋈ B
+		Num	Cube	Square
+		2	8	4
+		3	18	9
+		5	75	–
+
+
+
+
+
+
+
+
+
+
+
+Full Outer Join ( A ⟗ B)
+************
+
+In a Full Outer Join , all tuples from both relations are included in
+ the result, irrespective of the matching condition.
+
+A ⋈ B
+
+	A ⋈ B
+	Num	Square	Cube
+	2	4	8
+	3	9	18
+	4	16	–
+	5	–	75
+
+
+
+
+
+*******************************************************************
+Inner JOINS - theta, equi, natural 
+*******************************************************************
+
+
+
+Example 1
+**********
+
+CREATE TABLE Departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100)
+);
+
+
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+
+CREATE TABLE Salaries (
+    employee_id INT PRIMARY KEY,
+    salary DECIMAL(10, 2),
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+
+
+INSERT INTO Departments (department_id, department_name)
+VALUES
+    (1, 'Sales'),
+    (2, 'Marketing');
+
+
+INSERT INTO Employees (employee_id, name, department_id)
+VALUES
+    (1, 'Janak', 1),
+    (2, 'Janaki', 2),
+    (3, 'Alice', 1),
+    (4, 'Bob', 2);
+
+INSERT INTO Salaries (employee_id, salary)
+VALUES
+    (1, 50000),
+    (2, 60000),
+    (3, 55000),
+    (4, 58000);
+
+
+
+
+Theta Join:
+--------------
+
+SELECT *
+FROM Employees e, Departments d
+WHERE e.department_id = d.department_id;
+
++-------------+--------+---------------+---------------+-----------------+
+| employee_id | name   | department_id | department_id | department_name |
++-------------+--------+---------------+---------------+-----------------+
+|           1 | Janak  |             1 |             1 | Sales           |
+|           3 | Alice  |             1 |             1 | Sales           |
+|           2 | Janaki |             2 |             2 | Marketing       |
+|           4 | Bob    |             2 |             2 | Marketing       |
++-------------+--------+---------------+---------------+-----------------+
+
+
+
+Equi Join:
+--------------
+
+SELECT *
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id;
+
++-------------+--------+---------------+---------------+-----------------+
+| employee_id | name   | department_id | department_id | department_name |
++-------------+--------+---------------+---------------+-----------------+
+|           1 | Janak  |             1 |             1 | Sales           |
+|           3 | Alice  |             1 |             1 | Sales           |
+|           2 | Janaki |             2 |             2 | Marketing       |
+|           4 | Bob    |             2 |             2 | Marketing       |
++-------------+--------+---------------+---------------+-----------------+
+
+
+
+
+Natural Join:
+--------------
+
+SELECT *
+FROM Employees
+NATURAL JOIN Departments;
+
++---------------+-------------+--------+-----------------+
+| department_id | employee_id | name   | department_name |
++---------------+-------------+--------+-----------------+
+|             1 |           1 | Janak  | Sales           |
+|             1 |           3 | Alice  | Sales           |
+|             2 |           2 | Janaki | Marketing       |
+|             2 |           4 | Bob    | Marketing       |
++---------------+-------------+--------+-----------------+
+
+
+
+
+
+
+
+Example 2
+**********
+
+CREATE TABLE C (
+    num INT PRIMARY KEY,
+    square INT
+);
+
+
+
+CREATE TABLE D (
+    num INT PRIMARY KEY,
+    cube INT
+);
+
+mysql> CREATE TABLE D (
+	num INT PRIMARY KEY, 
+	`cube` INT(3) 
+);
+
+
+
+
+
+-- Insert data into Table C
+INSERT INTO C (num, square)
+VALUES
+    (2, 4),
+    (3, 9);
+
+-- Insert data into Table D
+INSERT INTO D (num, `cube`)
+VALUES
+    (2, 8),
+    (3, 27);
+
+
+
+
+
+Left Outer Join (C LEFT JOIN D):
+
+SELECT C.num, C.square, D.cube
+FROM C
+LEFT JOIN D ON C.num = D.num;
+
++-----+--------+------+
+| num | square | cube |
++-----+--------+------+
+|   2 |      4 |    8 |
+|   3 |      9 |   27 |
++-----+--------+------+
+
+
+
+
+Example 3
+**********
+
+
+
+
+
+
+
+
+
+
+
+*******************************************************************
+-- C
+*******************************************************************
+
+
+
+
+*******************************************************************
+-- C
+*******************************************************************
+
+
+
+
+*******************************************************************
+-- C
+*******************************************************************
+
+
+
+
+
+
+
+*******************************************************************
+-- C
+*******************************************************************
 
 
 
