@@ -795,14 +795,14 @@ SQL/ DBMS JOINS
 	------------
 	Returns only matching rows from both tables.
 	Excludes unmatched rows.
-	THETHA, EQUI, NATURAL
+	THETHA , EQUI, NATURAL
 
 
 	OUTER JOIN:
 	------------
-	Returns matching rows and all rows from one table, even if there is no match in the other table.
+	Returns matching rows and all rows from one table, even if there is no match in the 			other table.
 	Includes unmatched rows with NULL values.
-	LEFT, RIGHT, or FULL
+		LEFT, RIGHT, or FULL
 	determines which table's unmatched rows are included in the result
 
 
@@ -823,7 +823,7 @@ Inner Join
 	be called equijoin.
 
 
-	Inner Join further divided into three subtypes:
+	Inner Join is further divided into three subtypes:
 	
 		Theta join
 		Natural join
@@ -859,6 +859,42 @@ It is denoted by symbol θ.
 
 
 
+					-- Create Table A
+					CREATE TABLE TableA (
+					    column1 INT,
+					    column2 INT
+					);
+					
+					-- Insert Data into Table A
+					INSERT INTO TableA (column1, column2) VALUES
+					(1, 1),
+					(1, 2);
+					
+					-- Create Table B
+					CREATE TABLE TableB (
+					    column1 INT,
+					    column2 INT
+					);
+					
+					-- Insert Data into Table B
+					INSERT INTO TableB (column1, column2) VALUES
+					(1, 1),
+					(1, 3);
+
+
+
+					mysql> SELECT * FROM TableA, TableB 
+						WHERE TableA.column2 > TableB.column2;
+					+---------+---------+---------+---------+
+					| column1 | column2 | column1 | column2 |
+					+---------+---------+---------+---------+
+					|       1 |       2 |       1 |       1 |
+					+---------+---------+---------+---------+
+
+
+
+
+
 
 EQUI Join
 ************
@@ -872,6 +908,14 @@ an RDBMS, and one reason why RDBMS have essential performance problems.
 	column 1	column 2
 	1		1
 
+					
+					mysql> SELECT * FROM TableA 
+						JOIN TableB ON TableA.column2 = TableB.column2;
+					+---------+---------+---------+---------+
+					| column1 | column2 | column1 | column2 |
+					+---------+---------+---------+---------+
+					|       1 |       1 |       1 |       1 |
+					+---------+---------+---------+---------+
 
 
 
@@ -908,6 +952,133 @@ Example:
 	Num	Square	Cube
 	2	4	8
 	3	9	18
+
+
+
+						-- Create Table C
+						CREATE TABLE C (
+						    Num INT,
+						    Square INT
+						);
+						
+						-- Insert Data into Table C
+						INSERT INTO C (Num, Square) VALUES
+						(2, 4),
+						(3, 9);
+						
+						-- Create Table D
+						CREATE TABLE D (
+						    Num INT,
+						    Cube INT
+						);
+						
+						-- Insert Data into Table D
+						INSERT INTO D (Num, Cube) VALUES
+						(2, 8),
+						(3, 18);
+
+
+
+
+
+						mysql> select * from C;
+						+------+--------+
+						| Num  | Square |
+						+------+--------+
+						|    2 |      4 |
+						|    3 |      9 |
+						+------+--------+
+						
+						
+						mysql> select * from D;
+						+------+------+
+						| Num  | Cube |
+						+------+------+
+						|    2 |    8 |
+						|    3 |   18 |
+						+------+------+
+
+						
+						mysql> SELECT * FROM C 
+							NATURAL JOIN D;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    2 |      4 |    8 |
+						|    3 |      9 |   18 |
+						+------+--------+------+
+						2 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+						--EQUI JOIN
+						mysql> SELECT C.Num, C.Square, D.Cube FROM C 
+							JOIN D ON C.Num = D.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    2 |      4 |    8 |
+						|    3 |      9 |   18 |
+						+------+--------+------+
+						2 rows in set (0.00 sec
+
+
+
+
+
+
+
+						-- THETA <
+						mysql> SELECT C.Num, C.Square, D.Cube FROM C, D 
+							WHERE C.Num < D.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    2 |      4 |   18 |
+						+------+--------+------+
+						
+						
+						
+						-- THETA >
+						mysql> SELECT C.Num, C.Square, D.Cube FROM C, D 
+									WHERE C.Num > D.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    3 |      9 |    8 |
+						+------+--------+------+
+						
+						
+						
+						-- THETA >=
+						mysql> SELECT C.Num, C.Square, D.Cube 
+						FROM C, D 
+						WHERE C.Num >= D.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    3 |      9 |    8 |
+						|    2 |      4 |    8 |
+						|    3 |      9 |   18 |
+						+------+--------+------+
+						
+						
+						-- THETA !=
+						mysql> SELECT C.Num, C.Square, D.Cube 
+							FROM C, D WHERE 
+							C.Num != D.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    3 |      9 |    8 |
+						|    2 |      4 |   18 |
+						+------+--------+------+
+
 
 
 
@@ -962,6 +1133,47 @@ Num	Square		Num	Cube
 	4	16	–
 
 
+							-- Create Table A
+							CREATE TABLE A (
+							    Num INT,
+							    Square INT
+							);
+							
+							-- Insert Data into Table A
+							INSERT INTO A (Num, Square) VALUES
+							(2, 4),
+							(3, 9),
+							(4, 16);
+							
+							-- Create Table B
+							CREATE TABLE B (
+							    Num INT,
+							    Cube INT
+							);
+							
+							-- Insert Data into Table B
+							INSERT INTO B (Num, Cube) VALUES
+							(2, 8),
+							(3, 18),
+							(5, 75);
+
+
+
+
+							mysql> SELECT A.Num, A.Square, B.Cube 
+								FROM A 
+								LEFT JOIN B ON A.Num = B.Num;
+							+------+--------+------+
+							| Num  | Square | Cube |
+							+------+--------+------+
+							|    2 |      4 |    8 |
+							|    3 |      9 |   18 |
+							|    4 |     16 | NULL |
+							+------+--------+------+
+
+
+
+
 
 
 
@@ -982,8 +1194,18 @@ RIGHT outer JOIN is the opposite of LEFT JOIN
 
 
 
-
-
+					
+					mysql> SELECT A.Num, A.Square, B.Cube FROM A 
+						RIGHT JOIN 
+						B ON A.Num = B.Num;
+					+------+--------+------+
+					| Num  | Square | Cube |
+					+------+--------+------+
+					|    2 |      4 |    8 |
+					|    3 |      9 |   18 |
+					| NULL |   NULL |   75 |
+					+------+--------+------+
+					3 rows in set (0.00 sec)
 
 
 
@@ -1008,112 +1230,21 @@ A ⋈ B
 
 
 
-
-*******************************************************************
-Inner JOINS - theta, equi, natural 
-*******************************************************************
-
-
-
-Example 1
-**********
-
-CREATE TABLE Departments (
-    department_id INT PRIMARY KEY,
-    department_name VARCHAR(100)
-);
-
-
-CREATE TABLE Employees (
-    employee_id INT PRIMARY KEY,
-    name VARCHAR(100),
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
-);
-
-
-CREATE TABLE Salaries (
-    employee_id INT PRIMARY KEY,
-    salary DECIMAL(10, 2),
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
-);
-
-
-INSERT INTO Departments (department_id, department_name)
-VALUES
-    (1, 'Sales'),
-    (2, 'Marketing');
-
-
-INSERT INTO Employees (employee_id, name, department_id)
-VALUES
-    (1, 'Janak', 1),
-    (2, 'Janaki', 2),
-    (3, 'Alice', 1),
-    (4, 'Bob', 2);
-
-INSERT INTO Salaries (employee_id, salary)
-VALUES
-    (1, 50000),
-    (2, 60000),
-    (3, 55000),
-    (4, 58000);
-
-
-
-
-Theta Join:
---------------
-
-SELECT *
-FROM Employees e, Departments d
-WHERE e.department_id = d.department_id;
-
-+-------------+--------+---------------+---------------+-----------------+
-| employee_id | name   | department_id | department_id | department_name |
-+-------------+--------+---------------+---------------+-----------------+
-|           1 | Janak  |             1 |             1 | Sales           |
-|           3 | Alice  |             1 |             1 | Sales           |
-|           2 | Janaki |             2 |             2 | Marketing       |
-|           4 | Bob    |             2 |             2 | Marketing       |
-+-------------+--------+---------------+---------------+-----------------+
-
-
-
-Equi Join:
---------------
-
-SELECT *
-FROM Employees e
-JOIN Departments d ON e.department_id = d.department_id;
-
-+-------------+--------+---------------+---------------+-----------------+
-| employee_id | name   | department_id | department_id | department_name |
-+-------------+--------+---------------+---------------+-----------------+
-|           1 | Janak  |             1 |             1 | Sales           |
-|           3 | Alice  |             1 |             1 | Sales           |
-|           2 | Janaki |             2 |             2 | Marketing       |
-|           4 | Bob    |             2 |             2 | Marketing       |
-+-------------+--------+---------------+---------------+-----------------+
-
-
-
-
-Natural Join:
---------------
-
-SELECT *
-FROM Employees
-NATURAL JOIN Departments;
-
-+---------------+-------------+--------+-----------------+
-| department_id | employee_id | name   | department_name |
-+---------------+-------------+--------+-----------------+
-|             1 |           1 | Janak  | Sales           |
-|             1 |           3 | Alice  | Sales           |
-|             2 |           2 | Janaki | Marketing       |
-|             2 |           4 | Bob    | Marketing       |
-+---------------+-------------+--------+-----------------+
+						mysql> SELECT A.Num, A.Square, B.Cube 
+							FROM A 
+							LEFT JOIN B ON A.Num = B.Num 
+							UNION 
+							SELECT B.Num, A.Square, B.Cube 
+							FROM B 
+							LEFT JOIN A ON B.Num = A.Num;
+						+------+--------+------+
+						| Num  | Square | Cube |
+						+------+--------+------+
+						|    2 |      4 |    8 |
+						|    3 |      9 |   18 |
+						|    4 |     16 | NULL |
+						|    5 |   NULL |   75 |
+						+------+--------+------+
 
 
 
@@ -1121,58 +1252,10 @@ NATURAL JOIN Departments;
 
 
 
-Example 2
-**********
-
-CREATE TABLE C (
-    num INT PRIMARY KEY,
-    square INT
-);
-
-
-
-CREATE TABLE D (
-    num INT PRIMARY KEY,
-    cube INT
-);
-
-mysql> CREATE TABLE D (
-	num INT PRIMARY KEY, 
-	`cube` INT(3) 
-);
 
 
 
 
-
--- Insert data into Table C
-INSERT INTO C (num, square)
-VALUES
-    (2, 4),
-    (3, 9);
-
--- Insert data into Table D
-INSERT INTO D (num, `cube`)
-VALUES
-    (2, 8),
-    (3, 27);
-
-
-
-
-
-Left Outer Join (C LEFT JOIN D):
-
-SELECT C.num, C.square, D.cube
-FROM C
-LEFT JOIN D ON C.num = D.num;
-
-+-----+--------+------+
-| num | square | cube |
-+-----+--------+------+
-|   2 |      4 |    8 |
-|   3 |      9 |   27 |
-+-----+--------+------+
 
 
 
