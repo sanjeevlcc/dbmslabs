@@ -1,0 +1,47 @@
+
+
+
+Movies(movielD, movieName, releaseDate, ticketPrice, buyPrice)
+Viewers (viewerlD, viewer Name, email, phone, age)
+Tickets (ticketID, showDateTime, screenNumber, seatNumber, viewerlD, movielD)
+
+        a. Write the DDL statement to create the Tickets table.
+        b. Write SQL query to find the list of all the movies released in the month of January 2018.
+        c. Write SQL query to find the name and email of viewers whose name contains
+        "Prakash"
+        d. Write SQL to find the name of the viewers of age not less than 18 years.
+
+
+
+
+SOLLUTION
+----------
+a. Write the DDL statement to create the Tickets table.
+
+
+b. Write SQL query to find the list of all the movies released in the month of January 2018.
+
+
+c. Write SQL query to find the name and email of viewers whose name contains "Prakash"
+
+
+d. Write SQL to find the name of the viewers of age not less than 18 years.
+
+
+
+
+
+
+===============LAB SCNERIO ======================
+
+
+a. Write the DDL statement to create the Tickets table.
+
+
+b. Write SQL query to find the list of all the movies released in the month of January 2018.
+
+
+c. Write SQL query to find the name and email of viewers whose name contains "Prakash"
+
+
+d. Write SQL to find the name of the viewers of age not less than 18 years.
