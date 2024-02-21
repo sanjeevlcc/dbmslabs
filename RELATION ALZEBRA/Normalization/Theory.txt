@@ -485,15 +485,92 @@ ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constrai
 
 
 
-====================================================================================
+
+
+
+
+
+
 
 ====================================================================================
+Database Normal Forms
+====================================================================================
+      The inventor of the relational model Edgar Codd proposed the 
+      theory of normalization of data with the introduction of the First Normal Form, 
+      and he continued to extend theory with Second and Third Normal Form. 
+      
+      Later he joined Raymond F. Boyce to develop the theory of Boyce-Codd Normal Form.
+
+Database Normal Forms
+----------------------------
+                1NF (First Normal Form)
+                2NF (Second Normal Form)
+                3NF (Third Normal Form)
+                BCNF (Boyce-Codd Normal Form)
+                4NF (Fourth Normal Form)
+                5NF (Fifth Normal Form)
+                6NF (Sixth Normal Form)
+
+The Theory of Data Normalization in MySQL server is still being developed further. 
+For example, there are discussions even on 6th Normal Form. 
+
+However, in most practical applications, normalization achieves its best in 3rd Normal Form. 
+
+
+Normal Form	Description
+---------------------------
+1NF	
+     A relation is in 1NF if it contains an atomic value.
+
+2NF	
+     A relation will be in 2NF if it is in 1NF and 
+     all non-key attributes are fully functional dependent on the primary key.
+
+3NF	
+     A relation will be in 3NF if it is in 2NF and 
+     no transition dependency exists.
+
+BCNF	
+      A stronger definition of 3NF is known as Boyce Codd's normal form.
+
+4NF	
+      A relation will be in 4NF if it is in Boyce Codd's normal form
+      and has no multi-valued dependency.
+
+5NF	
+      A relation is in 5NF. If it is in 4NF and does not contain any 
+      join dependency, joining should be lossless.
+
+
+
+
+
+
 
 
 
 ====================================================================================
-
+Advantages  and Disadvantages of Normalization
 ====================================================================================
+
+Advantages of Normalization
+------------------------------
+          Normalization helps to minimize data redundancy.
+          Greater overall database organization.
+          Data consistency within the database.
+          Much more flexible database design.
+          Enforces the concept of relational integrity.
+
+Disadvantages of Normalization
+------------------------------
+           You cannot start building the database before knowing what the user needs.
+           The performance degrades when normalizing the relations to higher normal forms, 
+           i.e., 4NF, 5NF.
+           It is very time-consuming and difficult to normalize relations of a higher degree.
+           Careless decomposition may lead to a bad database design, leading to serious problems.
+
+
+
 
 
 
