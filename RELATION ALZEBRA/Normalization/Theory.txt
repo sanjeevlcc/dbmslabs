@@ -928,9 +928,83 @@ Example. Consider the following relation:
                     R1: FD  (A → B, B → C, AB → D)
 
 
-====================================================================================
+
+
+
+
+
+
+
+
 
 ====================================================================================
+Prime and Non-Prime Attributes
+====================================================================================
+      For a given relation R= {A1,A2,A3,………..,An}, 
+      
+      an attribute A is a prime attribute if A is a part of any candidate key of R 
+      otherwise A is a non-prime attribute
+
+                     EXAMPLE
+                     -------
+                     R(A, B, C, D, E, F, G, H) 
+                     FD = {D→AB, B→A, C→A, F→G, H→FGD, E→A}
+                     
+                     Solution
+                     RHS: AB A A G FGD A =>> C E H is missing
+                     
+                     CK = CEH 
+                     
+                     Prime Attributes = CEH
+                     Non-Prime Attributes = ABDFG
+                     
+                     
+                               CEH      ABDFG
+                             --PA--------NPA----
+
+           
+
+
+           Example
+           -----------
+           Consider a relation R(A, B, C, D, E, F, G, H) 
+           having a set of FD’s F = {D→AB, B→A, C→A, F→G, H→FGD, E→A}. 
+           
+           What are the candidate keys of relation R? 
+           Also find prime and non-prime attributes.
+
+
+                Sol. 
+                Consider a subset K={C, E, H} of R. 
+                CEH is a candidate key as all attributes does not 
+                appear on right hand side of any FD in F. 
+                
+                It can also be proved as follows.
+                Compute K+ which gives ABCDEFH. 
+                Now compute closure of every subset of K such as CE, EH and CH. 
+                
+                First consider Y= {C,E}, the closure Y+
+                CE = CE = CAE or = AC ≠ R.
+                
+                Second consider Y={E,H}, the closure Y+
+                 = ABDEFGH ≠ R.
+
+               Finally, consider Y= { C,H}, the closure Y+
+                = ABCDFGH ≠ R.
+               
+               Thus, CEH is a candidate key.
+               
+               Prime Attributes are = CEH
+               Non-Prime Attributes are = ABDFG
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1128,7 +1202,7 @@ Example. Consider the relation schema R= (A, B, C, D) and
 
 
 
-Armstrong’s Axioms
+Armstrong’s Axioms - RAT rule
 ----------------------
      The following three rules called inference axioms or Armstrong’s Axioms 
      can be used to find  all the FDs logically implied by a set of FDs.
@@ -1207,9 +1281,221 @@ Armstrong’s Axioms
          then XZ → W holds.
 
 
-====================================================================================
+
+
+
+      Example. 
+      
+      Let R = (A, B, C, D) and 
+      F be the set of functional dependencies for 
+      R given by {A→B, A→C, BC→D}. 
+      
+      Prove A→D.
+
+
+               Sol. Given set of functional dependencies for 
+               a relation R is {A→B, A→C, BC→D} 
+               
+               By using Armstrong Axioms, named projectivity, we can show that
+                     A→BC (as A→B, A→C)
+               
+                 Since BC→D, so by transitivity rule,
+                
+               A→BC and BC→D means A→D. Hence proved.
+
+
+
+
+     Example. 
+     
+     Consider a relation R2(A, B, C, D, E, F) and 
+     a set of functional dependencies FD={AB→C, C→FA, F→E} that hold on R2. 
+     
+     (i) Using Armstrong’s axioms show that the functional dependency AB→E also holds 
+     on R. 
+     (ii) Does AB→F hold for FD1 = {AB→CD, C→E, DE→F}?
+
+               Sol.
+               (i) AB→C (given). 
+                Apply decomposition to C→FA, get C→F. 
+                F→E (given). 
+                Apply transitivity to AB→C, C→F, F→E, get AB→E. Hence proved.
+               
+               
+               (ii) Yes. We can prove it as follows:
+                AB→CD (given). 
+                C→E (given). Apply augmentation to C→E, get, CD→DE. 
+                DE→F (given). 
+                Apply transitivity to AB→CD, CD→DE and DE→F, get AB→
+
+
+
+
+
+
+
+
+
+      Example. 
+      
+      Let F = {AB → C, B → D, CD→E, CE→GH}. 
+      Give a derivation sequence on FD, {AB→G} using only Armstrong’s axioms. 
+
+
+                  Sol. 
+                  
+                  We have to derive AB → G
+                  
+                  AB → ABE (augmentation: AB → E with AB) 
+                  ABE → CE (augmentation: AB → C with E) 
+                  AB → CE (transitivity: AB → ABE and ABE → CE) 
+                  AB → GH (transitivity: AB → CE and CE → GH) 
+                  GH → G (reflexivity) 
+                  AB → G (transitivity: AB → GH and GH → G)
+
+
+
+
+
 
 ====================================================================================
+Closure of an Attribute
+====================================================================================
+
+Closure of an Attribute can be defined as a set of attributes that can be functionally determined from it.
+
+                                    OR
+
+Closure of a set F of FDs is the set F+ of all FDs that can be inferred from F
+
+Closure of a set of attributes X concerning F is the set X+ of all attributes that are functionally determined by X
+
+Pseudocode to find Closure of an Attribute
+---------------------------------------------
+         Determine X+, the closure of X under functional dependency set F
+         X Closure : = will contain X itself;
+         Repeat the process as:
+         old X Closure  : = X Closure;
+         for each functional dependency P → Q in FD set do
+         if X Closure is subset of P then X Closure := X Closure U Q ;
+           Repeat until ( X Closure = old X Closure);
+
+
+
+
+
+
+      Q.1: 
+      
+      Consider the relation scheme 
+      R = {E, F, G, H, I, J, K, L, M, N} and 
+      the set of functional dependencies 
+      {{E, F} -> {G}, 
+       {F} -> {I, J}, 
+       {E, H} -> {K, L}, 
+        K -> {M}, 
+        L -> {N} on R. 
+      
+              What is the key for R?
+
+                    Solution:
+                    
+                    Finding attribute closure of all given options, we get: 
+                    {E,F}+ = {EFGIJ}        ≠ R
+                    {E,F,H}+ = {EFHGIJKLMN}   = R
+                    {E,F,H,K,L}+ = {{EFHGIJKLMN}       = R
+                    {E}+ = {E}           ≠ R
+                    
+                    {EFH}+ and {EFHKL}+ results in set of all attributes  ≠ R, 
+                    but EFH is minimal. 
+                    
+                    So EFH will be candidate key.
+
+
+
+
+       Q.2: 
+       
+       Consider a relation scheme
+       R = (A, B, C, D, E, H) 
+       
+       on which the following functional dependencies hold: 
+       {A–>B, BC–> D, E–>C, D–>A}. 
+       
+       What are the candidate keys of R?
+
+
+                 Solution:
+                 
+                 (AE)+ = {ABECD} which is not set of all attributes. 
+                 So AE is not a candidate key. Hence option A and B are wrong. 
+                 
+                 (AEH)+ = {ABCDEH} 
+                 
+                 (BEH)+ = {BEHCDA} 
+                 
+                 (BCH)+ = {BCHDA} which is not set of all attributes. 
+                 So BCH is not a candidate key. Hence option C is wrong. 
+                 
+                 CK : AEH, BEH, DEH 
+
+
+====================================================================================
+Keys and Functional Dependencie
+OR
+Finding candidate key
+====================================================================================
+
+Example
+-----------
+
+Consider a relation R(A,B,C,D,E) 
+having a set of FD’s F= { A→BC, CD→E,B→D,E→A}. 
+
+List all the candidate keys of relation R. 
+Also find primary key, prime attributes and non-prime attributes.
+
+
+Sol. 
+There are 5 attributes, which gives a large number of subsets of R. To reduce the 
+number of subsets to be considered, we should start with single attributes, then take subsets 
+mentioned on LHS of all FD’s. If they are candidate keys, then ignore all subsets having 
+these attributes (2nd condition of candidate key).
+
+First of all try all individual attributes
+Try A, then A+
+ = ABCDE = R, So A is a candidate key. 
+
+Try B, then B+
+ = BD ≠ R, So B is not a candidate key.
+
+Try C, then C+
+ = C ≠ R, So C is not a candidate key. 
+
+Try D, then D+
+ = D ≠ R, So D is not a candidate key. 
+
+Try E, then E+
+ = ABCDE = R, So E is a candidate key.
+
+Now try CD, then CD+ = ABCDE = R, so CD is a candidate key. 
+
+You can ignore all the subsets having A, E and CD. 
+
+Thus only two subsets are left i.e. BC and BD
+
+Try BC, then BC+
+= ABCDE =R, so BC is a candidate key. 
+
+Finaly, try BD, then BD+
+ =BD ≠R, So B is not a candidate key.
+
+So, candidate keys of R are A, E, BC and CD.
+
+Consider one of them as primary keys.
+
+Take BC as a primary key, so Prime Attributes are B and C 
+and non-prime attributes are A,D and E.
 
 
 
