@@ -11,11 +11,12 @@ Functional Dependency and Normalisation
 
 
 ====================================================================================
+NOTE/ BOOK
+
+
 https://industri.fatek.unpatti.ac.id/wp-content/uploads/2019/03/162-Introduction-to-Database-Management-System-Satinder-Bal-Gupta-Aditya-Mittal-Edisi-2-2017.pdf
 
-
-
-_Page NO: 212
+Page NO: 212
 ====================================================================================
 
 
@@ -604,7 +605,17 @@ Database Keys
              Foreign Key
              Composite Key
 
- table t1 {emp_id, name, citizenship_id, email_id, department_id}
+table t1 {emp_id, name, citizenship_id, email_id, department_id}
+
+
+
+
+mysql> select * from t1;
++--------+----------------+----------------+--------------------+---------------+
+| emp_id | name           | citizenship_id | email_id           | department_id |
++--------+----------------+----------------+--------------------+---------------+
+
+
 
 
 Super Key:
@@ -624,6 +635,43 @@ Super Key:
          {name, email_id}
          {emp_id,name, email_id}
          {emp_id, citizenship_id}, etc.
+
+
+
+
+
+-- Create the table t1
+CREATE TABLE t1 (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    citizenship_id VARCHAR(20),
+    email_id VARCHAR(50),
+    department_id INT
+);
+
+
+
+-- Insert data with English script
+INSERT INTO t1 VALUES
+(6, 'Suman Shrestha', 'NEP-123', 'suman@example.com', 105),
+(7, 'Sarita Rai', 'NEP-456', 'sarita@example.com', 106),
+(8, 'Raj Gurung', 'NEP-789', 'raj@example.com', 107),
+(9, 'Bibek Paudel', 'NEP-012', 'bibek@example.com', 105),
+(10, 'Anita Rana', 'NEP-345', 'anita@example.com', 108);
+
+
+
+
+mysql> select * from t1;
++--------+----------------+----------------+--------------------+---------------+
+| emp_id | name           | citizenship_id | email_id           | department_id |
++--------+----------------+----------------+--------------------+---------------+
+|      6 | Suman Shrestha | NEP-123        | suman@example.com  |           105 |
+|      7 | Sarita Rai     | NEP-456        | sarita@example.com |           106 |
+|      8 | Raj Gurung     | NEP-789        | raj@example.com    |           107 |
+|      9 | Bibek Paudel   | NEP-012        | bibek@example.com  |           105 |
+|     10 | Anita Rana     | NEP-345        | anita@example.com  |           108 |
++--------+----------------+----------------+--------------------+---------------+
 
 
 Candidate Key:
@@ -684,6 +732,202 @@ Composite Key:
          Examples: 
          {emp_id, email_id}, {name, citizenship_id, department_id}
 
+
+
+
+
+                        -- Super Key
+                        SELECT 
+                            emp_id, name, citizenship_id, email_id, department_id
+                        FROM 
+                            t1;
+
+
+
+            -- Candidate Key
+            SELECT 
+                emp_id, email_id
+            FROM 
+                t1;
+
+                            -- Primary Key
+                            SELECT 
+                                emp_id
+                            FROM 
+                                t1;
+
+                                                 -- Alternate Key
+                                                 SELECT 
+                                                     email_id
+                                                 FROM 
+                                                     t1;
+
+
+
+
+
+
+            -- Foreign Key (Assuming there is 
+            another table 'departments' with a 
+            primary key 'dept_id')
+
+
+                      -- Create the 'departments' table
+                      CREATE TABLE departments (
+                          dept_id INT PRIMARY KEY,
+                          department_name VARCHAR(50)
+                      );
+
+                           -- Insert data into the 'departments' table
+                           INSERT INTO departments VALUES
+                           (101, 'HR'),
+                           (102, 'IT'),
+                           (103, 'Finance'),
+                           (104, 'Marketing'),
+                           (105, 'Operations'),
+                           (106, 'Research'),
+                           (107, 'Sales'),
+                           (108, 'Customer Service');
+
+            SELECT 
+                emp_id, name, citizenship_id, email_id, t1.department_id, d.dept_id
+            FROM 
+                t1
+            JOIN 
+                departments d ON t1.department_id = d.dept_id;
+
+
++--------+----------------+----------------+--------------------+---------------+---------+
+| emp_id | name           | citizenship_id | email_id           | department_id | dept_id |
++--------+----------------+----------------+--------------------+---------------+---------+
+|      6 | Suman Shrestha | NEP-123        | suman@example.com  |           105 |     105 |
+|      7 | Sarita Rai     | NEP-456        | sarita@example.com |           106 |     106 |
+|      8 | Raj Gurung     | NEP-789        | raj@example.com    |           107 |     107 |
+|      9 | Bibek Paudel   | NEP-012        | bibek@example.com  |           105 |     105 |
+|     10 | Anita Rana     | NEP-345        | anita@example.com  |           108 |     108 |
++--------+----------------+----------------+--------------------+---------------+---------+
+
+
+
+                              -- Composite Key
+                              SELECT 
+                                  emp_id, email_id
+                              FROM 
+                                  t1;
+
+
+
+
+
+
+
+
+====================================================================================
+Functional Dependencies
+====================================================================================
+
+Functional dependencies are the result of interrelationship between attributes or
+in between tuples in any relation.
+
+Definition : 
+In relation R, 
+    X and Y are the two subsets of the set of attributes, 
+    Y is  said to be functionally dependent on X if a given value of X (all attributes in X) 
+    uniquely determines the value of Y (all attributes in Y).
+
+
+It is denoted by X → Y (Y depends upon X).
+           emp_id  → name  
+
+
+Determinant :
+      Here X is known as determinant of functional dependency.
+
+                         X      →   Y
+                    determinant   dependent
+
+                         emp_id  → name  
+
+
+
+
+
+
+EXAMPLE SCNERIO
+--------------------
+          emp_id  → name             // VALID
+          6  → Suman Shrestha 
+          7  → Sarita Rai
+
+
+          emp_id  → name             // VALID
+          6  → Suman Shresth
+          6  → Suman Shresth
+
+
+          emp_id  → name             // VALID
+          6  → Suman Shrestha 
+          7  → Suman Shrestha 
+
+
+          emp_id  → name             // INVALID
+          6  → Suman Shrestha 
+          6  → Sarita Rai
+
++--------+----------------+----------------+--------------------+---------------+
+| emp_id | name           | citizenship_id | email_id           | department_id |
++--------+----------------+----------------+--------------------+---------------+
+|      6 | Suman Shrestha | NEP-123        | suman@example.com  |           105 |
+|      7 | Sarita Rai     | NEP-456        | sarita@example.com |           106 |
+|      8 | Raj Gurung     | NEP-789        | raj@example.com    |           107 |
+|      9 | Bibek Paudel   | NEP-012        | bibek@example.com  |           105 |
+|     10 | Anita Rana     | NEP-345        | anita@example.com  |           108 |
++--------+----------------+----------------+--------------------+---------------+
+
+
+
+
+
+
+
+
+
+====================================================================================
+Functional Dependency Chart/Diagram
+====================================================================================
+
+It is the graphical representation of function dependencies among attributes in any relation. 
+The following four steps are followed to draw FD chart.
+
+
+          1. Find out the primary key attributes.
+          2. Make a rectangle and write all primary key attributes inside it.
+          3. Write all non-prime key attributes outside the rectangle.
+          4. Use arrows to show functional dependency among attributes
+
+Example. Consider the following relation:
+         Professor (Pfcode, Dept, Head, Time) It is assumed that
+         (i) A professor can work in more than one dept.
+         (ii) The time he spends in each dept is given.
+         (iii) Each dept has only one head.
+   Draw the dependency diagram for the given relation by identifying the dependencies.
+
+                                     Pfcode → Dept
+                                     Dept  → Head
+                                     Pfcode, Dept → Time
+    
+
+                                              OR
+
+                    R1 or T1 (Pfcode → Dept , Dept  → Head, Pfcode Dept → Time)
+
+
+                    Pfcode → Dept , Dept  → Head, Pfcode Dept → Time
+                    ---A-------B------B-------C------AB-----------D---
+
+                    R1: FD  (A → B, B → C, AB → D)
+
+
 ====================================================================================
 
 ====================================================================================
@@ -691,27 +935,276 @@ Composite Key:
 
 
 ====================================================================================
+Types of Functional Dependencie
+====================================================================================
+There are four major types of FD’s.
+                Trival Dependency and Non-trival Dependency
+                Single Valued Dependency and Multivalued Dependency
+                Partial Dependency and Fully Functional Dependency 
+                Transitive Dependency and Non-transitive Dependency 
+
+
+
+
+Trival Dependency and Non-trival Dependency
+---------------------------------------------------
+
+Trival FD : 
+----------------
+In any relation R, X → Y is trival if Y ⊆ X (Y is the subset of X).
+
+        EXAMPLE
+        Consider a table with two columns Employee_Id and Employee_Name.  
+
+
+        {Employee_id, Employee_Name}   →    Employee_Id 
+                    is a trivial functional dependency as   
+        
+        
+        Employee_Id is a subset of {Employee_Id, Employee_Name}.  
+        Also, 
+        Employee_Id → Employee_Id 
+                  and 
+        Employee_Name   →    Employee_Name 
+                    are trivial dependencies too.  
+
+
+
+Non-trival FD : 
+----------------
+In any relation R, X → Y is non-trival if Y ⊆ X (Y is not the subset of X)
+
+          EXAMPLE
+          ID   →    Name,  
+          Name   →    DOB  
+
+
+
+             EXAMPLE
+             ----------
+             Consider the Supplier-Product relation shown
+             +----+-------+------+---------+
+             | S# | City  | P#   | Quantity |
+             +----+-------+------+---------+
+             |  1 | Delhi | 1P   |      100 |
+             |  2 | Rohtak| 8P   |      200 |
+             |  3 | Pune  | 3P   |       50 |
+             |  4 | Pune  | 5P   |       75 |
+             |  5 | Rohtak| 1P   |       99 |
+             |  6 | Mau   | 5P   |      105 |
+             +----+-------+------+----------+
+
+                        (S#, P#) : S# is trival FD
+                         S# : Supplier ID
+                         P# : Product ID
+
+
+
+            EXAMPLE
+            ----------
+            Consider the given relation R:
+            +---+---+---+
+            | O | P | Q |
+            +---+---+---+
+            | 1 | 2 | 3 |
+            | 2 | 1 | 7 |
+            | 2 | 1 | 5 |
+            | 7 | 3 | 8 |
+            +---+---+---+
+            Write all non-trivial functional dependencies satisfied by R. 
+            Also give an example of an FD that does not hold on R.
+
+           Sol. For functional dependencies look at the data given in the table.
+           
+           – The FD O → P holds on R, 
+               since for each value of O there is a single value of P.
+           
+           – The FD O → Q does not hold on R, since in the 2nd and 3rd row, 
+               O has the same value, but Q has different values.
+           
+           The non-trivial functional dependencies are as follows:
+                         O → P, 
+                         Q → O, 
+                         Q → P, 
+                         OQ → P, 
+                         PQ → O, 
+                         Q → OP, 
+                         O → OP, 
+                         OQ → PQ,
+                         OQ → OPQ,
+                         Q → OQ, 
+                         PQ → OPQ, 
+                         Q → OPQ,
+                         P → O, 
+                         P → OP
+
+
+
+
+
+Partial Dependency and Fully Functional Dependency 
+---------------------------------------------------
+
+
+
+Partial dependency : 
+----------------------
+Suppose you have more than one attributes in primary key. Let A be the non-prime key attribute. If A is not dependent upon all prime key attributes then partial dependency exists.
+
+
+Fully functional dependency : 
+------------------------------
+Let A be the non-prime key attribute and value of A is dependent upon all prime key attributes. Then A is said to be fully functional dependent. 
+
+Consider a relation student having prime key attributes (RollNo and Game) and 
+non-prime key attributes (Grade, Name and Fee)
+
+
+
+
+Transitive Dependency and Non-transitive Dependency 
+---------------------------------------------------
+
+
+Transitive dependency : 
+----------------------------
+Transitive dependency is due to dependency between non-prime key attributes. 
+Suppose in a relation R, X → Y (Y depen upon X), and
+                         Y → Z (Z depends upon Y), 
+
+                    then X → Z (Z depends upon X).
+
+Therefore, Z is said to be transitively  dependent upon X.
+
+                i.e X → Y   Y → Z   --------- X → Z
+
+
+
+Non-transitive dependency : 
+----------------------------
+Any functional dependency which is not transitive is known as Non-transitive dependency.
+Non-transitive dependency exists if there is no dependency between non-prime key attributes.
+
+
+
+
+
+
+Single Valued Dependency and Multivalued Dependency
+---------------------------------------------------
+Single valued dependency : 
+-----------------------------
+In any relation R, if for a particular value of X, Y has single value then it is known as single valued dependency.
+
+Multivalued dependency (MVD) : 
+-----------------------------
+In any relation R, if for a particular value of X, Y has more then one value, then it is known as multivalued dependency. It is denoted by 
+X →→ Y
+
+
+
 
 ====================================================================================
-
-
-
+Dependencies and Logical Implications
+or 
+Properties of FD
 ====================================================================================
 
-====================================================================================
+Given a relational schema R and a set of functional dependencies F. 
+
+A functional dependency X → Y (Not in F) on R is said to be logically implied 
+by the set of functional dependencies 
+
+F on R if for relation R on the relational schema that 
+satisfies F also satisfies X → Y.
+
+
+Example. Consider the relation schema R= (A, B, C, D) and 
+              the set of FD’s F = {A→B, B→C, C→D}. 
+
+         Then the FD’s A → C, B → D and A → D are logically implied
 
 
 
-====================================================================================
-
-====================================================================================
 
 
+Armstrong’s Axioms
+----------------------
+     The following three rules called inference axioms or Armstrong’s Axioms 
+     can be used to find  all the FDs logically implied by a set of FDs.
+     
+     Let X, Y, Z, and W be subsets of attributes  of a relation R. 
 
-====================================================================================
 
-====================================================================================
 
+     The following axioms hold:
+
+      1. Reflexivity. 
+      -------------------
+      If Y is a subset of X, then X → Y. 
+      
+      This also implies that X → X always holds. 
+                Employee_Id → Employee_Id
+      
+      Functional dependencies of this type 
+      are called trivial functional dependencies.
+
+
+
+      2. Augmentation. 
+      -------------------
+      If X → Y holds and Z is a set of attributes, 
+      then ZX → ZY.
+
+
+      3. Transitivity. 
+      -------------------
+      If X → Y holds 
+      and Y → Z holds, 
+      then X → Z holds.
+
+
+             EXAMPLE
+             Employee_Id   → Employee_Name
+             Employee_Name → Address
+             Employee_Id   → Address 
+
+
+
+      These rules are Sound and Complete. 
+      They are sound because they do not generate 
+      any invalid functional dependencies. 
+      
+      
+      They are complete because they allow us 
+      to generate F+ (closure of F) from the given 
+      set of functional dependencies F. 
+
+
+
+      4. Additivity or Union. 
+      -------------------
+      If X → Y and 
+         X → Z, 
+      then X → YZ holds.
+
+
+
+        5. Projectivity or Decomposition. 
+        -------------------
+        If   X → YZ holds, 
+        then X → Y and X → Z also →
+        
+                  NOTE:    XY → Z  
+                       then X → Z and Y → Z DONT HOLD
+
+
+
+
+         6. Pseudotransitivity. 
+         -------------------
+         If X → Y and ZY → W holds, 
+         then XZ → W holds.
 
 
 ====================================================================================
