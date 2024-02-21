@@ -1,6 +1,26 @@
 
 
 
+
+Functional Dependency and Normalisation
+
+
+
+
+
+
+
+====================================================================================
+https://industri.fatek.unpatti.ac.id/wp-content/uploads/2019/03/162-Introduction-to-Database-Management-System-Satinder-Bal-Gupta-Aditya-Mittal-Edisi-2-2017.pdf
+
+
+
+_Page NO: 212
+====================================================================================
+
+
+
+
 ====================================================================================
  Database Normalization
 ====================================================================================
@@ -575,10 +595,94 @@ Disadvantages of Normalization
 
 
 ====================================================================================
-
+Database Keys
 ====================================================================================
+             Super Key             
+             Candidate Key
+             Primary Key          
+             Alternate Key
+             Foreign Key
+             Composite Key
+
+ table t1 {emp_id, name, citizenship_id, email_id, department_id}
 
 
+Super Key:
+-----------------
+         Any combination of possible attributes that uniquely identifies a tuple.
+         It is a sublet of cndidate key
+         
+         Examples: 
+         {emp_id} 
+         {citizenship_id}
+         {email_id}
+         
+         {emp_id, citizenship_id}
+         {email_id, citizenship_id}
+         {email_id, emp_id}
+         
+         {name, email_id}
+         {emp_id,name, email_id}
+         {emp_id, citizenship_id}, etc.
+
+
+Candidate Key:
+-----------------
+         A minimal super key, meaning no subset of the key can uniquely identify a tuple.
+         No NULL VALUES
+         A attribute where PRIMARY key can be selected
+         
+         Examples: 
+         {emp_id}, 
+         {email_id}, 
+         {emp_id, citizenship_id, email_id)
+         {emp_id, citizenship_id}}
+         { citizenship_id, email_id}etc.
+
+
+Primary Key:
+-----------------
+         A candidate key chosen to be the main identifier for the table.
+         It must be unique for each tuple and cannot contain NULL values.
+         it serves as the main identifier for the table.
+         
+         Examples:
+         {emp_id}, 
+         
+         {email_id}
+
+
+
+Alternate Key:
+-----------------
+         Candidate keys that are not chosen as the primary key.
+         Examples: 
+                   If {emp_id} is chosen as the primary key, 
+                   then {email_id} is an alternate key.
+         
+         {emp_id, name, citizenship_id, email_id, department_id}
+         ---PK--------------AK------------AK-------------------
+
+
+Foreign Key:
+-----------------
+         An attribute that refers to the primary key in another table.
+         It enforces referential integrity between the two related tables.
+         It establishes a link between two tables by referencing the 
+            primary key in another table.
+         
+         Examples: 
+         If there is another table with a primary key, 
+         say {dept_id}, and department_id in t1 refers to {dept_id}, 
+         then it is a foreign key.
+
+
+Composite Key:
+-----------------
+         A key that consists of more than one attribute.
+         
+         Examples: 
+         {emp_id, email_id}, {name, citizenship_id, department_id}
 
 ====================================================================================
 
