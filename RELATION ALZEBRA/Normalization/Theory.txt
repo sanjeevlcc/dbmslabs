@@ -16,8 +16,7 @@ is stored logically.
             This repetition of data may result in:
             
                 Making relations very large.
-                It isn't easy to maintain and update data as it would involve searching
-                  many records in relation.
+                It isn't easy to maintain and update data as it would involve searching many                             records in relation.
                 Wastage and poor utilization of disk space and resources.
                 The likelihood of errors and inconsistencies increases.
             
@@ -25,8 +24,241 @@ is stored logically.
             So to handle these problems, we should analyze and decompose the relations with 
             redundant data into smaller, simpler, and well-structured relations that are 
             satisfy desirable properties. 
+
             Normalization is a process of decomposing the relations into relations with fewer 
             attributes.
+
+------------------------DOCKER------------------------------
+step 1: Login with credentials in ... https://killercoda.com/
+step 2: Choose any scnerio. Ubuntu or CKA or Playground
+step 3: docker run --name mydb1 -e MYSQL_ROOT_PASSWORD=1234 -d mysql
+step 4: docker exec -ti mydb1 bash
+step 5: mysql -u root -p1234
+----------------------------------------------------------------
+
+mysql> create database db33;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use db33;
+Database changed
+
+CREATE TABLE PatientRecords (
+    PatientID INT PRIMARY KEY NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Gender VARCHAR(10) NOT NULL,
+    Age INT NOT NULL,
+    Address VARCHAR(100) NOT NULL,
+    PhoneNumber VARCHAR(15) NOT NULL,
+    AdmissionDate DATE NOT NULL,
+    DischargeDate DATE,
+    DoctorName VARCHAR(50) NOT NULL,
+    Diagnosis VARCHAR(100) NOT NULL,
+    RoomNumber INT NOT NULL
+);
+
+INSERT INTO PatientRecords VALUES
+(1, 'Sajan', 'Shrestha', 'Male', 32, 'Kathmandu, Nepal', '9876543210', '2023-01-15', '2023-01-25', 'Dr. Sharma', 'Common Cold', 101),
+(2, 'Aarati', 'Dahal', 'Female', 45, 'Pokhara, Nepal', '9843210765', '2023-02-02', '2023-02-10', 'Dr. Khanal', 'Hypertension', 203),
+(3, 'Rajendra', 'Gurung', 'Male', 28, 'Biratnagar, Nepal', '9812345678', '2023-03-12', '2023-03-20', 'Dr. Bhattarai', 'Gastritis', 302),
+(4, 'Sunita', 'Magar', 'Female', 60, 'Butwal, Nepal', '9867543210', '2023-04-05', '2023-04-15', 'Dr. Thapa', 'Arthritis', 105),
+(5, 'Bibek', 'Dhakal', 'Male', 38, 'Dharan, Nepal', '9801234567', '2023-05-20', '2023-06-02', 'Dr. Acharya', 'Diabetes', 201);
+
+
+
+mysql> select * from PatientRecords;          // to long table attributes
++-----------+-----------+----------+--------+-----+-------------------+-------------+---------------+---------------+---------------+--------------+------------+
+| PatientID | FirstName | LastName | Gender | Age | Address           | PhoneNumber | AdmissionDate | DischargeDate | DoctorName    | Diagnosis    | RoomNumber |
++-----------+-----------+----------+--------+-----+-------------------+-------------+---------------+---------------+---------------+--------------+------------+
+
+
+mysql> select * from PatientRecords;
++-----------+-----------+----------+--------+-----+-------------------+-------------+---------------+---------------+---------------+--------------+------------+
+| PatientID | FirstName | LastName | Gender | Age | Address           | PhoneNumber | AdmissionDate | DischargeDate | DoctorName    | Diagnosis    | RoomNumber |
++-----------+-----------+----------+--------+-----+-------------------+-------------+---------------+---------------+---------------+--------------+------------+
+|         1 | Sajan     | Shrestha | Male   |  32 | Kathmandu, Nepal  | 9876543210  | 2023-01-15    | 2023-01-25    | Dr. Sharma    | Common Cold  |        101 |
+|         2 | Aarati    | Dahal    | Female |  45 | Pokhara, Nepal    | 9843210765  | 2023-02-02    | 2023-02-10    | Dr. Khanal    | Hypertension |        203 |
+|         3 | Rajendra  | Gurung   | Male   |  28 | Biratnagar, Nepal | 9812345678  | 2023-03-12    | 2023-03-20    | Dr. Bhattarai | Gastritis    |        302 |
+|         4 | Sunita    | Magar    | Female |  60 | Butwal, Nepal     | 9867543210  | 2023-04-05    | 2023-04-15    | Dr. Thapa     | Arthritis    |        105 |
+|         5 | Bibek     | Dhakal   | Male   |  38 | Dharan, Nepal     | 9801234567  | 2023-05-20    | 2023-06-02    | Dr. Acharya   | Diabetes     |        201 |
++-----------+-----------+----------+--------+-----+-------------------+-------------+---------------+---------------+---------------+--------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+let's normalize the PatientRecords table up to the Third Normal Form (3NF). 
+-+---------------+---------------+--------------+------------+
+
+-- Create Doctor table
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY,
+    DoctorName VARCHAR(50) UNIQUE
+);
+
+-- Create Diagnoses table
+CREATE TABLE Diagnoses (
+    DiagnosisID INT PRIMARY KEY,
+    DiagnosisName VARCHAR(100) UNIQUE
+);
+
+-- Create PatientRecords table with foreign keys
+CREATE TABLE PatientRecords1 (
+    PatientID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Gender VARCHAR(10),
+    Age INT,
+    Address VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    AdmissionDate DATE,
+    DischargeDate DATE,
+    DoctorID INT,
+    DiagnosisID INT,
+    RoomNumber INT,
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID),
+    FOREIGN KEY (DiagnosisID) REFERENCES Diagnoses(DiagnosisID)
+);
+
+
+mysql> desc Doctors;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| DoctorID   | int         | NO   | PRI | NULL    |       |
+| DoctorName | varchar(50) | YES  | UNI | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> desc Diagnoses;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| DiagnosisID   | int          | NO   | PRI | NULL    |       |
+| DiagnosisName | varchar(100) | YES  | UNI | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc PatientRecords1;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| PatientID     | int          | NO   | PRI | NULL    |       |
+| FirstName     | varchar(50)  | YES  |     | NULL    |       |
+| LastName      | varchar(50)  | YES  |     | NULL    |       |
+| Gender        | varchar(10)  | YES  |     | NULL    |       |
+| Age           | int          | YES  |     | NULL    |       |
+| Address       | varchar(100) | YES  |     | NULL    |       |
+| PhoneNumber   | varchar(15)  | YES  |     | NULL    |       |
+| AdmissionDate | date         | YES  |     | NULL    |       |
+| DischargeDate | date         | YES  |     | NULL    |       |
+| DoctorID      | int          | YES  | MUL | NULL    |       |
+| DiagnosisID   | int          | YES  | MUL | NULL    |       |
+| RoomNumber    | int          | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+12 rows in set (0.01 sec)
+
+
+
+
+
+-- Insert data into Doctors table
+INSERT INTO Doctors VALUES
+(1, 'Dr. Sharma'),
+(2, 'Dr. Khanal'),
+(3, 'Dr. Bhattarai'),
+(4, 'Dr. Thapa'),
+(5, 'Dr. Acharya');
+
+
+
+
+-- Insert data into Diagnoses table
+INSERT INTO Diagnoses VALUES
+(101, 'Common Cold'),
+(203, 'Hypertension'),
+(302, 'Gastritis'),
+(105, 'Arthritis'),
+(201, 'Diabetes');
+
+-- Insert data into PatientRecords table with foreign keys
+INSERT INTO PatientRecords1 VALUES
+(1, 'Sajan', 'Shrestha', 'Male', 32, 'Kathmandu, Nepal', '9876543210', '2023-01-15', '2023-01-25', 1, 101, 101),
+(2, 'Aarati', 'Dahal', 'Female', 45, 'Pokhara, Nepal', '9843210765', '2023-02-02', '2023-02-10', 2, 203, 203),
+(3, 'Rajendra', 'Gurung', 'Male', 28, 'Biratnagar, Nepal', '9812345678', '2023-03-12', '2023-03-20', 3, 302, 302),
+(4, 'Sunita', 'Magar', 'Female', 60, 'Butwal, Nepal', '9867543210', '2023-04-05', '2023-04-15', 4, 105, 105),
+(5, 'Bibek', 'Dhakal', 'Male', 38, 'Dharan, Nepal', '9801234567', '2023-05-20', '2023-06-02', 5, 201, 201);
+
+
+
+
+
+
+
+mysql> select * from Doctors;
++----------+---------------+
+| DoctorID | DoctorName    |
++----------+---------------+
+|        5 | Dr. Acharya   |
+|        3 | Dr. Bhattarai |
+|        2 | Dr. Khanal    |
+|        1 | Dr. Sharma    |
+|        4 | Dr. Thapa     |
++----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Diagnoses;
++-------------+---------------+
+| DiagnosisID | DiagnosisName |
++-------------+---------------+
+|         105 | Arthritis     |
+|         101 | Common Cold   |
+|         201 | Diabetes      |
+|         302 | Gastritis     |
+|         203 | Hypertension  |
++-------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from PatientRecords1;
++-----------+-----------+----------+--------+------+-------------------+-------------+---------------+---------------+----------+-------------+------------+
+| PatientID | FirstName | LastName | Gender | Age  | Address           | PhoneNumber | AdmissionDate | DischargeDate | DoctorID | DiagnosisID | RoomNumber |
++-----------+-----------+----------+--------+------+-------------------+-------------+---------------+---------------+----------+-------------+------------+
+|         1 | Sajan     | Shrestha | Male   |   32 | Kathmandu, Nepal  | 9876543210  | 2023-01-15    | 2023-01-25    |        1 |         101 |        101 |
+|         2 | Aarati    | Dahal    | Female |   45 | Pokhara, Nepal    | 9843210765  | 2023-02-02    | 2023-02-10    |        2 |         203 |        203 |
+|         3 | Rajendra  | Gurung   | Male   |   28 | Biratnagar, Nepal | 9812345678  | 2023-03-12    | 2023-03-20    |        3 |         302 |        302 |
+|         4 | Sunita    | Magar    | Female |   60 | Butwal, Nepal     | 9867543210  | 2023-04-05    | 2023-04-15    |        4 |         105 |        105 |
+|         5 | Bibek     | Dhakal   | Male   |   38 | Dharan, Nepal     | 9801234567  | 2023-05-20    | 2023-06-02    |        5 |         201 |        201 |
++-----------+-----------+----------+--------+------+-------------------+-------------+---------------+---------------+----------+-------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+CHECK REDUNDANCY
++-----------+-----------+----------+-------
+
+mysql> INSERT INTO PatientRecords1 VALUES
+      (4, 'Sunita', 'Magar', 'Female', 60, 'Butwal, Nepal', '9867543210', '2023-04-05', '2023-04-15', 4, 105, 105);
+     ERROR 1062 (23000): Duplicate entry '4' for key 'PatientRecords1.PRIMARY'
+
+
+
+mysql> INSERT INTO Diagnoses VALUES (201, 'Diabetes');
+ERROR 1062 (23000): Duplicate entry '201' for key 'Diagnoses.PRIMARY'
+
+mysql> INSERT INTO Diagnoses VALUES (209, 'Diabetes');
+ERROR 1062 (23000): Duplicate entry 'Diabetes' for key 'Diagnoses.DiagnosisName'
+
+
+
+
+
+
+
+
+
+
+
 
 ====================================================================================
 Why Do We Need Normalization?
@@ -35,6 +267,18 @@ Why Do We Need Normalization?
 As we have discussed above, normalization is used to reduce data redundancy. 
 It provides a method to remove the following anomalies from the database and bring it to a 
 more consistent state:
+
+
+     what is anomalies in dbms?
+     ---------------------------
+           something different, abnormal, peculiar, or not easily classified
+           Anomalies are irregularities or inconsistencies that occur 
+           in a database, disrupting the normal functioning and data integrity. 
+           
+           They are often a result of poor database design and can lead to significant 
+           problems like data redundancy, data loss, and incorrect data.
+
+
 
 A database anomaly is a flaw in the database that occurs because of poor planning and redundancy.
 
@@ -48,10 +292,36 @@ Updation anomalies:
     This occurs when the same data items are repeated with the same values and 
     are not linked to each other.
 
-Deletion anomalies: 
+Deletion anomalies:  
 ---------------------
     This occurs when deleting one part of the data deletes the other necessary 
     information from the database.
+
+
+
+Insertion anomalies: 
+---------------------
+
+
+Updation anomalies: 
+---------------------
+ 
+
+Deletion anomalies:  
+---------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ====================================================================================
 
