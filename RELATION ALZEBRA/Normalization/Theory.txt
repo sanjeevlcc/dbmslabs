@@ -32,7 +32,7 @@ is stored logically.
 step 1: Login with credentials in ... https://killercoda.com/
 step 2: Choose any scnerio. Ubuntu or CKA or Playground
 step 3: docker run --name mydb1 -e MYSQL_ROOT_PASSWORD=1234 -d mysql
-step 4: docker exec -ti mydb1 bash
+step 4: docker exec -ti mydb1 mysql -u root -p1234
 step 5: mysql -u root -p1234
 ----------------------------------------------------------------
 
@@ -182,6 +182,8 @@ INSERT INTO Diagnoses VALUES
 (105, 'Arthritis'),
 (201, 'Diabetes');
 
+
+
 -- Insert data into PatientRecords table with foreign keys
 INSERT INTO PatientRecords1 VALUES
 (1, 'Sajan', 'Shrestha', 'Male', 32, 'Kathmandu, Nepal', '9876543210', '2023-01-15', '2023-01-25', 1, 101, 101),
@@ -299,27 +301,187 @@ Deletion anomalies:
 
 
 
-Insertion anomalies: 
----------------------
-
-
-Updation anomalies: 
----------------------
- 
-
-Deletion anomalies:  
----------------------
 
 
 
+CASE SCNERIO IN Insertion anomalies: 
+-------------------------------------
+                  mysql> select * from Doctors;
+                  +----------+---------------+
+                  | DoctorID | DoctorName    |
+                  +----------+---------------+
+                  |        5 | Dr. Acharya   |
+                  |        3 | Dr. Bhattarai |
+                  |        2 | Dr. Khanal    |
+                  |        1 | Dr. Sharma    |
+                  |        4 | Dr. Thapa     |
+                  +----------+---------------+
+
+
+                  mysql> select * from Diagnoses;
+                  +-------------+---------------+
+                  | DiagnosisID | DiagnosisName |
+                  +-------------+---------------+
+                  |         105 | Arthritis     |
+                  |         101 | Common Cold   |
+                  |         201 | Diabetes      |
+                  |         302 | Gastritis     |
+                  |         203 | Hypertension  |
+                  +-------------+---------------+
+
+
+-- Inserting a patient with a non-existing doctor ..... i.e id 10
+mysql> INSERT INTO PatientRecords1 VALUES (6, 'Ram', 'Sharma', 'Male', 45, 'Pokhara, Nepal', '9812345678', '2023-06-15', '2023-06-25', 10, 203, 303);
+
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db33`.`PatientRecords1`, CONSTRAINT `PatientRecords1_ibfk_1` FOREIGN KEY (`DoctorID`) REFERENCES `Doctors` (`DoctorID`))
 
 
 
 
 
 
+-- Inserting a patient with a non-existing diagnosis ..... i.e id 306
+mysql> INSERT INTO PatientRecords1 VALUES (7, 'Gita', 'Rai', 'Female', 30, 'Birgunj, Nepal', '9876543210', '2023-07-01', '2023-07-10', 3, 306, 202);
 
 
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db33`.`PatientRecords1`, CONSTRAINT `PatientRecords1_ibfk_2` FOREIGN KEY (`DiagnosisID`) REFERENCES `Diagnoses` (`DiagnosisID`))
+
+
+
+
+
+
+CASE SCNERIO IN  Updation anomalies: 
+-------------------------------------
+    Updating the name of a doctor results in inconsistencies across patient records.
+
+DISPAY QUERY that patients relate to doctors
+
+mysql>  SELECT PatientRecords1.FirstName, PatientRecords1.LastName, Doctors.DoctorName
+    FROM PatientRecords1
+    INNER JOIN Doctors ON PatientRecords1.DoctorID = Doctors.DoctorID;
+                                  +-----------+----------+---------------+
+                                  | FirstName | LastName | DoctorName    |
+                                  +-----------+----------+---------------+
+                                  | Sajan     | Shrestha | Dr. Sharma    |
+                                  | Aarati    | Dahal    | Dr. Khanal    |
+                                  | Rajendra  | Gurung   | Dr. Bhattarai |
+                                  | Sunita    | Magar    | Dr. Thapa     |
+                                  | Bibek     | Dhakal   | Dr. Acharya   |
+                                  +-----------+----------+---------------+
+
+
+                             OR
+                             
+                             SELECT 
+                               CONCAT(FirstName, ' ', LastName) AS PatientName,
+                               Doctors.DoctorName
+                             FROM PatientRecords1
+                             INNER JOIN Doctors ON PatientRecords1.DoctorID = Doctors.DoctorID;
+                             
+                                 +-----------------+---------------+
+                                 | PatientName     | DoctorName    |
+                                 +-----------------+---------------+
+                                 | Sajan Shrestha  | Dr. Sharma    |
+                                 | Aarati Dahal    | Dr. Khanal    |
+                                 | Rajendra Gurung | Dr. Bhattarai |
+                                 | Sunita Magar    | Dr. Thapa     |
+                                 | Bibek Dhakal    | Dr. Acharya   |
+                                 +-----------------+---------------+
+
+
+-- Update doctor's name ....
+NOW ALL RECORD RELATE TO CHANGE "Dr. Bhattarai" TO "Dr. Pokharel"
+
+mysql> UPDATE Doctors
+     SET DoctorName = 'Dr. Pokharel'
+     WHERE DoctorID = 3;
+Query OK, 1 row affected (0.00 sec)
+
+
+
+                                           mysql> select * from Doctors;
+                                           +----------+--------------+
+                                           | DoctorID | DoctorName   |
+                                           +----------+--------------+
+                                           |        5 | Dr. Acharya  |
+                                           |        2 | Dr. Khanal   |
+                                           |        3 | Dr. Pokharel |
+                                           |        1 | Dr. Sharma   |
+                                           |        4 | Dr. Thapa    |
+                                           +----------+--------------+
+                                           5 rows in set (0.00 sec)
+
+
+
+SELECT PatientRecords1.FirstName, PatientRecords1.LastName, Doctors.DoctorName
+    FROM PatientRecords1
+    INNER JOIN Doctors ON PatientRecords1.DoctorID = Doctors.DoctorID;
+
+                                     +-----------+----------+--------------+
+                                     | FirstName | LastName | DoctorName   |
+                                     +-----------+----------+--------------+
+                                     | Sajan     | Shrestha | Dr. Sharma   |
+                                     | Aarati    | Dahal    | Dr. Khanal   |
+                                     | Rajendra  | Gurung   | Dr. Pokharel |
+                                     | Sunita    | Magar    | Dr. Thapa    |
+                                     | Bibek     | Dhakal   | Dr. Acharya  |
+                                     +-----------+----------+--------------+
+
+
+
+
+CASE SCNERIO IN Deletion anomalies:  
+-------------------------------------
+
+Deleting a doctor or diagnosis without considering patient records
+
+-- Deleting a doctor without considering patient records
+DELETE FROM Doctors
+WHERE DoctorID = 4;
+
+-- Deleting a diagnosis without considering patient records
+DELETE FROM Diagnoses
+WHERE DiagnosisID = 105;
+
+
+
+mysql> select * from Doctors;
+                          +----------+--------------+
+                          | DoctorID | DoctorName   |
+                          +----------+--------------+
+                          |        5 | Dr. Acharya  |
+                          |        2 | Dr. Khanal   |
+                          |        3 | Dr. Pokharel |
+                          |        1 | Dr. Sharma   |
+                          |        4 | Dr. Thapa    |
+                          +----------+--------------+
+
+
+mysql> DELETE FROM Doctors
+    -> WHERE DoctorID = 4;
+
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`db33`.`PatientRecords1`, CONSTRAINT `PatientRecords1_ibfk_1` FOREIGN KEY (`DoctorID`) REFERENCES `Doctors` (`DoctorID`))
+
+
+
+mysql> select * from Diagnoses;
+                         +-------------+---------------+
+                         | DiagnosisID | DiagnosisName |
+                         +-------------+---------------+
+                         |         105 | Arthritis     |
+                         |         101 | Common Cold   |
+                         |         201 | Diabetes      |
+                         |         302 | Gastritis     |
+                         |         203 | Hypertension  |
+                         +-------------+---------------+
+
+
+mysql> DELETE FROM Diagnoses
+    -> WHERE DiagnosisID = 105;
+
+
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`db33`.`PatientRecords1`, CONSTRAINT `PatientRecords1_ibfk_2` FOREIGN KEY (`DiagnosisID`) REFERENCES `Diagnoses` (`DiagnosisID`))
 
 
 
