@@ -969,7 +969,7 @@ Prime and Non-Prime Attributes
                      FD = {D→AB, B→A, C→A, F→G, H→FGD, E→A}
                      
                      Solution
-                     RHS: AB A A G FGD A =>> C E H is missing
+                     RHS: AB A A G FGD A =>> C E H is missing 
                      
                      CK = CEH 
                      
@@ -999,7 +999,7 @@ Example
 
 
                   {emp_id} -> {name, citizenship_id, email_id, department_id}
-                       A -> CDE
+                       A -> BCDE
                   {email_id} -> {name}
                        D-> B
                   {department_id} -> {citizenship_id, email_id}
@@ -1008,12 +1008,12 @@ Example
 
 
                        FD:
-                        A -> CDE
+                        A -> BCDE
                         D-> B
                         E->CD
                  
                           RHS : A
-                          A+ -> A -> A CDE -> A CDE B = ABCD              = R
+                          A+ -> A -> A BCDE  = ABCD              = R
                  
                              CK = A
                              PA = A
@@ -1025,6 +1025,15 @@ Example
                  
                  Non-Prime Attributes: NPA = BCDE          
                                   name, citizenship_id, email_id, department_id
+
+
+
+               +--------+----------------+----------------+--------------------+---------------+
+               | emp_id | name           | citizenship_id | email_id           | department_id |
+               +--------+----------------+----------------+--------------------+---------------+
+                  A          B                 C                D                     E
+        ----------PA---------NPA--------------NPA----------------NPA--------------------NPA--------
+
 
 
 
@@ -1361,7 +1370,8 @@ Example. Consider the relation schema R= (A, B, C, D) and
 
 
 Armstrong’s Axioms - RAT rule
-----------------------------------
+----------------------------------imp
+
      The following three rules called inference axioms or Armstrong’s Axioms 
      can be used to find  all the FDs logically implied by a set of FDs.
      
@@ -1380,7 +1390,6 @@ Armstrong’s Axioms - RAT rule
       
       Functional dependencies of this type 
       are called trivial functional dependencies.
-
 
 
 
@@ -1419,7 +1428,7 @@ Armstrong’s Axioms - RAT rule
 
 
       4. Additivity or Union. 
-      -------------------
+      -------------------------
       If X → Y and 
          X → Z, 
       then X → YZ holds.
@@ -1428,21 +1437,33 @@ Armstrong’s Axioms - RAT rule
 
 
         5. Projectivity or Decomposition. 
-        -------------------
+        ----------------------------------
         If   X → YZ holds, 
-        then X → Y and X → Z also →
+        then  and X → Z also →
         
                   NOTE:    XY → Z  
                        then X → Z and Y → Z DONT HOLD
 
 
 
-
          6. Pseudotransitivity. 
-         -------------------
-         If X → Y and ZY → W holds, 
+         -------------------------
+         If XZ → W holds, 
          then XZ → W holds.
 
+
+
+
+
+                       --------------------SUMMARY--------------------------------
+                       X → Y                 Y is a subset of X  Reflexivity. 
+                       ZX → ZY               X → Y holds and Z   Augmentation
+                       X → Z                 X → Y,Y → Z         Transitivity
+                       X → YZ                X → Y, X → Z        Union
+                       X → Y,X → Z           X → YZ              Decomposition
+                       X → Z and Y → Z       XY → Z              DONT HOLD
+                       XZ → W                XZ → W              Pseudotransitivity
+                       ----------------------------------------------------------
 
 
 
@@ -1664,14 +1685,235 @@ and non-prime attributes are A,D and E.
 
 
 
-====================================================================================
+
+
+ Example
+-----------
+ Given R( X Y Z W) and FD= { XYZ → W, XY → ZW and X → YZW
+
+Step 1: Let us calculate the closure of XYZ+ = XYZW (from the method we studied earlier)
+Since XYZ closure is determining all the attributes of the table, hence it is Super Key
+
+Step 2: Let us calculate the closure of XY+ = XYZW (from the method we studied earlier)
+Since XY closure is determining all the attributes of the table, hence it is Super Key
+
+Step 3: Let us calculate the closure of X+ = XYZW (from the method we studied earlier)
+Since X closure is determining all the attributes of the table, hence it is Super Key
+
+As we have talked in the above step only for the super key, not for the candidate key.
+Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose no proper subset is a superkey)
+
+From the above definition, XYZ is not a candidate key, as in Step 2 and 3 we found that XY and X are also Super Key (i.e., subset of XYZ are also SK which violate the definition)
+
+XY is not a candidate key, as in Step 3 we found that X is also a Super Key (i.e., subset of XY are also SK which violate the definition)
+
+X is the Candidate key: As X cannot be further subdivided, or X cannot have any subset.
+
+
+
+
+
+
+
+ Example
+-----------
+Given R( X Y Z W) and FD= { XY → Z, Z → YW, and W → X }
+
+Step 1: Let us calculate the closure of XY+ = XYZW (from the method we studied earlier)
+Since XY closure is determining all the attributes of the table, hence it is Super Key
+
+Step 2: Let us calculate the closure of Z+ = ZYWX (from the method we studied earlier)
+Since Z closure is determining all the attributes of the table, hence it is Super Key
+
+Step 3: Let us calculate the closure of W+ = WX (from the method we studied earlier)
+Since X closure is not determining all the attributes of the table, hence it is Not Super Key, since it is not SK it can never be Candidate key
+
+
+
+As we have talked in the above step only for the super key, not for the candidate key.
+
+Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose no proper subset is a superkey)
+
+From the above definition XY is a candidate key, as in Step 2 and 3 none of the subsets of XY i.e. either X or Y is Super Key.
+
+
+
+ Example
+-----------
+https://www.javatpoint.com/dbms-candidate-key
+
+
+
+ Example
+-----------
+Let R = (A, B, C, D, E, F) be a relation scheme with the following dependencies-
+
+FD: C → F , E → A, EC → D, A → B
+Which of the following is a key for R?
+
+            CD
+            EC
+            AE
+            AC
+sol
+
+Step-01:
+Determine all essential attributes of the given relation.
+Essential attributes of the relation are- C and E.
+So, attributes C and E will definitely be a part of every candidate key.
+
+Step-02:
+We will check if the essential attributes together can determine all remaining non-essential attributes.
+To check, we find the closure of CE.
+ 
+So, we have-
+{ CE }+ = { C , E }
+        = { C , E , F }                       ( Using C → F )
+        = { A , C , E , F }                   ( Using E → A )
+        = { A , C , D , E , F }               ( Using EC → D )
+        = { A , B , C , D , E , F }           ( Using A → B )
+
+ 
+We conclude that CE can determine all the attributes of the given relation.
+
+So, CE is the only possible candidate key of the relation.
+
+
+
+
+Example
+-----------
+Let R = (A, B, C, D, E) be a relation scheme with the following dependencies-
+FD: AB → C, , C → D, B → E
+
+Determine the total number of candidate keys and super keys.
+
+sol
+ 
+AB is the only possible candidate key of the relation.
+
+
+Example
+-----------
+Consider the relation scheme R(E, F, G, H, I, J, K, L, M, N) and the set of functional dependencies-
+FD : { E, F } → { G }
+{ F } → { I , J }
+{ E, H } → { K, L }
+{ K } → { M }
+{ L } → { N }
+
+
+
+sol
+
+EFH is the only possible candidate key of the relation.
+
+
+
+
+
+
+
+
+
+
+Example. 
+----------
+
+Suppose you are given a relation R(A, B, C, D). 
+For each of the following sets 
+of FDs, assuming they are the only dependencies that hold for R, 
+identify the candidate  key(s) for R. 
+
+1. B→C, D→A. 
+2. A→BC, C→AD 
+3. A→B, B→C, C→D 
+
+
+Sol. 
+
+                 1. Candidate key: BD
+                 2. Candidate keys: A and C
+                 3. Candidate key: A
+
+
+
+
+
+Example. 
+----------
+
+Consider the following relational schema R(A, B, C, D, E) and 
+set of functional dependencies AB → E and D → C.
+
+List all superkey(s) for this relation. 
+Which of these superkeys form a key (i.e., a minimal superkey) for this relation? 
+Justify the answer in terms of functional dependencies and closures.
+
+
+Sol. 
+
+A superkey is a set of attributes X s.t. X+  = all attributes.
+From the FDs above, we can derive:
+           {A, B, D}+ = {A, B, C, D}+
+                      = {A, B, D, E}+
+                      = {A, B, C, D, E}+
+                      = {A, B, C, D, E}
+
+Hence, {A,B,D}, {A,B,C,D}, {A,B,D,E}, and {A,B,C,D,E} are all superkeys.
+
+A key is a set of attributes which form a superkey and for which no subset is a superkey. 
+
+In this example, {A,B,D} is the only key
+
+
+
+
+
+
+
+
+
 
 ====================================================================================
+Normalisation
+====================================================================================
+Normalisation is a process by which we can decompose or divide any relation into more 
+than one relation to remove anomalies in relational database.
+
+It is a step by step process and each step is known as Normal Form.
+Normalisation is a reversible process
+
+
+
+
+
+Normal Form	Description
+---------------------------
+1NF	
+     A relation is in 1NF if it contains an atomic value.
+
+2NF	
+     A relation will be in 2NF if it is in 1NF and 
+     all non-key attributes are fully functional dependent on the primary key.
+
+3NF	
+     A relation will be in 3NF if it is in 2NF and 
+     no transition dependency exists.
+
+BCNF	
+      A stronger definition of 3NF is known as Boyce Codd's normal form.
+
+
+
+
+
+
 
 
 
 ====================================================================================
-
+First Normal Form (1NF)
 ====================================================================================
 
 
