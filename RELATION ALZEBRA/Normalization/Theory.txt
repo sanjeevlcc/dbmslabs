@@ -1912,30 +1912,252 @@ BCNF
 
 
 
+
+
 ====================================================================================
 First Normal Form (1NF)
 ====================================================================================
+A relation is in 1NF if it contains an single(atomic) valued attributes/columns.
+OR
+If a relation contain composite or multi-valued attribute, it violates first normal.
+
+   eg : phone no : 98154789 , 987578  ====> Multivalued, not atomic 
+        age: 25 years old ===> single, atomic, not multivalues ==> 1NF
+
+
+
+EXAMPLE
+----------
+
+        If we have an Employee table in which we store the 
+        employee information along with the employee skillset,
+        the table will look like this:
+
++--------+--------------+------------+-----------------------+
+| emp_id | emp_name     | emp_mobile | emp_skills            |
++--------+--------------+------------+-----------------------+
+|      1 | John Tick    | 9999957773 | Python, JavaScript    |
+|      2 | Darth Trader | 8888853337 | HTML, CSS, JavaScript |
+|      3 | Rony Shark   | 7777720008 | Java, Linux, C++      |
++--------+--------------+------------+-----------------------+
+
+  The above table has 4 columns:
+       
+          All the columns have different names.
+          
+          All the columns hold values of the same type like emp_name 
+          has all the names, emp_mobile has all the contact numbers, etc.
+          
+          The order in which we save data doesn't matter
+          
+          But the emp_skills column holds multiple comma-separated values, 
+          while as per the First Normal form, each column 
+          should have a single value.
+
+
+    Hence the above table fails to pass the First Normal form.
+    
+           So how do you fix the above table? There are 
+           two ways to do this:
+           
+           Remove the emp_skills column from the Employee 
+           table and keep it in some other table.
+           
+           Or add multiple rows for the employee and each row 
+           is linked with one skill.
+
+1. Create Separate tables for Employee and Employee Skills
+     So the Employee table will look like this,
+
+          +--------+--------------+------------+
+          | emp_id | emp_name     | emp_mobile |
+          +--------+--------------+------------+
+          |      1 | John Tick    | 9999957773 |
+          |      2 | Darth Trader | 8888853337 |
+          |      3 | Rony Shark   | 7777720008 |
+          +--------+--------------+------------+
+          
+                    +--------+------------+
+                    | emp_id | skill      |
+                    +--------+------------+
+                    |      1 | JavaScript |
+                    |      1 | Python     |
+                    |      2 | CSS        |
+                    |      2 | HTML       |
+                    |      2 | JavaScript |
+                    |      3 | C++        |
+                    |      3 | Java       |
+                    |      3 | Linux      |
+                    +--------+------------+
+
+
+2. Add Multiple rows for Multiple skills
+        You can also simply add multiple rows to add multiple skills. 
+        This will lead to repetition of the data, but that 
+        can be handled as you further Normalize your 
+        data using the Second Normal form and the Third Normal form.
+
+
+               +--------+--------------+-----------+--------------+
+               emp_id  	  emp_name	      emp_mobile	  emp_skill
+               +--------+--------------+-----------+--------------+
+               1	         John Tick	     9999957773	  Python
+               1	         John Tick	     9999957773	  JavaScript
+               2	         Darth Trader  	8888853337  	HTML
+               2	         Darth Trader  	8888853337	  CSS
+               2	         Darth Trader  	8888853337	  JavaScript
+               3	         Rony Shark    	7777720008	  Java
+               3	         Rony Shark	    7777720008	  Linux
+               3	         Rony Shark	    7777720008	  C++
+               +--------+--------------+-----------+--------------+
+
+
+
+
+
+EXAMPLE
+----------
+In the below table Course is a multi-valued attribute 
+so it is not in 1NF. 
+
+
+
+           +-----+----+--------+
+             ID   Name   Courses
+           +-----+----+--------+
+              1    A      c1, c2
+              2    E      c3
+              3    M      C2, c3
+           +-----+----+--------+
+
+Now Table is in 1NF as there is no multi-valued attribute
+            +-----+----+--------+
+             ID   Name   Course
+            +-----+----+--------+
+              1    A       c1
+              1    A       c2
+              2    E       c3
+              3    M       c2
+              3    M       c3
+            +-----+----+--------+
+
+
+
+
+
+EXAMPLE
+----------
+
+student
++--------+--------+----------------+--------------+---------+
+| stu_no | name   | phone          | district     | country |
++--------+--------+----------------+--------------+---------+
+|      1 | ram    | 1234 7894 8521 | palpa        | nepal   |
+|      2 | sita   | 1598           | palpa butwal | nepal   |
+|      3 | laxman | 9898           |  butwal      | nepal   |
++--------+--------+----------------+--------------+---------+
+
+to 1 NF
+
+         +--------+--------+-----------+-----------+---------+
+         | stu_no | name   | district1 | district2 | country |
+         +--------+--------+-----------+-----------+---------+
+         |      1 | ram    | palpa     | NULL      | nepal   |
+         |      2 | sita   | palpa     | butwal    | nepal   |
+         |      3 | laxman | butwal    | NULL      | nepal   |
+         +--------+--------+-----------+-----------+---------+
+         
+         +--------+-------------+-------------+-------------+
+         | stu_no | phone_part1 | phone_part2 | phone_part3 |
+         +--------+-------------+-------------+-------------+
+         |      1 | 1234        | 7894        | 8521        |
+         |      2 | 1598        |             |             |
+         |      3 | 9898        |             |             |
+         +--------+-------------+-------------+-------------+
+
+
+
+
+-- Create the student table
+CREATE TABLE student (
+    stu_no INT PRIMARY KEY,
+    name VARCHAR(255),
+    district1 VARCHAR(255),
+    district2 VARCHAR(255),
+    country VARCHAR(255)
+);
+
+-- Create the phone table with 
+separate columns for each part 
+of the phone number
+CREATE TABLE phone (
+    stu_no INT,
+    phone_part1 VARCHAR(4),
+    phone_part2 VARCHAR(4),
+    phone_part3 VARCHAR(4),
+    PRIMARY KEY (stu_no, phone_part1, phone_part2, phone_part3),
+    FOREIGN KEY (stu_no) REFERENCES student(stu_no)
+);
+
+-- Insert data into the student table
+INSERT INTO student (stu_no, name, district1, district2, country)
+VALUES
+(1, 'ram', 'palpa', NULL, 'nepal'),
+(2, 'sita', 'palpa', 'butwal', 'nepal'),
+(3, 'laxman', 'butwal', NULL, 'nepal');
+
+-- Insert data into the phone 
+table by splitting the phone number
+INSERT INTO phone (stu_no, phone_part1, phone_part2, phone_part3)
+VALUES
+(1, '1234', '7894', '8521'),
+(2, '1598', NULL, NULL),
+(3, '9898', NULL, NULL);
+INSERT INTO phone (stu_no, phone_part1, phone_part2, phone_part3) VALUES
+    (1, '1234', '7894', '8521'),
+    (2, '1598','' ,'')
+    (3, '9898','' ,'');
+
+
+
+
 
 
 
 ====================================================================================
+Second Normal Form (2NF)
+====================================================================================
+A relation will be in 2NF if it is in 1NF and 
+     all non-key attributes are fully functional dependent on the primary key.
 
+EXAMPLE
+----------
+====================================================================================
+Third Normal Form (3NF)
 ====================================================================================
 
+A relation will be in 3NF if it is in 2NF and 
+     no transition dependency exists.
 
 
+
+
+
+
+
+EXAMPLE
+----------
+
+
+EXAMPLE
+----------
 ====================================================================================
-
+BCNF
 ====================================================================================
+ A stronger definition of 3NF is known as Boyce Codd's normal form.
 
-
-
-====================================================================================
-
-====================================================================================
-
-
-
+EXAMPLE
+----------
 ====================================================================================
 
 ====================================================================================
