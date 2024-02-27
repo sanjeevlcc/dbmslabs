@@ -204,7 +204,7 @@ CREATE TABLE users_shard3 (
 
 
 ********************************************************************************
-LAB 3
+LAB 3 Granting and Revoking Privileges:
 ********************************************************************************
 
 
@@ -570,6 +570,13 @@ Query OK, 0 rows affected, 1 warning (0.06 sec)
 
 
 
+
+
+                    CHECKING AND ANALYSISNG
+                    ---------------------------
+
+
+
 USE StudentManagementSystem;
 ----------------------------------
 
@@ -600,20 +607,248 @@ Query OK, 0 rows affected, 1 warning (0.12 sec)
 
 
 
+
+
+
+
+
+
+                    CHECKING AND ANALYSISNG
+                    ---------------------------
+
+For Hospital Management System (HMS) Database:
+------------------------------------------------------
+
+USE HospitalManagementSystem;
+
+-- Revoke SELECT privilege from all users on Hospital table
+REVOKE SELECT ON Hospital FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+
+-- Revoke INSERT and UPDATE privileges from all users on Hospital table
+REVOKE INSERT, UPDATE ON Hospital FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+
+-- Revoke DELETE privilege from all users on Hospital table
+REVOKE DELETE ON Hospital FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+
+
+
+
+
+
+                      CHECKING AND ANALYSISNG
+                    ---------------------------
+For Student Management System (SMS) Database:
+------------------------------------------------------
+USE StudentManagementSystem;
+
+-- Revoke SELECT privilege from all users on Student table
+REVOKE SELECT ON Student FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+-- Revoke INSERT and UPDATE privileges from all users on Student table
+REVOKE INSERT, UPDATE ON Student FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+-- Revoke DELETE privilege from all users on Student table
+REVOKE DELETE ON Student FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@'localhost', 'manoj'@'localhost';
+
+
+
+
 ********************************************************************************
-LAB 4
+LAB 4 Parallel and Distributed Databases
+********************************************************************************
+OPEN killer koda  > CKA > MAke two tabs
+
+
+
+
+
+                    TERMINAL 1
+                    --------------
+controlplane $ watch kubectl get all
+                    
+
+
+
+
+
+                    TERMINAL 2
+                    --------------
+
+
+
+Parallel Database Setup:
+-----------------------------
+
+
+controlplane $ cat > parallel-mysql-deployment.yaml
+# parallel-mysql-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parallel-mysql
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: parallel-mysql
+  template:
+    metadata:
+      labels:
+        app: parallel-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpassword
+        - name: MYSQL_DATABASE
+          value: mydatabase
+
+
+controlplane $ kubectl apply -f parallel-mysql-deployment.yaml
+
+
+
+controlplane $ kubectl get pod                     .........parallely 3 MYSQL server is running
+NAME                              READY   STATUS    RESTARTS   AGE
+parallel-mysql-7984d4c78b-bz7g9   1/1     Running   0          95s
+parallel-mysql-7984d4c78b-lfg8j   1/1     Running   0          95s
+parallel-mysql-7984d4c78b-lltkj   1/1     Running   0          95s  ........ let us crash or delete this pod/server.......system ll automatically re create it, i.e Loadbalancing and scaliblity
+
+
+
+
+controlplane $ kubectl delete pod parallel-mysql-7984d4c78b-lltkj ..... crashing pod
+pod "parallel-mysql-7984d4c78b-lltkj" deleted
+
+
+controlplane $ kubectl get pod 
+NAME                              READY   STATUS    RESTARTS   AGE
+parallel-mysql-7984d4c78b-bz7g9   1/1     Running   0          4m8s
+parallel-mysql-7984d4c78b-lfg8j   1/1     Running   0          4m8s
+parallel-mysql-7984d4c78b-w62lx   1/1     Running   0          5s  ........... auto scale
+
+
+
+
+
+
+
+
+          Parallel Database
+          
+          The parallel-mysql Deployment creates 
+          three separate instances of MySQL running in parallel. 
+          
+                                        parallel-mysql-7984d4c78b-bz7g9  
+                                        parallel-mysql-7984d4c78b-lfg8j  
+                                        parallel-mysql-7984d4c78b-w62lx   
+          
+          Each instance is independent and doesn't share data.
+
+
+
+
+
+
+
+
+
+
+
+Distributed Database Setup:
+-----------------------------
+
+
+controlplane $ cat > distributed-mysql-deployment.yaml
+
+# distributed-mysql-deployment.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: distributed-mysql
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: distributed-mysql
+  serviceName: "mysql"
+  template:
+    metadata:
+      labels:
+        app: distributed-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpassword
+        - name: MYSQL_DATABASE
+          value: mydatabase
+
+
+
+kubectl apply -f distributed-mysql-deployment.yaml
+
+
+ontrolplane $ kubectl get pods  
+NAME                  READY   STATUS    RESTARTS   AGE
+distributed-mysql-0   1/1     Running   0          17s
+distributed-mysql-1   1/1     Running   0          15s
+distributed-mysql-2   1/1     Running   0          12s
+
+
+
+
+
+          Distributed Database:
+          
+                    The distributed-mysql StatefulSet creates 
+                    three MySQL instances, and 
+                    each has a unique identity (mysql-0, mysql-1, mysql-2). 
+                    
+                                        distributed-mysql-0   
+                                        distributed-mysql-1   
+                                        distributed-mysql-2   
+                    
+                    
+                    This is useful for scenarios where data is distributed 
+                    and instances have specific roles.
+                    
+                     Each instance is dependent and share data.
+
+
+
+
+
+
+********************************************************************************
+LAB 5
 ********************************************************************************
 
 
 
-********************************************************************************
-LAB 1
-********************************************************************************
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ********************************************************************************
-LAB 1
+LAB 6
 ********************************************************************************
 
 
