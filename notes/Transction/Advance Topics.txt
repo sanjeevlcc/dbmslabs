@@ -862,10 +862,291 @@ Removing Users:
 
 
 
-*******************************************
-Concept of Parallel and Distributed Databases,
-*******************************************
 
+
+
+
+
+
+
+*********************************************************************
+Concept of Parallel and Distributed Databases
+*********************************************************************
+
+
+
+Parallel and distributed databases are two related but distinct concepts 
+in the field of database systems. 
+
+
+Both concepts aim to improve the 
+        performance, 
+        scalability, 
+        reliability 
+of databases, but they achieve these goals through
+different architectural approaches.
+
+
+
+
+
+Parallel Databases:
+---------------------------
+
+Definition:
+------------------
+      A parallel database refers to a database system that 
+      employs parallel processing for the execution of 
+      queries and transactions.
+      
+      Parallel processing involves breaking down a large task 
+      into smaller subtasks that can be processed concurrently 
+      by multiple processors or nodes.
+
+
+
+                          +---------------------------------+
+                          |      Parallel Database          |
+                          |                                 |
+                          |          Shared Memory          |
+                          |         /            \          |
+                          |    Processor1   Processor2      |
+                          |         \            /          |
+                          |          Shared Disk            |
+                          |      /        |        \        |
+                          |    Disk1    Disk2     Disk3     |
+                          |                                 |
+                          +---------------------------------+
+
+
+Parallel Examples:
+-------------------
+                  Linux Containers (e.g., Docker)
+                  Parallel Compilation (e.g., make -j)
+                  GNU Parallel Cluster:(ssh)
+                  GNU Parallel
+                  MPI (Message Passing Interface
+                  OpenMP
+
+
+                    +------------------------------------+
+                    |            Docker Host             |
+                    |                                    |
+                    | +----------+ +----------+ +------+ |
+                    | | MySQL    | | MySQL    | | MySQL| |
+                    | | Container| | Container| | Cont.| |
+                    | | (CPU,    | | (CPU,    | | (CPU,| |
+                    | | Memory)  | | Memory)  | | Memory)|
+                    | +----------+ +----------+ +------+ |
+                    |                                    |
+                    +------------------------------------+
+
+ALTERNATIVES...... docker
+
+            +-------------------------------------+
+            |             Hardware Layer          |
+            |                                     |
+            |           +--------------+          |
+            |           |  CPU         |          |
+            |           +--------------+          |
+            |           |  Memory      |          |
+            |           +--------------+          |
+            +-------------------------------------+
+            |                OS Layer             |
+            |                                     |
+            |          +----------------+         |
+            |          |  Linux Kernel  |         |
+            |          +----------------+         |
+            |          |  System Libraries|       |
+            |          +----------------+         |
+            |          |  Device Drivers |        |
+            |          +----------------+         |
+            +-------------------------------------+
+            |            Network Layer            |
+            |                                     |
+            |          +----------------+         |
+            |          |  Networking   |          |
+            |          |  Protocols     |         |
+            |          +----------------+         |
+            |          |  TCP/IP Stack   |        |
+            |          +----------------+         |
+            +-------------------------------------+
+            |               Docker Layer          |
+            |                                     |
+            |         +------------------+        |
+            |         | Docker Engine   |         |
+            |         +------------------+        |
+            |         | Docker Containers|        |
+            |         |   (MySQL #1)     |        |
+            |         |   (MySQL #2)     |        |
+            |         |   (MySQL #3)     |        |
+            |         +------------------+        |
+            |                                     |
+            +-------------------------------------+
+
+
+Key Concepts:
+---------
+
+      Parallel Processing: 
+      ------------------
+            The workload is divided among multiple processors, and
+            each processor works on a portion of the data
+            simultaneously, improving overall query performance.
+      
+      
+      Shared Memory or Shared Disk Architectures: 
+      ---------------------------------------------
+            Parallel databases can be implemented with 
+            shared-memory architectures, where processors share a 
+            common memory space, or shared-disk architectures, where 
+            processors access data stored on shared disks.
+      
+      
+      Parallel Query Execution: 
+      ---------------------------
+            Queries are decomposed into subqueries, which are 
+            executed in parallel across multiple processors. 
+            This is particularly effective for complex queries 
+            and data-intensive operations.
+      
+      
+      Load Balancing: 
+      ------------------
+            Parallel databases typically include mechanisms to
+            balance the load evenly among processors, ensuring efficient 
+            utilization of resources.
+      
+      Scalability: 
+      ------------------
+            Parallel databases are scalable, and additional
+            processors can be added to handle increased workloads.
+      
+
+
+
+Distributed Databases:
+--------------------------
+
+Definition:
+---------
+
+        A distributed database refers to a database system 
+        where data is distributed across multiple locations or nodes 
+        in a network.
+        Each node in the network has its own local storage and 
+        processing capabilities.
+
+                      +------------------------+
+                      |   Distributed Database |
+                      |                        |
+                      |        Node1           |
+                      |       /     \          |
+                      |  Node2     Node3       |
+                      |       \     /          |
+                      |        Node4           |
+                      |                        |
+                      +------------------------+
+
+Distributed Examples:
+-------------------
+                  Hadoop
+                  Apache Spark
+                  Apache Kafka
+                  Distributed File Systems (e.g., Ceph, GlusterFS)
+                  Distributed Database Systems (e.g., MongoDB, Cassandra)
+
+
+                  +-----------------------------------------+
+                  |          iSCSI Target (200GB)           |
+                  |            {MASTER}                     |
+                  | +-------------------------------------+ |
+                  | |       iSCSI LUN (Block Device)      | |
+                  | |              (200GB)                | |
+                  | +-------------------------------------+ |
+                  |     |           |            |          |
+                  | +---+---+   +---+---+    +---+---+      |
+                  | |Client1 |   |Client2 |    |Client3 |   |
+                  | |(20GB)  |   |(20GB)  |    |(20GB)  |   |
+                  | +--------+   +------=-+    +--------+   |
+                  | SLAVE1        SLAVE2        SLAVE3      |
+                  +-----------------------------------------+
+
+
+
+
+Key Concepts:
+------------------
+      
+      Distribution of Data: 
+      ---------------------------
+            Data is partitioned and stored across different 
+            nodes in the network. Each node may be responsible for 
+            a subset of the data.
+            
+      
+      
+      Autonomy: 
+      ---------
+            Each node in a distributed database system operates autonomously. 
+            Nodes may have their own local schema and can process 
+            queries independently.
+      
+      
+      
+      Transparency: 
+      ------------------
+              A well-designed distributed database provides transparency to
+              users, making the distribution of data and the location of data
+              storage transparent to applications.
+      
+      
+      
+      Data Replication:
+      ------------------
+            Some distributed databases use data replication to improve 
+            fault tolerance and availability. Copies of data may be
+            stored on multiple nodes.
+      
+      
+      
+      Scalability and Fault Tolerance: 
+      ------------------------------------
+            Distributed databases can be highly scalable, and they often 
+            provide fault tolerance by distributing data across multiple nodes.
+            
+      
+      
+      
+      Network Communication: 
+      ---------------------------
+            Nodes in a distributed database communicate with each 
+            other through a network, and communication protocols play 
+            a crucial role in ensuring data consistency and integrity.
+            
+      
+
+
+                    Parallel vs. Distributed Databases:
+                    ------------------------------------
+Concurrency:
+------------------
+Parallel databases focus on concurrent processing of tasks within a single query, while distributed databases focus on the concurrent processing of queries across multiple nodes.
+
+Architectural Difference: 
+---------------------------
+Parallel databases are designed for shared-memory or shared-disk architectures, while distributed databases are designed for architectures where data is distributed across multiple nodes.
+
+Data Distribution: 
+---------------------------
+In parallel databases, data is usually stored centrally, and parallel processing is applied to that centralized data. In distributed databases, data is physically distributed across different nodes.
+
+Use Cases: 
+------------------
+
+Parallel databases are well-suited for handling complex queries and data-intensive tasks within a single database. Distributed databases are suitable for scenarios where data needs to be distributed across multiple geographical locations or when high availability and fault tolerance are critical.
+
+In some advanced systems, the concepts of parallel and distributed databases can be combined to create parallel and distributed database systems that leverage both parallel processing and data distribution for enhanced performance and scalability.
 
 *******************************************
 Concept of Data Warehousing and Data Mining, 
