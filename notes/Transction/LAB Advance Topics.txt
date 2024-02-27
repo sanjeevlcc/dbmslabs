@@ -121,16 +121,65 @@ Run the optimized query and compare the execution time with the original query.
 LAB 2
 ********************************************************************************
 
+Partitioning involves dividing a large table or index into 
+smaller, more manageable pieces called partitions based 
+on a chosen criterion, such as a range of values, a list, or a 
+hash function.
+
+Example (Range Partitioning):
+
+CREATE TABLE sales (
+    sale_id INT PRIMARY KEY,
+    sale_date DATE,
+    amount DECIMAL(10,2)
+) PARTITION BY RANGE (YEAR(sale_date)) (
+    PARTITION p0 VALUES LESS THAN (1991),
+    PARTITION p1 VALUES LESS THAN (1992),
+    PARTITION p2 VALUES LESS THAN (1993),
+    PARTITION p3 VALUES LESS THAN (1994),
+    PARTITION p4 VALUES LESS THAN (1995),
+    PARTITION p5 VALUES LESS THAN (1996),
+    PARTITION p6 VALUES LESS THAN (1997),
+    PARTITION p7 VALUES LESS THAN (1998),
+    PARTITION p8 VALUES LESS THAN (1999),
+    PARTITION p9 VALUES LESS THAN MAXVALUE
+);
+
+
+Sharding:
+
+Sharding involves horizontally partitioning data across multiple database instances or servers. Each shard contains a subset of the entire dataset.
+
+Example (Hash-Based Sharding):
+
+-- Shard 1
+CREATE TABLE users_shard1 (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(50)
+);
+
+-- Shard 2
+CREATE TABLE users_shard2 (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(50)
+);
+
+-- Shard 3
+CREATE TABLE users_shard3 (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(50)
+);
+
+----------------------------
+
+********************************************************************************
+LAB 3
+********************************************************************************
+
 
 
 ********************************************************************************
-LAB 1
-********************************************************************************
-
-
-
-********************************************************************************
-LAB 1
+LAB 4
 ********************************************************************************
 
 
