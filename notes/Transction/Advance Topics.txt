@@ -871,7 +871,7 @@ Removing Users:
 
 *********************************************************************
 Concept of Parallel and Distributed Databases
-*********************************************************************
+********************************************************************* LAB 4
 
 
 
@@ -925,7 +925,7 @@ Parallel Examples:
                   Parallel Compilation (e.g., make -j)
                   GNU Parallel Cluster:(ssh)
                   GNU Parallel
-                  MPI (Message Passing Interface
+                  MPI (Message Passing Interface )
                   OpenMP
 
 
@@ -1016,7 +1016,8 @@ Key Concepts:
             Parallel databases typically include mechanisms to
             balance the load evenly among processors, ensuring efficient 
             utilization of resources.
-      
+
+
       Scalability: 
       ------------------
             Parallel databases are scalable, and additional
@@ -1127,26 +1128,83 @@ Key Concepts:
       
 
 
+
+
+
                     Parallel vs. Distributed Databases:
                     ------------------------------------
-Concurrency:
-------------------
-Parallel databases focus on concurrent processing of tasks within a single query, while distributed databases focus on the concurrent processing of queries across multiple nodes.
+                                  +---------------------------------------------+
+                                  |           Parallel Database                 |
+                                  |                                             |
+                                  |  +-----------------+   +-----------------+  |
+                                  |  |    Processor    |   |    Processor    |  |
+                                  |  +-----------------+   +-----------------+  |
+                                  |  |    Processor    |   |    Processor    |  |
+                                  |  +-----------------+   +-----------------+  |
+                                  |       Shared Memory   |   Shared Disk       |
+                                  +---------------------------------------------+
 
-Architectural Difference: 
----------------------------
-Parallel databases are designed for shared-memory or shared-disk architectures, while distributed databases are designed for architectures where data is distributed across multiple nodes.
 
-Data Distribution: 
----------------------------
-In parallel databases, data is usually stored centrally, and parallel processing is applied to that centralized data. In distributed databases, data is physically distributed across different nodes.
 
-Use Cases: 
-------------------
+            +---------------------------------------------+
+            |           Distributed Database              |
+            |                                             |
+            |  +-----------------+   +-----------------+  |
+            |  |     Node 1      |   |     Node 2      |  |
+            |  +-----------------+   +-----------------+  |
+            |  |     Node 3      |   |     Node 4      |  |
+            |  +-----------------+   +-----------------+  |
+            |          Network                            |
+            |          Communication                      |
+            +---------------------------------------------+
 
-Parallel databases are well-suited for handling complex queries and data-intensive tasks within a single database. Distributed databases are suitable for scenarios where data needs to be distributed across multiple geographical locations or when high availability and fault tolerance are critical.
+
+      Concurrency:
+      ------------------
+          Parallel databases focus on concurrent processing of
+          tasks within a single query, while distributed databases 
+          focus on the concurrent processing of queries across multiple nodes.
+
+
+      Architectural Difference: 
+      ---------------------------
+          Parallel databases are designed for shared-memory
+          or shared-disk architectures, while distributed 
+          databases are designed for architectures where data is 
+          distributed across multiple nodes.
+
+
+      Data Distribution: 
+      ---------------------------
+          In parallel databases, data is usually stored 
+          centrally, and parallel processing is applied to
+          that centralized data. In distributed databases, data
+          is physically distributed across different nodes.
+
+
+      Use Cases: 
+      ------------------
+            Parallel databases are well-suited for handling 
+            complex queries and data-intensive tasks within a 
+            single database. Distributed databases are suitable 
+            for scenarios where data needs to be distributed 
+            across multiple geographical locations or when high 
+            availability and fault tolerance are critical.
+
+
+
+
+
 
 In some advanced systems, the concepts of parallel and distributed databases can be combined to create parallel and distributed database systems that leverage both parallel processing and data distribution for enhanced performance and scalability.
+
+
+
+
+
+
+
+
 
 *******************************************
 Concept of Data Warehousing and Data Mining, 
