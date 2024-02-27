@@ -272,7 +272,590 @@ Threat on dbms
                         availability 
   of the stored data. 
 
+
+
+
 Here are some common threats to DBMS
+--------------------------------------------
+      Unauthorized Access:
+      ----------------------
+          Threat actors gaining unauthorized access to the 
+          database can lead to data theft, unauthorized modification, or deletion. 
+          
+          This can occur through weak authentication mechanisms, 
+          compromised credentials, or exploiting vulnerabilities in the DBMS.
+      
+      
+      SQL Injection (SQLi):
+      ----------------------
+          SQL injection attacks involve inserting malicious SQL code 
+          into input fields to manipulate the database queries. 
+          
+          Proper input validation and parameterized queries are essential to
+          mitigate this threat.
+      
+      
+      Data Leakage:
+      ----------------------
+          Data leakage occurs when sensitive information is 
+          unintentionally exposed or disclosed. 
+          This can happen through insecure configurations, weak access
+          controls, or unintended data exposure in queries or reports.
+          
+      
+      Malware and Viruses:
+      ----------------------
+          Malicious software and viruses can infect database servers, leading to 
+          data corruption, theft, or denial of service. 
+          Regularly updating antivirus software and applying security 
+          patches can help mitigate this threat.
+      
+      
+      Insider Threats:
+      ----------------------
+          Employees or individuals with authorized access to the 
+          database may intentionally or unintentionally compromise data security. 
+          This could involve data theft, unauthorized modifications, or other 
+          malicious activities.
+      
+      
+      
+      Denial of Service (DoS) and Distributed Denial of Service (DDoS):
+      ---------------------- ---------------------- ----------------------
+          Attackers may attempt to overwhelm the database server 
+          with a high volume of requests, causing it to become slow, 
+          unresponsive, or unavailable. 
+          
+          Implementing measures such as rate limiting and traffic 
+          filtering can help mitigate DoS and DDoS attacks.
+      
+      
+      
+      Data Tampering:
+      ----------------------
+          Unauthorized modification of data within the database can lead 
+          to incorrect or misleading information. 
+          
+          Encryption, integrity checks, and access controls can
+          help prevent and detect data tampering.
+      
+      
+      Eavesdropping:
+      ----------------------
+          Attackers may attempt to intercept and eavesdrop on communication
+          between the database server and clients, leading to 
+          the exposure of sensitive data. 
+          
+          Encrypting data in transit using protocols like SSL/TLS 
+          can help mitigate this threat.
+      
+      
+      Inadequate Backup and Recovery:
+      ----------------------
+          Insufficient or outdated backup strategies can lead to data loss 
+          in the event of hardware failures, accidental deletions,
+          or security incidents. 
+          
+          Regularly scheduled and tested backups are crucial for data recovery.
+      
+      
+      
+      
+      Insecure Configurations:
+      ----------------------
+          Improperly configured database servers can expose vulnerabilities 
+          that attackers can exploit. 
+          
+          Ensuring secure configurations, removing
+          unnecessary services, and following best practices are 
+          essential for reducing the risk of compromise.
+      
+      
+      Weak Authentication and Authorization:
+      ----------------------
+          Weak or easily guessable passwords, lack of two-factor authentication, 
+          and improper authorization settings can lead to unauthorized access. 
+          
+          Strong authentication mechanisms and proper authorization controls
+          are crucial for preventing this threat.
+      
+      
+      Lack of Monitoring and Logging:
+      ----------------------
+          Inadequate monitoring and logging practices make it challenging to 
+          detect and respond to security incidents promptly. 
+          
+          Regularly reviewing logs and implementing real-time monitoring 
+          can help identify suspicious activities.
+
+
+    To mitigate these threats, organizations should adopt a comprehensive
+    approach to database security, incorporating best practices such as 
+    access controls, encryption, regular audits, and ongoing security 
+    awareness training for personnel.
+    
+    Regular security assessments, including 
+    vulnerability scanning and penetration testing, are also essential 
+    components of a robust database security strategy.
+
+
+
+
+
+
+
+
+
+Authentication and Authorization
+------------------------------------
+
+      Authentication and authorization are critical components of 
+      database security, and they involve managing 
+              system privileges and 
+              object privileges 
+      to control access to the database. 
+
+Authentication:
+----------------------
+    Definition: 
+    ------------
+    Authentication is the process of verifying the 
+    identity of a user, application, or system attempting 
+    to access the database. 
+
+    It ensures that the entity requesting access is who it claims to be.
+
+
+    Implementation:
+    ----------------
+        Usernames and Passwords:
+        ------------------------
+            The most common form of authentication involves
+            using usernames and passwords. Users provide a 
+            unique identifier (username) and a secret
+            credential (password) to prove their identity.
+        
+        Multi-Factor Authentication (MFA): 
+        ------------------------
+            Enhances security by requiring users to provide 
+            multiple forms of identification, such as a password and
+            a temporary code sent to their mobile device.
+
+
+Authorization:
+---------------
+    Definition: 
+    ------------
+    Authorization is the process of granting or denying 
+    access to specific resources or actions within the database 
+    based on the authenticated user's identity and 
+    associated permissions.
+    
+    Implementation:
+    ----------------
+        Roles and Permissions:
+        ------------------------
+            Database systems often use roles to group users
+            and assign specific permissions to those roles. 
+            
+            Users inherit the permissions associated with
+            their assigned roles.
+        
+        
+        Object Privileges: 
+        -------------------
+            Object privileges define the actions a user or 
+            role can perform on specific database
+            objects (tables, views, procedures, etc.).
+            
+            Common privileges include SELECT, INSERT, UPDATE, 
+            DELETE, and EXECUTE.
+        
+        
+        System Privileges: 
+        -------------------
+            System privileges grant users the authority to perform
+            certain actions at the system level, such as creating or 
+            deleting tables, managing users, or altering system configurations.
+        
+
+System Privileges:
+------------------------
+
+    Examples of System Privileges:
+    ------------------------------
+          CREATE SESSION:
+              Allows a user to connect to the database.
+          
+          CREATE TABLE: 
+              Permits the creation of tables in a specified schema.
+          
+          CREATE USER: 
+              Grants the ability to create new database users.
+          
+          ALTER SYSTEM:
+              Provides the authority to make changes to the overall database system.
+
+
+
+
+Object Privileges:
+------------------------
+
+      Examples of Object Privileges:
+      ------------------------------
+            SELECT: Allows a user to retrieve data from a specified table or view.
+            
+            INSERT: Grants the ability to add new records to a specified table.
+            
+            UPDATE: Permits the modification of existing data in a specified table.
+            
+            DELETE: Allows the removal of records from a specified table.
+            
+            EXECUTE: Enables the execution of a stored procedure or function.
+
+
+
+Granting and Revoking Privileges:
+---------------------------------- LAB NO 3
+GRANT Statement: Used to give specific privileges to a user or role.
+    GRANT SELECT, INSERT ON employees TO hr_user;
+
+
+REVOKE Statement: Used to remove previously granted privileges.
+    REVOKE SELECT ON employees FROM hr_user;
+
+
+SHOW GRANTS:  To view the grants assigned to a specific user in MySQL
+    SHOW GRANTS;
+    SHOW GRANTS FOR 'username'@'hostname';
+    SHOW GRANTS FOR 'ashok'@'localhost';
+
+
+
+
+Roles :
+---------------
+A role is a mechanism that can be used to allow authorization. 
+
+A person or a group of people can be allowed a role or group of roles. 
+
+By many roles, the head can manage access privileges very easily. 
+
+The roles are provided by the database management system for easy 
+and managed or controlled privilege management. 
+
+
+
+
+SCNERIO EXAMPLES
+-------------------
+
+Example 1: Creating a Role
+--------------------------------------
+CREATE ROLE sales_team;
+
+
+Example 2: Granting SELECT on a Table to a Rol
+---------------------------------------------------------
+GRANT SELECT ON products TO sales_team;
+
+
+Example 3: Granting INSERT on a Table to a Rolesql
+---------------------------------------------------------
+
+GRANT INSERT ON orders TO sales_team;
+
+
+Example 4: Granting UPDATE on a Table to a Role
+---------------------------------------------------------
+
+GRANT UPDATE ON customers TO sales_team;
+
+
+Example 5: Granting DELETE on a Table to a Role
+---------------------------------------------------------
+GRANT DELETE ON invoices TO sales_team;
+
+
+
+Example 6: Granting EXECUTE on a Stored Procedure to a Role
+---------------------------------------------------------
+
+GRANT EXECUTE ON calculate_discount TO sales_team;
+
+
+
+Example 7: Granting CONNECT Privilege to a Role
+---------------------------------------------------------
+
+GRANT CONNECT TO sales_team;
+
+
+
+Example 8: Granting RESOURCE Privilege to a Role
+---------------------------------------------------------
+
+GRANT RESOURCE TO sales_team;
+
+
+
+Example 9: Granting CREATE TABLE Privilege to a Role
+---------------------------------------------------------
+
+GRANT CREATE TABLE TO sales_team;
+
+
+
+Example 10: Granting ALL Privileges on a Table to a Role
+---------------------------------------------------------
+
+GRANT ALL ON employees TO sales_team;
+
+
+
+Example 11: Granting a Role to a User
+---------------------------------------------------------
+
+GRANT sales_team TO john_doe;
+
+
+
+Example 12: Granting Multiple Privileges in One Statement
+---------------------------------------------------------
+
+GRANT SELECT, INSERT, UPDATE ON products TO sales_team;
+
+
+
+Example 13: Granting a Role with GRANT OPTION
+---------------------------------------------------------
+
+GRANT sales_team TO mary_smith WITH GRANT OPTION;
+
+
+
+Example 14: Granting a Role to Multiple Users
+---------------------------------------------------------
+
+GRANT sales_team TO alice, bob, charlie;
+
+
+
+Example 15: Granting a Role with Different Privileges
+---------------------------------------------------------
+
+GRANT SELECT ON customers TO sales_team;
+GRANT INSERT, UPDATE ON orders TO sales_team;
+
+
+Example 16: Granting Role to Another Role
+---------------------------------------------------------
+
+GRANT sales_team TO marketing_team;
+
+
+
+Example 17: Revoking SELECT Privilege from a Role
+---------------------------------------------------------
+
+REVOKE SELECT ON products FROM sales_team;
+
+
+
+Example 18: Revoking a Role from a User
+---------------------------------------------------------
+
+REVOKE sales_team FROM john_doe;
+
+
+
+
+Example 19: Showing Granted Privileges for a Role
+---------------------------------------------------------
+
+SHOW GRANTS FOR sales_team;
+
+
+
+Example 20: Dropping a Role
+---------------------------------------------------------
+DROP ROLE sales_team;
+
+
+
+
+
+
+6. Grant a Role to multiple Users:
+---------------------------------------------------------
+
+GRANT finance_role TO user_jane, user_bob;
+
+
+
+7. Grant a Role with Admin Option:
+---------------------------------------------------------
+
+GRANT finance_role TO user_chris WITH ADMIN OPTION;
+
+
+
+8. Grant a Role to another Role:
+---------------------------------------------------------
+
+GRANT finance_role TO accounting_role;
+
+
+
+9. Grant a Role only within a specific Schema:
+---------------------------------------------------------
+
+GRANT finance_role ON SCHEMA schema_name TO user_jill;
+
+
+
+
+10. Grant a Role to be Default Role:
+---------------------------------------------------------
+
+GRANT finance_role TO user_david DEFAULT ROLE;
+
+
+
+11. Grant a Role with Password:
+---------------------------------------------------------
+
+GRANT finance_role TO user_mark IDENTIFIED BY 'role_password';
+
+
+
+12. Grant a Role using a Certificate:
+---------------------------------------------------------
+
+GRANT finance_role TO user_anna BY CERTIFICATE cert_name;
+
+
+
+13. Grant a Role with Proxy:
+---------------------------------------------------------
+
+GRANT finance_role TO user_mary WITH ADMIN OPTION GRANT PROXY ON user_jack;
+
+
+
+
+14. Grant a Role with Proxy Only:
+---------------------------------------------------------
+
+GRANT finance_role TO user_ryan GRANT PROXY ON user_susan ONLY;
+
+
+
+15. Grant a Role with Time Limit:
+---------------------------------------------------------
+
+GRANT finance_role TO user_tim WITH ADMIN OPTION WITH ADMIN OPTION FOR '1:00:00';
+
+
+
+16. Grant a Role to a Host:
+---------------------------------------------------------
+GRANT finance_role TO 'user_peter'@'localhost';
+
+
+
+
+17. Grant a Role to a Domain:
+---------------------------------------------------------
+
+GRANT finance_role TO 'user_sophie'@'%.example.com';
+
+
+
+
+
+18. Grant a Role to a Specific IP:
+---------------------------------------------------------
+
+GRANT finance_role TO 'user_olivia'@'192.168.1.100';
+
+
+
+
+19. Grant a Role on External Table:
+---------------------------------------------------------
+
+GRANT SELECT ON EXTERNAL TABLE sales_data_external TO finance_role;
+
+
+
+
+20. Grant a Role with Resource Limits:
+---------------------------------------------------------
+
+GRANT finance_role TO user_tony RESOURCE LIMIT 10K ROWS PER HOUR;
+
+
+
+
+
+
+
+MISC
+-------
+
+
+Adding Users:
+-----------------
+Adding Users 'ram', 'sita', 'gita':
+----------------------------------
+    CREATE USER 'ram'@'localhost' IDENTIFIED BY 'ram_password';
+    CREATE USER 'sita'@'localhost' IDENTIFIED BY 'sita_password';
+    CREATE USER 'gita'@'localhost' IDENTIFIED BY 'gita_password';
+
+
+
+Granting Permissions:
+----------------------------------
+      Granting Permissions on 'database11':
+      --------------------------------------
+          GRANT ALL PRIVILEGES ON database11.* TO 'ram'@'localhost';
+          GRANT SELECT, INSERT, UPDATE ON database11.* TO 'sita'@'localhost';
+      
+      Granting Permissions on 'database12':
+      ----------------------------------
+          GRANT ALL PRIVILEGES ON database12.* TO 'gita'@'localhost';
+          GRANT SELECT ON database12.* TO 'ram'@'localhost';
+
+
+Viewing User Status:
+-----------------
+      Viewing Status of 'ram':
+      ----------------------------------
+          SHOW STATUS LIKE 'ram'@'localhost';
+
+
+
+Locking and Unlocking Users:
+----------------------------------
+        Locking 'sita':
+        -----------------
+            ALTER USER 'sita'@'localhost' ACCOUNT LOCK;
+
+
+      Unlocking 'sita':
+      -----------------
+          ALTER USER 'sita'@'localhost' ACCOUNT UNLOCK;
+
+
+
+Removing Users:
+-----------------
+    Removing 'gita':
+    -----------------
+          DROP USER 'gita'@'localhost';
+
 
 
 
