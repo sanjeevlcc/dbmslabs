@@ -370,22 +370,199 @@ mysql> SELECT COUNT(user) AS total_users FROM mysql.user;
 USE HospitalManagementSystem;
 -----------------------------------
 
+-- Create Users
+CREATE USER 'sanjeev'@'localhost' IDENTIFIED BY 'password1';
+CREATE USER 'ohm'@'localhost' IDENTIFIED BY 'password2';
+CREATE USER 'ashok'@'localhost' IDENTIFIED BY 'password3';
+CREATE USER 'manoj'@'localhost' IDENTIFIED BY 'password4';
+
+
+
+-- Grant SELECT privilege to Sanjeev on Hospital table
+GRANT SELECT ON Hospital TO 'sanjeev'@'localhost';
+
+-- Grant INSERT and UPDATE privileges to Ohm on Hospital table
+GRANT INSERT, UPDATE ON Hospital TO 'ohm'@'localhost';
+
+-- Grant DELETE privilege to Ashok on Hospital table
+GRANT DELETE ON Hospital TO 'ashok'@'localhost';
+
+-- Grant ALL privileges to Manoj on Hospital table
+GRANT ALL ON Hospital TO 'manoj'@'localhost';
+
+
+
+
+
+USE StudentManagementSystem;
+----------------------------------
+
+-- Grant SELECT privilege to Sanjeev on Student table
+mysql> GRANT SELECT ON Student TO 'sanjeev'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+
+
+-- Grant INSERT and UPDATE privileges to Ohm on Student table
+mysql> GRANT INSERT, UPDATE ON Student TO 'ohm'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+
+
+
+-- Grant DELETE privilege to Ashok on Student table
+mysql> GRANT DELETE ON Student TO 'ashok'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+
+
+
+-- Grant ALL privileges to Manoj on Student table
+mysql> GRANT ALL ON Student TO 'manoj'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.12 sec)
+
+
+
+
+
+
+
+
+
+
+                    CHECKING AND ANALYSISNG
+                    ---------------------------
+
+
+USE HospitalManagementSystem;
+-----------------------------------
+
 -- Grant SELECT privilege to Sanjeev on Hospital table
 mysql> GRANT SELECT ON Hospital TO 'sanjeev'@'localhost';
 Query OK, 0 rows affected, 1 warning (0.03 sec
+
+                    mysql> exit
+                    Bye
+                    bash-4.4# mysql -u sanjeev -p
+                    Enter password: password1
+                     
+                    mysql> USE HospitalManagementSystem;
+                    mysql> select * from Hospital;              ........works fine ok select
++-----------+-----------+----------+------+--------+----------------+------------+
+| PatientID | FirstName | LastName | Age  | Gender | Diagnosis      | RoomNumber |
++-----------+-----------+----------+------+--------+----------------+------------+
+|         1 | John      | Doe      |   35 | Male   | Appendicitis   |        101 |
+|         2 | Jane      | Smith    |   42 | Female | Fractured Arm  |        205 |
+
+
+
+
+
+                              mysql> delete from Hospital where PatientID=1;          ....... dont work for delete , due to PriVILIGES
+                              ERROR 1142 (42000): DELETE command denied to user 'sanjeev'@'localhost' for table 'Hospital'
+
+
+
+
+
+
+
 
 
 -- Grant INSERT and UPDATE privileges to Ohm on Hospital table
 mysql> GRANT INSERT, UPDATE ON Hospital TO 'ohm'@'localhost';
 Query OK, 0 rows affected, 1 warning (0.12 sec)
 
+
+                    bash-4.4# mysql -u ohm -ppassword2
+                    USE HospitalManagementSystem;
+
+                    mysql> select * from Hospital;
+                    ERROR 1142 (42000): SELECT command denied to user 'ohm'@'localhost' for table 'Hospital'
+                    
+                    
+                    mysql> INSERT INTO Hospital VALUES
+                         (11, 'Shyam', 'Dhakal', 37, 'Male', 'Appendicitis', 101);
+                    Query OK, 1 row affected (0.02 sec)                   ...... works fine PRIVILIGES WORKS 
+
+
+
+
 -- Grant DELETE privilege to Ashok on Hospital table
 mysql> GRANT DELETE ON Hospital TO 'ashok'@'localhost';
 Query OK, 0 rows affected, 1 warning (0.03 sec)
 
+
+                    bash-4.4# mysql -u ashok -ppassword3
+                    
+                    mysql> USE HospitalManagementSystem;
+                    Reading table information for completion of table and column names
+                    You can turn off this feature to get a quicker startup with -A
+                    
+                    Database changed
+
+
+
+                    mysql> select * from Hospitals;
+                    ERROR 1142 (42000): SELECT command denied to user 'ashok'@'localhost' for table 'Hospitals'
+
+
+
+
+
+
+
+
 -- Grant ALL privileges to Manoj on Hospital table
 mysql> GRANT ALL ON Hospital TO 'manoj'@'localhost';
 Query OK, 0 rows affected, 1 warning (0.06 sec)
+
+
+                    bash-4.4# mysql -u manoj -ppassword4
+                     mysql> USE HospitalManagementSystem;
+                    
+                    mysql> select * from Hospital;
++-----------+-----------+----------+------+--------+----------------+------------+
+| PatientID | FirstName | LastName | Age  | Gender | Diagnosis      | RoomNumber |
++-----------+-----------+----------+------+--------+----------------+------------+
+|         1 | John      | Doe      |   35 | Male   | Appendicitis   |        101 |
+|         2 | Jane      | Smith    |   42 | Female | Fractured Arm  |        205 |
+|         3 | Mike      | Johnson  |   28 | Male   | Influenza      |        303 |
+|         4 | Emily     | Williams |   55 | Female | Diabetes       |        402 |
+|         5 | David     | Brown    |   47 | Male   | Hypertension   |        105 |
+|         6 | Anna      | Miller   |   32 | Female | Migraine       |        201 |
+|         7 | Brian     | Jones    |   25 | Male   | Sprained Ankle |        304 |
+|         8 | Sophia    | Davis    |   38 | Female | Pneumonia      |        102 |
+|         9 | Daniel    | Clark    |   43 | Male   | Heart Attack   |        401 |
+|        10 | Olivia    | Taylor   |   29 | Female | Allergy        |        203 |
+|        11 | Shyam     | Dhakal   |   37 | Male   | Appendicitis   |        101 |
++-----------+-----------+----------+------+--------+----------------+------------+
+11 rows in set (0.00 sec)
+
+
+
+
+                    mysql>  delete from Hospital where PatientID=10;
+                    Query OK, 1 row affected (0.02 sec)
+
+
+
+
+                    mysql> select * from Hospital;
++-----------+-----------+----------+------+--------+----------------+------------+
+| PatientID | FirstName | LastName | Age  | Gender | Diagnosis      | RoomNumber |
++-----------+-----------+----------+------+--------+----------------+------------+
+|         1 | John      | Doe      |   35 | Male   | Appendicitis   |        101 |
+|         2 | Jane      | Smith    |   42 | Female | Fractured Arm  |        205 |
+|         3 | Mike      | Johnson  |   28 | Male   | Influenza      |        303 |
+|         4 | Emily     | Williams |   55 | Female | Diabetes       |        402 |
+|         5 | David     | Brown    |   47 | Male   | Hypertension   |        105 |
+|         6 | Anna      | Miller   |   32 | Female | Migraine       |        201 |
+|         7 | Brian     | Jones    |   25 | Male   | Sprained Ankle |        304 |
+|         8 | Sophia    | Davis    |   38 | Female | Pneumonia      |        102 |
+|         9 | Daniel    | Clark    |   43 | Male   | Heart Attack   |        401 |
+|        11 | Shyam     | Dhakal   |   37 | Male   | Appendicitis   |        101 |
++-----------+-----------+----------+------+--------+----------------+------------+
+10 rows in set (0.00 sec)
 
 
 
@@ -395,17 +572,30 @@ Query OK, 0 rows affected, 1 warning (0.06 sec)
 
 USE StudentManagementSystem;
 ----------------------------------
+
 -- Grant SELECT privilege to Sanjeev on Student table
-GRANT SELECT ON Student TO 'sanjeev'@'localhost';
+mysql> GRANT SELECT ON Student TO 'sanjeev'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+
 
 -- Grant INSERT and UPDATE privileges to Ohm on Student table
-GRANT INSERT, UPDATE ON Student TO 'ohm'@'localhost';
+mysql> GRANT INSERT, UPDATE ON Student TO 'ohm'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+
+
 
 -- Grant DELETE privilege to Ashok on Student table
-GRANT DELETE ON Student TO 'ashok'@'localhost';
+mysql> GRANT DELETE ON Student TO 'ashok'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+
+
 
 -- Grant ALL privileges to Manoj on Student table
-GRANT ALL ON Student TO 'manoj'@'localhost';
+mysql> GRANT ALL ON Student TO 'manoj'@'localhost';
+Query OK, 0 rows affected, 1 warning (0.12 sec)
+
 
 
 
