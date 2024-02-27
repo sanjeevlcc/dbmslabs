@@ -656,9 +656,35 @@ REVOKE DELETE ON Student FROM 'sanjeev'@'localhost', 'ohm'@'localhost', 'ashok'@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ********************************************************************************
 LAB 4 Parallel and Distributed Databases
 ********************************************************************************
+
 OPEN killer koda  > CKA > MAke two tabs
 
 
@@ -752,6 +778,27 @@ parallel-mysql-7984d4c78b-w62lx   1/1     Running   0          5s  ........... a
 
 
 
+                    +-----------------------------------------+
+                    |          parallel-mysql Deployment      |
+                    |                                         |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 1              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 2              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 3              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |                                         |
+                    |  Scaling up if any node is down         |
+                    +-----------------------------------------+
 
 
 
@@ -821,6 +868,96 @@ distributed-mysql-2   1/1     Running   0          12s
                     and instances have specific roles.
                     
                      Each instance is dependent and share data.
+
+                    
+                    +-----------------------------------------+
+                    |        distributed-mysql StatefulSet    |
+                    |                                         |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 0         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 1         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 2         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |                                         |
+                    |  Scaling up if any node is down         |
+                    +-----------------------------------------+
+                    
+
+
+
+
+
+
+difference
+------------
+
+
+
+                     +-----------------------------------------+
+                    |        distributed-mysql StatefulSet    |
+                    |                                         |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 0         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 1         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |  +-------------------+                  |
+                    |  |      MySQL Pod    |                  |
+                    |  | Replica 2         |                  |
+                    |  | d11(id,age,name)  |                  |
+                    |  +-------------------+                  |
+                    |                                         |
+                    |  Scaling up if any node is down         |
+                    +-----------------------------------------+
+
+
+
+
+
+
+                    +-----------------------------------------+
+                    |          parallel-mysql Deployment      |
+                    |                                         |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 1              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 2              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |  +------------------------+             |
+                    |  |      MySQL Pod         |             |
+                    |  | Replica 3              |             |
+                    |  | table t1(name,age,add) |             |
+                    |  +------------------------+             |
+                    |                                         |
+                    |  Scaling up if any node is down         |
+                    +-----------------------------------------+
+
+
+
+
+
+
+
 
 
 
