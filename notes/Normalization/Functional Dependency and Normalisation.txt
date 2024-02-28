@@ -2127,11 +2127,176 @@ INSERT INTO phone (stu_no, phone_part1, phone_part2, phone_part3) VALUES
 ====================================================================================
 Second Normal Form (2NF)
 ====================================================================================
-A relation will be in 2NF if it is in 1NF and 
-     all non-key attributes are fully functional dependent on the primary key.
+A relation will be in 2NF if it is in 1NF 
+and 
+all non-prime attributes are fully functional dependent on the candidte key(PK).
+OR
+There shoud be no partial dependency
+
+     R(ABC)
+          CK <- NPA
+          eg AB <- A  (proper subset A or B)
+                <- B
+          
+          then  A or B -> C  (partial dependnt)
+
+
+
+
+
+
+
+
+EXAMPLE
+---------- 2NF ?
+
+TEACHER 
+---------------------------------------------
+TEACHER_ID	      SUBJECT	       TEACHER_AGE
+---------------------------------------------
+  25	              Chemistry	      30
+  25	              Biology	        30
+  47	              English	        35
+  83	              Math	           38
+  83	              Computer	       38
+---------------------------------------------
+
+
+In the given table,
+non-prime attribute TEACHER_AGE is dependent on TEACHER_ID which 
+is a proper subset of a candidate key. 
+
+That's why it violates the rule for 2NF.
+
+TEACHER_ID <- TEACHER_AGE
+
+To convert the given table into 2NF, we
+decompose it into two tables:
+
+
+
+                  TEACHER_DETAIL 
+                  ---------------------------
+                  TEACHER_ID	   TEACHER_AGE
+                  ---------------------------
+                       25	        30
+                       47	        35
+                       83	        38
+                  ---------------------------
+
+
+                        TEACHER_SUBJECT 
+                        ---------------------------
+                        TEACHER_ID	        SUBJECT
+                        ---------------------------
+                                25	       Chemistry
+                                25	       Biology
+                                47	       English
+                                83	       Math
+                                83	       Computer
+                        ---------------------------
+
+
 
 EXAMPLE
 ----------
+EmployeeProjectDetail
+----------------------------------------------------------------------
+Employee Code	    Project ID	     Employee Name	    Project Name
+----------------------------------------------------------------------
+     101	           P03	             John           	Project103
+     101           	P01	             John	           Project101
+     102	           P04	             Ryan	           Project104
+     103	           P02             	Stephanie	      Project102
+----------------------------------------------------------------------
+
+In the above table, 
+the prime attributes of the table are Employee Code and Project ID.
+
+We have partial dependencies in this table because 
+Employee Name can be determined by Employee Code
+
+and 
+Project Name can be determined by Project ID.
+
+Thus, the above relational table violates the rule of 2NF.
+
+----------------------------------------------------------------------
+Employee Code	    Project ID	     Employee Name	    Project Name
+----------------------------------------------------------------------
+     PA              PA             NPA                NPA
+
+
+Employee Code <- Employee Name
+   PA                 NPA
+
+
+Project ID.<- Project Name
+   PA                 NPA
+
+
+
+
+To remove partial dependencies from this table 
+and normalize it into second normal form, 
+we can decompose the <EmployeeProjectDetail> table
+
+into the following three tables:
+
+EmployeeDetail
+----------------------------------
+Employee Code	 Employee Name
+----------------------------------
+    101	       John
+    101	       John
+    102	       Ryan
+    103	       Stephanie
+----------------------------------
+
+EmployeeProject
+----------------------------------
+Employee Code	      Project ID
+----------------------------------
+      101	            P03
+      101	            P01
+      102	            P04
+      103            	P02
+----------------------------------
+
+
+ProjectDetail
+----------------------------------
+Project ID	       Project Name
+----------------------------------
+      P03	         Project103
+      P01	         Project101
+      P04	         Project104
+      P02	         Project102
+
+----------------------------------
+
+
+the above tables satisfy the following 
+two rules of 2NF as they are in 1NF and 
+every non-prime attribute is fully dependent on the primary key.
+
+
+EXAMPLE
+----------
+
+
+
+
+EXAMPLE
+----------
+EXAMPLE
+----------
+
+
+
+EXAMPLE
+----------
+
 ====================================================================================
 Third Normal Form (3NF)
 ====================================================================================
@@ -2139,6 +2304,119 @@ Third Normal Form (3NF)
 A relation will be in 3NF if it is in 2NF and 
      no transition dependency exists.
 
+A -> B
+B -> C
+then A -> C   i.e transitive dpendency
+
+
+example
+------------
+        -----------------------------
+        roll_no  provinence   city
+        -----------------------------
+        1          lumbini    butwal
+        2          gandaki    pokhara
+        3          lumbini    butwl
+        4          gandaki    pokhara
+        5          koshi      ktm
+        -----------------------------
+
+here, PK = CK = roll_no
+   FD : roll_no -> provinence, city
+        provinence -> city
+
+so, roll_no -> provinence, provinence -> city
+  then      roll_no -> city 
+            i.e transitive dpendency, not 3NF
+
+since : PK = CK = roll_no   i.e PA
+           roll_no -> city  i.e NPA -> NPA , voilates 3nf
+
+
+EXAMPLE
+----------
+  R(ABCD)
+  FD: AB-> C, C-> D
+
+        sol
+        CK = AB    PA = AB     NPA = CD
+        
+        
+        here   AB+ = AB C D      = R
+               PA -> PA or NPA      ok for 3NF
+        
+        but     C -> D
+               NPA-> NPA            not 3nf
+
+
+
+
+EXAMPLE
+----------
+EmployeeDetail
+--------------------------------------------------------------------------------
+Employee Code     	Employee Name	     Employee Zipcode	       Employee City
+--------------------------------------------------------------------------------
+        101	          John	               110033	               Model Town
+        101	          John	               110044	               Badarpur
+        102	          Ryan	               110028	               Naraina
+        103	          Stephanie	          110064	               Hari Nagar
+--------------------------------------------------------------------------------
+
+In 3NF, we remove transitive dependencies by 
+ensuring that every non-prime attribute 
+is non-transitively dependent on the primary key.
+
+
+The above table is not in 3NF because it has 
+Employee Code -> Employee City transitive dependency because:
+
+          Employee Code -> Employee Zipcode
+          Employee Zipcode -> Employee City
+
+Also, Employee Zipcode is not a super key and Employee City is 
+not a prime attribute.
+
+To remove transitive dependency from this table and normalize
+it into the third normal form, we can decompose 
+the <EmployeeDetail> table into the following two tables:
+
+
+
+         EmployeeDetail
+         -----------------------------------------------------
+         Employee Code	   Employee Name	   Employee Zipcode
+         -----------------------------------------------------
+              101          	John	            110033
+              101	          John	            110044
+              102	          Ryan	            110028
+              103	          Stephanie	       110064
+         -----------------------------------------------------
+
+
+               EmployeeLocation
+               ------------------------------------
+               Employee Zipcode     	Employee City
+               ------------------------------------
+                     110033	           Model Town
+                     110044	           Badarpur
+                     110028	           Naraina
+                     110064	           Hari Nagar
+               ------------------------------------
+
+Thus, we’ve converted the <EmployeeDetail> table into 3NF
+by decomposing it into <EmployeeDetail> and <EmployeeLocation> 
+tables as they are in 2NF and they don’t 
+have any transitive dependency.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2149,8 +2427,15 @@ EXAMPLE
 ----------
 
 
+
 EXAMPLE
 ----------
+
+
+
+EXAMPLE
+----------
+
 ====================================================================================
 BCNF
 ====================================================================================
