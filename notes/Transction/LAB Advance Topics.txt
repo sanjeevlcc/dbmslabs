@@ -1110,6 +1110,9 @@ and create a simple PHP script to visualize the results.
 
 Below are the steps:
 
+
+
+
                     1. Create Dockerfile:
                     Dockerfile
                     --------------------------
@@ -1203,6 +1206,7 @@ and displays the results using a simple PHP script.
 For a more complete implementation, you would need to
 implement the KNN algorithm and visualization logic 
 based on your specific requirements.
+
 
 
 ********************************************************************************
