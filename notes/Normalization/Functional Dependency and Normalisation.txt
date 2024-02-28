@@ -2243,35 +2243,35 @@ we can decompose the <EmployeeProjectDetail> table
 
 into the following three tables:
 
-EmployeeDetail
-----------------------------------
-Employee Code	 Employee Name
-----------------------------------
-    101	       John
-    101	       John
-    102	       Ryan
-    103	       Stephanie
-----------------------------------
-
-EmployeeProject
-----------------------------------
-Employee Code	      Project ID
-----------------------------------
-      101	            P03
-      101	            P01
-      102	            P04
-      103            	P02
-----------------------------------
-
-
-ProjectDetail
-----------------------------------
-Project ID	       Project Name
-----------------------------------
-      P03	         Project103
-      P01	         Project101
-      P04	         Project104
-      P02	         Project102
+                    EmployeeDetail
+                    ----------------------------------
+                    Employee Code	 Employee Name
+                    ----------------------------------
+                        101	       John
+                        101	       John
+                        102	       Ryan
+                        103	       Stephanie
+                    ----------------------------------
+                    
+                    EmployeeProject
+                    ----------------------------------
+                    Employee Code	      Project ID
+                    ----------------------------------
+                          101	            P03
+                          101	            P01
+                          102	            P04
+                          103            	P02
+                    ----------------------------------
+                    
+                    
+                    ProjectDetail
+                    ----------------------------------
+                    Project ID	       Project Name
+                    ----------------------------------
+                          P03	         Project103
+                          P01	         Project101
+                          P04	         Project104
+                          P02	         Project102
 
 ----------------------------------
 
@@ -2281,8 +2281,75 @@ two rules of 2NF as they are in 1NF and
 every non-prime attribute is fully dependent on the primary key.
 
 
+
+
+
+
+
+
 EXAMPLE
 ----------
+
+ Let’s say a school wants to store the 
+data of teachers and the subjects they teach. 
+ 
+
+Since a teacher can teach more than one subjects, the table 
+can have multiple rows for a same teacher.
+
+
+----------------------------------------------
+Teacher_Id	    Subject	    Teacher_Age
+----------------------------------------------
+       111	      Maths	       38
+       111	      Physics	     38
+       222	      Biology	     38
+       333	      Physics	     40
+       333	      Chemistry	   40
+----------------------------------------------
+
+
+Candidate Keys: {Teacher_Id, Subject}
+Non prime attribute: Teacher_Age
+
+This table is in 1 NF because each attribute has atomic values. 
+
+However, it is not in 2NF 
+
+because non prime attribute Teacher_Age is dependent on 
+Teacher_Id alone which is a proper subset of candidate key. 
+
+This violates the rule for 2NF as the rule says 
+“no non-prime attribute is dependent on the proper subset of 
+any candidate key of the table”.
+
+To make the table complies with 2NF we can disintegrate it in two tables like this:
+
+
+
+          Teacher_Details
+          ----------------------------
+          Teacher_Id     	Teacher_Age
+          ----------------------------
+                111	       38
+                222	       38
+                333	       40
+          ----------------------------
+
+
+           Teacher_Subject
+           ----------------------------
+           Teacher_Id	        Subject
+           ----------------------------
+                 111	          Maths
+                 111          	Physics
+                 222           Biology
+                 333	          Physics
+                 333	          Chemistry
+           ----------------------------
+
+
+Now the tables are in Second normal form (2NF). 
 
 
 
@@ -2439,10 +2506,105 @@ EXAMPLE
 ====================================================================================
 BCNF
 ====================================================================================
- A stronger definition of 3NF is known as Boyce Codd's normal form.
+A stronger definition of 3NF is known as Boyce Codd's normal form.
+
+LHS of each FD should be CK or SK
+
+LHS (CK or SK ) , but RHS ( PK or NPK , doesnt matter)
+
+
 
 EXAMPLE
 ----------
+
+-----------------------------------------------
+Roll No      	Name	        Voter ID	      Age
+-----------------------------------------------
+    001	    Aarav Gurung	  NPL123456789	  25
+    002	    Maya Shah	     NPL987654321	  22
+    003	    Raj Thapa	     NPL456789012	  28
+    004	    Priya Rai	     NPL321654987	  20
+    005	    Arjun RAi     	NPL654321789	  30
+    006	    Sita Acharya  	NPL789012345	  26
+-----------------------------------------------
+
+CK  = Roll No ,  Voter ID	     
+FD:
+           Roll No -> Name	
+           Roll No -> Voter ID
+           Voter ID	->  Age
+           Voter ID	->  Roll No
+
+LHS (CK or SK ) , but RHS ( PK or NPK , doesnt matter)
+
+           Roll No -> Name	
+            CK                          ok
+           Roll No -> Voter ID
+             CK                         ok
+           Voter ID	->  Age
+             CK                         ok
+           Voter ID	->  Roll No
+              CK                         ok
+
+
+
+                        is in BCNF 
+
+
+
+
+
+
+OR
+-----
+
+Now, let's check the functional dependencies:
+
+          Roll No → Name, Voter ID, Age
+
+               Roll No is the primary key, so 
+               this is trivially satisfied.
+
+
+          Voter ID → Name, Age
+
+                Voter ID is not a superkey since two 
+                people may have the same Voter ID. 
+                Therefore, this violates BCNF.
+
+
+
+To bring the table into BCNF, we need 
+to decompose it. Let's create two tables:
+
+Table 1: (Roll No, Name, Age)
+Table 2: (Voter ID, Name)
+
+              Table 1: (Roll No, Name, Age)
+           -----------------------------------
+           Roll No      	Name	        	  Age
+           -----------------------------------
+               001	    Aarav Gurung	     25
+               002	    Maya Shah	     	  22
+               003	    Raj Thapa	     	  28
+               004	    Priya Rai	     	  20
+               005	    Arjun RAi     		  30
+               006	    Sita Acharya  		  26
+           ------------------------------------
+
+
+
+                         Table 2: (Voter ID, Name)
+                   -----------------------------------------
+                   Voter ID	             Name
+                   -----------------------------------------
+                   NPL123456789      	  Aarav Gurung
+                   NPL987654321     	   Maya Shah
+                   NPL456789012        	Raj Thapa
+                   NPL321654987	        Priya Rai
+                   NPL654321789      	  Arjun Bhattarai
+                   NPL789012345	        Sita Acharya
+                   -----------------------------------------
 ====================================================================================
 
 ====================================================================================
