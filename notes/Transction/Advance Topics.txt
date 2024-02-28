@@ -1518,6 +1518,20 @@ Big Data:
               Velocity (high speed of data generation), and 
               Variety (diverse data types).
 
+                    +----------------------+
+                    |     Big Data         |
+                    |                      |
+                    |    +--------------+  |
+                    |    |    Hadoop    |  |
+                    |    +--------------+  |
+                    |    +--------------+  |
+                    |    | Spark        |  |
+                    |    +--------------+  |
+                    |    +--------------+  |
+                    |    | Flink        |  |
+                    |    +--------------+  |
+                    +----------------------+
+
 
 Key Characteristics:
 --------------------
@@ -1572,6 +1586,23 @@ NoSQL Databases:
     
         NoSQL databases are designed to handle various data
         models, including document, key-value, wide-column, and graph.
+
+                    +----------------------+
+                    |   NoSQL Databases    |
+                    |                      |
+                    |  +----------------+  |
+                    |  | MongoDB        |  |
+                    |  +----------------+  |
+                    |  +----------------+  |
+                    |  | Cassandra      |  |
+                    |  +----------------+  |
+                    |  +----------------+  |
+                    |  | Redis          |  |
+                    |  +----------------+  |
+                    |  +----------------+  |
+                    |  | Neo4j          |  |
+                    |  +----------------+  |
+                    +----------------------+
 
 
 Key Characteristics:
