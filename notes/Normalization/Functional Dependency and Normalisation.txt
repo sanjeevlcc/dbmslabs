@@ -1199,9 +1199,13 @@ Partial Dependency and Fully Functional Dependency
 
 Partial dependency : 
 ----------------------
-Suppose you have more than one attributes in primary key. Let A be the non-prime key attribute. If A is not dependent upon all prime key attributes then partial dependency exists.
+Suppose you have more than one attributes in primary key. 
+Let A be the non-prime key attribute. 
+If A is not dependent upon all prime key attributes then partial dependency exists.
 
-A partial dependency occurs when a non-prime attribute is functionally dependent on only part of a candidate key, not the entire key.
+A partial dependency occurs when a non-prime attribute is functionally dependent 
+on only part of a candidate key, not the entire key.
+
 In other words, a non-prime attribute depends on only a portion (proper subset) of the candidate key.
 
 For example, in the t1 table, if we have a functional dependency 
@@ -1211,12 +1215,16 @@ For example, in the t1 table, if we have a functional dependency
 
 Fully functional dependency : 
 ------------------------------
-Let A be the non-prime key attribute and value of A is dependent upon all prime key attributes. Then A is said to be fully functional dependent. 
+Let A be the non-prime key attribute and value of A is dependent upon all prime key attributes. 
+Then A is said to be fully functional dependent. 
 
-A fully functional dependency occurs when a non-prime attribute is functionally dependent on the entire candidate key, not just a part of it.
+A fully functional dependency occurs when a non-prime attribute is functionally dependent on the entire
+candidate key, not just a part of it.
+
 In this case, the non-prime attribute depends on the entire set of attributes that form the candidate key.
 
-For example, if we have a functional dependency {emp_id} -> {name}, where name depends on the entire candidate key (emp_id), it would be a fully functional dependency.
+For example, if we have a functional dependency {emp_id} -> {name}, where name depends on 
+the entire candidate key (emp_id), it would be a fully functional dependency.
 
 
 
@@ -1236,14 +1244,18 @@ mysql> select * from t1;
 +--------+----------------+----------------+--------------------+---------------+
 
 {emp_id} -> {name, citizenship_id, email_id, department_id} 
-is a fully functional dependency because name, citizenship_id, email_id, and department_id depend on the entire candidate key (emp_id).
+  is a fully functional dependency because name, citizenship_id, email_id, and department_id depend
+  on the entire candidate key (emp_id).
+
 
 {email_id} -> {name} 
-is a fully functional dependency because name depends on the entire candidate key (email_id).
+  is a fully functional dependency because name depends on the entire candidate key (email_id).
 
 
 {department_id} -> {citizenship_id, email_id} 
-could be a partial dependency if citizenship_id and email_id depend only on a part of the candidate key (department_id), or it could be a fully functional dependency if they depend on the entire candidate key.
+  could be a partial dependency if citizenship_id and email_id depend only on a 
+  part of the candidate key (department_id), or it could be a fully functional dependency
+  if they depend on the entire candidate key.
 
 
 
@@ -1265,14 +1277,19 @@ Therefore, Z is said to be transitively  dependent upon X.
 
 
 
-A transitive dependency occurs when a non-prime attribute is functionally dependent on another non-prime attribute, rather than directly on the candidate key.
+A transitive dependency occurs when a non-prime attribute is functionally
+dependent on another non-prime attribute, rather than directly on the candidate key.
 
-In other words, the dependency involves a chain of functional dependencies where a non-prime attribute depends on another non-prime attribute that, in turn, depends on the candidate key.
+In other words, the dependency involves a chain of functional dependencies where 
+a non-prime attribute depends on another non-prime attribute that, in turn, 
+depends on the candidate key.
 
-Transitive dependencies can lead to data redundancy and are typically eliminated in database normalization.
+Transitive dependencies can lead to data redundancy and are typically 
+eliminated in database normalization.
 
 Example in the context of the t1 table: 
-{emp_id} -> {department_id} -> {citizenship_id} is a transitive dependency if citizenship_id depends on department_id and, in turn, department_id depends on emp_id.
+{emp_id} -> {department_id} -> {citizenship_id} is a transitive dependency if
+citizenship_id depends on department_id and, in turn, department_id depends on emp_id.
 
 
 
@@ -1288,13 +1305,15 @@ Non-transitive dependency exists if there is no dependency between non-prime key
 
 
 
-A non-transitive dependency occurs when a non-prime attribute is directly functionally dependent on the candidate key without involving any intermediate non-prime attributes.
+A non-transitive dependency occurs when a non-prime attribute is directly functionall
+y dependent on the candidate key without involving any intermediate non-prime attributes.
 
 In this case, the dependency is straightforward and does not involve a chain of dependencies.
 Non-transitive dependencies are usually desirable in a normalized relational database.
 
 Example in the context of the t1 table: 
-{emp_id} -> {name, citizenship_id, email_id, department_id} is a non-transitive dependency because name, citizenship_id, email_id, and department_id directly depend on the candidate key emp_id.
+{emp_id} -> {name, citizenship_id, email_id, department_id} is a non-transitive dependency
+because name, citizenship_id, email_id, and department_id directly depend on the candidate key emp_id.
 
 
 
@@ -1304,13 +1323,16 @@ Single Valued Dependency and Multivalued Dependency
 ---------------------------------------------------
 Single valued dependency : 
 -----------------------------
-In any relation R, if for a particular value of X, Y has single value then it is known as single valued dependency.
+In any relation R, if for a particular value of X, Y has single value then 
+it is known as single valued dependency.
 
 
 
-A single-valued dependency occurs when the value of one attribute uniquely determines the value of another attribute, and this relationship holds for all possible values in the database.
+A single-valued dependency occurs when the value of one attribute uniquely 
+determines the value of another attribute, and this relationship holds for all possible values in the database.
 
-In other words, if attribute A determines attribute B (A -> B), and each value of A uniquely determines one and only one value of B, then it's a single-valued dependency.
+In other words, if attribute A determines attribute B (A -> B), and each value of
+A uniquely determines one and only one value of B, then it's a single-valued dependency.
 
 Example in the context of the t1 table: 
 {emp_id} -> {name}, meaning that each employee ID uniquely determines the employee's name.
@@ -1321,17 +1343,22 @@ Example in the context of the t1 table:
 
 Multivalued dependency (MVD) : 
 -----------------------------
-In any relation R, if for a particular value of X, Y has more then one value, then it is known as multivalued dependency. It is denoted by 
+In any relation R, if for a particular value of X, Y has more then one value, 
+then it is known as multivalued dependency. It is denoted by 
 X →→ Y
 
 
 
-A multivalued dependency occurs when the presence of certain values in one attribute uniquely determines the values in another attribute, and this relationship holds for all possible values in the database.
+A multivalued dependency occurs when the presence of certain values in 
+one attribute uniquely determines the values in another attribute, and this relationship 
+holds for all possible values in the database.
 
-MVD is often expressed as X ->> Y, where X and Y are sets of attributes, and X uniquely determines a set of values in Y.
+MVD is often expressed as X ->> Y, where X and Y are sets of attributes, and X uniquely 
+determines a set of values in Y.
 
 Example in the context of the t1 table: 
-{emp_id} ->> {citizenship_id}, meaning that for each employee ID, there can be multiple citizenship IDs.
+    {emp_id} ->> {citizenship_id}, meaning that for each employee ID, there
+    can be multiple citizenship IDs.
 
 
 
@@ -1701,11 +1728,14 @@ Step 3: Let us calculate the closure of X+ = XYZW (from the method we studied ea
 Since X closure is determining all the attributes of the table, hence it is Super Key
 
 As we have talked in the above step only for the super key, not for the candidate key.
-Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose no proper subset is a superkey)
+Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose no 
+proper subset is a superkey)
 
-From the above definition, XYZ is not a candidate key, as in Step 2 and 3 we found that XY and X are also Super Key (i.e., subset of XYZ are also SK which violate the definition)
+From the above definition, XYZ is not a candidate key, as in Step 2 and 3 we found
+that XY and X are also Super Key (i.e., subset of XYZ are also SK which violate the definition)
 
-XY is not a candidate key, as in Step 3 we found that X is also a Super Key (i.e., subset of XY are also SK which violate the definition)
+XY is not a candidate key, as in Step 3 we found that X is also a Super Key (i.e., subset of XY
+are also SK which violate the definition)
 
 X is the Candidate key: As X cannot be further subdivided, or X cannot have any subset.
 
@@ -1726,15 +1756,18 @@ Step 2: Let us calculate the closure of Z+ = ZYWX (from the method we studied ea
 Since Z closure is determining all the attributes of the table, hence it is Super Key
 
 Step 3: Let us calculate the closure of W+ = WX (from the method we studied earlier)
-Since X closure is not determining all the attributes of the table, hence it is Not Super Key, since it is not SK it can never be Candidate key
+Since X closure is not determining all the attributes of the table, hence it is Not Super 
+Key, since it is not SK it can never be Candidate key
 
 
 
 As we have talked in the above step only for the super key, not for the candidate key.
 
-Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose no proper subset is a superkey)
+Let us see the definition of Candidate Key again (Candidate Key is a Super Key whose 
+no proper subset is a superkey)
 
-From the above definition XY is a candidate key, as in Step 2 and 3 none of the subsets of XY i.e. either X or Y is Super Key.
+From the above definition XY is a candidate key, as in Step 2 and 3 none of the s
+ubsets of XY i.e. either X or Y is Super Key.
 
 
 
