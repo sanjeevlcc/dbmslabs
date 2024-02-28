@@ -965,29 +965,244 @@ difference
 
 
 ********************************************************************************
-LAB 5
+LAB 5 Data Mining lab, simple clustering algorithm (K-Means) 
+with a random dataset
 ********************************************************************************
 
 
 
+To perform a Data Mining lab scenario using Docker,
+let's use the popular Python library scikit-learn to 
+implement a simple clustering algorithm (K-Means) 
+with a random dataset.
+
+We'll use Jupyter Notebook for a more interactive environment.
+
+
+
+                    Docker Setup:
+                    Create a Dockerfile:
+                    ------------------------
+
+
+controlplane $ cat > Dockerfile
+FROM python:3.8-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["jupyter", "notebook", "--ip='0.0.0.0'", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+
+
+controlplane $ 
+
+
+
+                    Create a requirements.txt file:
+                    ------------------------------
+
+controlplane $ cat > requirements.txt
+
+scikit-learn==0.24.1
+jupyter==1.0.0
+matplotlib==3.4.3
+
+
+controlplane $ 
+
+
+
+                    Create a Jupyter Notebook file (e.g., data_mining_lab.ipynb).
+                    ---------------------------------------------------------------
+                    Jupyter Notebook (data_mining_lab.ipynb):
+                    --------------------------------------------
+
+
+controlplane $ cat > data_mining_lab.ipynb
+
+
+# Import necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+
+# Generate random dataset
+X, _ = make_blobs(n_samples=300, centers=3, random_state=42)
+
+# Visualize the dataset
+plt.scatter(X[:, 0], X[:, 1], s=50)
+plt.title('Random Dataset')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+# Apply K-Means clustering algorithm
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+
+# Visualize the clustered dataset
+plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_, s=50, cmap='viridis')
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=200, c='red', marker='X')
+plt.title('K-Means Clustering')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+
+
+controlplane $ 
 
 
 
 
+controlplane $ ls
+Dockerfile  data_mining_lab.ipynb  requirements.txt
+
+
+
+                    Building and Running the Docker Container:
+                    Build the Docker image:
+                    ------------------------------------
+
+controlplane $ docker build -t data-mining-lab .
+
+
+                    Run the Docker container:
+                    --------------------------
+controlplane $  docker run  -d --name mining-lab -p 8888:8888 -v $(pwd):/app data-mining-lab
+
+
+                    List the Docker running container:
+                    --------------------------
+
+controlplane $ docker images
+
+controlplane $ docker ps
 
 
 
 
+                    Work from browser, chrme or firefox
+                    --------------------------
 
-
-
+                    127.0.0.1:8888
+                    
+                    or
+                    
+                    IP:8888
 
 
 
 ********************************************************************************
-LAB 6
+LAB 6  K-Nearest Neighbors (KNN) algorithm using 
+Docker and PHP 
 ********************************************************************************
 
+Creating a Data Mining lab scenario for the 
+K-Nearest Neighbors (KNN) algorithm using 
+Docker and PHP involves a few steps. 
+
+We'll generate a random dataset, implement the KNN algorithm,
+and create a simple PHP script to visualize the results. 
+
+Below are the steps:
+
+                    1. Create Dockerfile:
+                    Dockerfile
+                    --------------------------
+
+controlplane $ cat > Dockerfile
+
+Copy code
+FROM php:7.4-apache
+
+COPY . /var/www/html
+
+CMD ["apache2-foreground"]
+
+
+
+
+                    2. Create PHP Script (index.php):
+                    -----------------------------------
+
+
+controlplane $ cat > index.php
+
+
+<?php
+function generateRandomData($numPoints) {
+    $data = [];
+    for ($i = 0; $i < $numPoints; $i++) {
+        $data[] = [
+            'x' => rand(1, 100),
+            'y' => rand(1, 100),
+            'label' => null, // To be assigned by KNN algorithm
+        ];
+    }
+    return $data;
+}
+
+function knn($data, $point, $k) {
+    // Implement the KNN algorithm here
+    // You can use distance metrics and select the k-nearest neighbors
+    // Assign the label based on the majority class among the neighbors
+}
+
+$numPoints = 100;
+$testPoint = ['x' => 60, 'y' => 50]; // Random test point
+
+// Generate random data
+$data = generateRandomData($numPoints);
+
+// Apply KNN algorithm
+$k = 5; // Number of neighbors to consider
+foreach ($data as &$point) {
+    $point['label'] = knn($data, $point, $k);
+}
+
+// Display the results
+echo '<h2>Random Data Points</h2>';
+echo '<pre>';
+print_r($data);
+echo '</pre>';
+
+echo '<h2>Test Point Classification</h2>';
+echo '<pre>';
+print_r(knn($data, $testPoint, $k));
+echo '</pre>';
+?>
+
+
+
+                    3. Build Docker Image:
+                    ------------------------------------------
+controlplane $ docker build -t knn-lab .
+
+
+
+                    4. Run Docker Container:
+                    -----------------------------------
+controlplane $ docker run -d  -p 8080:80 knn-lab
+
+
+
+                    5. Access PHP Script in Browser:
+                    --------------------------------------
+
+http://localhost:8080/index.php 
+
+
+This basic scenario generates a random dataset, 
+applies the KNN algorithm to classify points, 
+and displays the results using a simple PHP script. 
+
+For a more complete implementation, you would need to
+implement the KNN algorithm and visualization logic 
+based on your specific requirements.
 
 
 ********************************************************************************
