@@ -1200,62 +1200,90 @@ Partial Dependency and Fully Functional Dependency
 Partial dependency : 
 ----------------------
 Suppose you have more than one attributes in primary key. 
-Let A be the non-prime key attribute. 
-If A is not dependent upon all prime key attributes then partial dependency exists.
+   
+      Let A be the non-prime key attribute. 
+          If A is not dependent upon all prime key attributes 
+          then partial dependency exists.
+   
+          A partial dependency occurs when a 
+          non-prime attribute is functionally dependent 
+          on only part of a candidate key, not the entire key.
+   
+   
+   
+          In other words, a non-prime attribute depends on only 
+          a portion (proper subset) of the candidate key.
+   
+   
+     For example, in the t1 table, if we have a functional dependency 
+                 {emp_id, department_id} -> {name}, 
+   
+          where name depends only on a part of the candidate 
+          key (emp_id), it would be a partial dependency.
 
-A partial dependency occurs when a non-prime attribute is functionally dependent 
-on only part of a candidate key, not the entire key.
 
-In other words, a non-prime attribute depends on only a portion (proper subset) of the candidate key.
-
-For example, in the t1 table, if we have a functional dependency 
-{emp_id, department_id} -> {name}, where name depends only on a part of the candidate key (emp_id), it would be a partial dependency.
 
 
 
 Fully functional dependency : 
 ------------------------------
-Let A be the non-prime key attribute and value of A is dependent upon all prime key attributes. 
-Then A is said to be fully functional dependent. 
+Let A be the non-prime key attribute and value of A 
+      is dependent upon all prime key attributes. 
+      Then A is said to be fully functional dependent. 
 
-A fully functional dependency occurs when a non-prime attribute is functionally dependent on the entire
-candidate key, not just a part of it.
+      A fully functional dependency occurs when a 
+      non-prime attribute is functionally dependent on the entire
+      candidate key, not just a part of it.
 
-In this case, the non-prime attribute depends on the entire set of attributes that form the candidate key.
+      In this case, the non-prime attribute depends on the entire 
+      set of attributes that form the candidate key.
 
-For example, if we have a functional dependency {emp_id} -> {name}, where name depends on 
-the entire candidate key (emp_id), it would be a fully functional dependency.
-
-
-
-
-
-Example:
-
-mysql> select * from t1;
-+--------+----------------+----------------+--------------------+---------------+
-| emp_id | name           | citizenship_id | email_id           | department_id |
-+--------+----------------+----------------+--------------------+---------------+
-|      6 | Suman Shrestha | NEP-123        | suman@example.com  |           105 |
-|      7 | Sarita Rai     | NEP-456        | sarita@example.com |           106 |
-|      8 | Raj Gurung     | NEP-789        | raj@example.com    |           107 |
-|      9 | Bibek Paudel   | NEP-012        | bibek@example.com  |           105 |
-|     10 | Anita Rana     | NEP-345        | anita@example.com  |           108 |
-+--------+----------------+----------------+--------------------+---------------+
-
-{emp_id} -> {name, citizenship_id, email_id, department_id} 
-  is a fully functional dependency because name, citizenship_id, email_id, and department_id depend
-  on the entire candidate key (emp_id).
+   For example, if we have a functional dependency 
+         
+             {emp_id} -> {name},
+   
+       where name depends on 
+       the entire candidate key (emp_id), 
+       it would be a fully functional dependency.
 
 
-{email_id} -> {name} 
-  is a fully functional dependency because name depends on the entire candidate key (email_id).
 
 
-{department_id} -> {citizenship_id, email_id} 
-  could be a partial dependency if citizenship_id and email_id depend only on a 
-  part of the candidate key (department_id), or it could be a fully functional dependency
-  if they depend on the entire candidate key.
+
+  Example:
+  
+  mysql> select * from t1;
+  +--------+----------------+----------------+--------------------+---------------+
+  | emp_id | name           | citizenship_id | email_id           | department_id |
+  +--------+----------------+----------------+--------------------+---------------+
+  |      6 | Suman Shrestha | NEP-123        | suman@example.com  |           105 |
+  |      7 | Sarita Rai     | NEP-456        | sarita@example.com |           106 |
+  |      8 | Raj Gurung     | NEP-789        | raj@example.com    |           107 |
+  |      9 | Bibek Paudel   | NEP-012        | bibek@example.com  |           105 |
+  |     10 | Anita Rana     | NEP-345        | anita@example.com  |           108 |
+  +--------+----------------+----------------+--------------------+---------------+
+
+             {emp_id} -> {name, citizenship_id, email_id, department_id} 
+
+       is a fully functional dependency because 
+       name, citizenship_id, email_id, and department_id 
+       depend   on the entire candidate key (emp_id).
+
+
+               {email_id} -> {name} 
+       is a fully functional dependency because name 
+       depends on the entire candidate key (email_id).
+
+
+          {department_id} -> {citizenship_id, email_id} 
+              
+              could be a partial dependency if 
+              citizenship_id and email_id depend only on a 
+              part of the candidate key (department_id),
+              or it could be a fully functional dependency
+              if they depend on the entire candidate key.
+
+
 
 
 
@@ -1265,31 +1293,46 @@ Transitive Dependency and Non-transitive Dependency
 
 Transitive dependency : 
 ----------------------------
-Transitive dependency is due to dependency between non-prime key attributes. 
-Suppose in a relation R, X → Y (Y depen upon X), and
-                         Y → Z (Z depends upon Y), 
+    Transitive dependency is due to dependency 
+    between non-prime key attributes. 
+    
+    Suppose in a relation R, X → Y (Y depen upon X), and
+                             Y → Z (Z depends upon Y), 
+    
+                        then X → Z (Z depends upon X).
 
-                    then X → Z (Z depends upon X).
 
-Therefore, Z is said to be transitively  dependent upon X.
+
+                 Therefore, Z is said to be 
+                 transitively  dependent upon X.
 
                 i.e X → Y   Y → Z   --------- X → Z
 
 
 
-A transitive dependency occurs when a non-prime attribute is functionally
-dependent on another non-prime attribute, rather than directly on the candidate key.
+        A transitive dependency occurs when a 
+        non-prime attribute is functionally
+        dependent on another non-prime attribute,
+        rather than directly on the candidate key.
 
-In other words, the dependency involves a chain of functional dependencies where 
-a non-prime attribute depends on another non-prime attribute that, in turn, 
-depends on the candidate key.
+        In other words, the dependency involves a 
+        chain of functional dependencies where 
+        a non-prime attribute depends on another 
+        non-prime attribute that, in turn, 
+        depends on the candidate key.
 
-Transitive dependencies can lead to data redundancy and are typically 
-eliminated in database normalization.
+        Transitive dependencies can lead to data
+        redundancy and are typically 
+        eliminated in database normalization.
+        
+
 
 Example in the context of the t1 table: 
-{emp_id} -> {department_id} -> {citizenship_id} is a transitive dependency if
-citizenship_id depends on department_id and, in turn, department_id depends on emp_id.
+       {emp_id} -> {department_id} -> {citizenship_id} 
+
+          is a transitive dependency if
+          citizenship_id depends on department_id and, in turn,
+          department_id depends on emp_id.
 
 
 
@@ -1300,13 +1343,18 @@ citizenship_id depends on department_id and, in turn, department_id depends on e
 
 Non-transitive dependency : 
 ----------------------------
-Any functional dependency which is not transitive is known as Non-transitive dependency.
-Non-transitive dependency exists if there is no dependency between non-prime key attributes.
+       Any functional dependency which is not transitive 
+       is known as Non-transitive dependency.
+       
+       Non-transitive dependency exists if there is 
+       no dependency between non-prime key attributes.
 
 
 
-A non-transitive dependency occurs when a non-prime attribute is directly functionall
-y dependent on the candidate key without involving any intermediate non-prime attributes.
+          A non-transitive dependency occurs when a
+          non-prime attribute is directly functionally
+          dependent on the candidate key without involving
+          any intermediate non-prime attributes.
 
 In this case, the dependency is straightforward and does not involve a chain of dependencies.
 Non-transitive dependencies are usually desirable in a normalized relational database.
