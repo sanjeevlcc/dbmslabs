@@ -676,7 +676,7 @@ Parallel Schedule:
                                 | T1 | T2 | T3 |
                                 +----+----+----+
                                 | T1 |    |    |
-                                |    | T2 | T1 |
+                                | T3 | T2 | T1 |
                                 |    |    | T3 |
                                 +----+----+----+
 
@@ -684,7 +684,7 @@ Parallel Schedule:
                                                 | T1 | T2 | T3 |
                                                 +----+----+----+
                                                 | T1 |    |    |
-                                                |    |    | T3 |
+                                                |    | T1 | T3 |
                                                 |    | T2 | T1 |
                                                 +----+----+----+
 
@@ -693,7 +693,7 @@ Advantages of Serial Schedule:
 ----------------------------------
         Simplicity: 
         -------------
-                Serial schedules are straightforward to implement 
+                Serial schedules are straight forward to implement 
                 and analyze due to their sequential nature.
         
         Deterministic:
@@ -706,16 +706,24 @@ Advantages of Serial Schedule:
 Disadvantages of Serial Schedule:
 ----------------------------------
         Low Throughput:
-        -------------
+        -----------------
                 Serial schedules may result in lower throughput 
                 as transactions are executed sequentially, leading 
                 to potential performance bottlenecks.
-        
+                +----+----+----+
+                | T1 | T2 | T3 |
+                +----+----+----+
+                When T1 complets then T2 starts and so on T3
+
+
         Potential for Delays:
         --------------------------
                 If one transaction takes a long time to execute, it 
                 can delay the execution of subsequent transactions, 
                 affecting overall system responsiveness.
+                PERFORMANCE DEGRAGADE
+
+
 
 Advantages of Parallel Schedule:
 ----------------------------------
@@ -724,12 +732,23 @@ Advantages of Parallel Schedule:
                 Parallel schedules can achieve higher throughput by 
                 allowing multiple transactions to execute concurrently, 
                 utilizing available system resources more efficiently.
-        
+
+                        SERIAL                        PARALLEL
+                +----+----+----+                +----+----+----+
+                | T1 | T2 | T3 |                | T1 | T2 | T3 |
+                +----+----+----+                +----+----+----+
+                                                |    | T1 |    |
+                                                |    | T2 | T1 |
+                                                | T3 |    | T3 |
+                                                +----+----+----+
+
+
         Improved Performance:
         --------------------------
                 Parallel execution can lead to reduced transaction 
                 latency and faster response times, especially in
                 systems with high concurrency requirements.
+
 
 
 Disadvantages of Parallel Schedule:
