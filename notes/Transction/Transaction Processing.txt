@@ -1,0 +1,330 @@
+
+
+==========================================================================
+Transaction Processing, Concurrency Control and Recovery Techniques
+==========================================================================
+
+SYLLABUS
+------------------
+        Introduction to Transaction Processing: 
+        Transaction and System Concepts,
+        Desirable Properties of Transactions: 
+        Serializable Schedule: 
+        Two-Phase Locking and Timestamp Ordering Concurrency Control Techniques 
+        Recovery Concepts, 
+        NO- UNDO REDO Recovery Based on Deferred Update,
+        Recovery Technique Based on Immediate Update: 
+        Shadow Paging:
+        Database Backup and Recovery from Catastroplac Failures
+
+
+
+==========================================================================
+ Introduction to Transaction Processing
+==========================================================================
+
+
+Transaction processing is a fundamental aspect of modern database systems, 
+facilitating the reliable and efficient management of data in various 
+applications. 
+
+In this context, a transaction refers to a logical unit of work
+that consists of one or more database operations, such as reads, writes,
+or updates. 
+
+These operations are typically performed as a single, indivisible unit 
+to maintain data integrity and consistency.
+
+Transaction processing systems (TPS) are responsible for 
+executing and managing transactions in a reliable and efficient manner.
+
+
+
+
+
+
+==========================================================================
+Transaction and System Concepts
+==========================================================================
+
+ACID
+------
+
+      Atomicity:
+      ---------------
+          Transactions should exhibit the atomicity property, meaning 
+          that either all the operations within a transaction are 
+          executed successfully, or none of them are. 
+          
+          In other words, transactions are indivisible and 
+          should be treated as all or nothing.
+      
+      Consistency:
+      ---------------
+          Transactions should leave the database in a consistent 
+          state, adhering to all integrity constraints and business rules. 
+          Consistency ensures that the database transitions from one
+          valid state to another valid state after each transaction.
+      
+      Isolation: 
+      ---------------
+          Each transaction should be isolated from other transactions
+          executing concurrently. 
+          
+          Isolation ensures that the intermediate states of transactions
+          are not visible to other transactions until they are committed. 
+          This prevents interference and maintains data integrity.
+      
+      Durability: 
+      ---------------
+          Once a transaction is committed, its effects should be 
+          permanently stored in the database and should not be lost, 
+          even in the event of system failures. 
+          
+          Durability guarantees that committed transactions survive 
+          system crashes or other failures.
+
+
+
+
+
+==========================================================================
+Desirable Properties of Transactions
+==========================================================================
+
+Desirable Properties of Transactions:
+---------------------------------------------
+
+ACID Properties: 
+---------------
+    The desirable properties of transactions are often 
+    summarized using the acronym ACID:
+    
+    Atomicity: 
+        Transactions are all-or-nothing operations.
+    Consistency: 
+        Transactions preserve the consistency of the database.
+    Isolation: 
+        Transactions execute independently of each other and do not interfere.
+    Durability: 
+        Committed transactions persist even in the face of system failures.
+
+Concurrency Control:
+------------------------------
+    Effective concurrency control mechanisms are essential for
+    managing concurrent execution of transactions while preserving
+    consistency and isolation. 
+    
+    Techniques such as locking, timestamp ordering, and multi-version 
+    concurrency control are commonly employed to ensure correct interleaving
+    of transactions.
+
+Recovery Management: 
+------------------------------
+    Robust recovery mechanisms are necessary to restore the database to
+    a consistent state after system failures. 
+    
+    This involves techniques such as logging changes to the database,
+    maintaining a write-ahead log, and performing recovery procedures 
+    such as rollbacks or roll-forwards.
+
+High Availability: 
+------------------------------
+    Transaction processing systems should aim to achieve high 
+    availability to ensure continuous access to data and
+    uninterrupted operation, even in the face of hardware 
+    failures, network issues, or other disruptions. 
+    
+    Redundancy, failover mechanisms, and disaster recovery plans 
+    contribute to achieving high availability.
+
+Scalability: 
+------------------------------
+    Transaction processing systems should be designed to scale 
+    efficiently to handle increasing workloads and growing datasets. 
+    
+    Scalability can be achieved through techniques such as sharding, 
+    replication, and vertical or horizontal scaling of hardware resources.
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+Introduction to Transaction Processing: 
+Transaction and System Concepts,
+Desirable Properties of Transactions: 
+Serializable Schedule: 
+Two-Phase Locking and Timestamp Ordering Concurrency Control Techniques 
+Recovery Concepts, 
+NO- UNDO REDO Recovery Based on Deferred Update,
+Recovery Technique Based on Immediate Update: 
+Shadow Paging:
+Database Backup and Recovery from Catastroplac Failures
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
+
+
+
+
+
+
+==========================================================================
+
+==========================================================================
+
+
