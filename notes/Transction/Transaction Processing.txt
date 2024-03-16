@@ -1393,9 +1393,44 @@ essential aspects of a robust disaster recovery plan.
 
 
 
+==========================================================================
+EXTRA
+-------
+
+Access database logs for 
+Immediate Update and Deferred Update 
+
+scenarios in some popular RDBMS:
+==========================================================================
+
+
+MySQL:
+**********
+In MySQL, you can configure the level of logging in the MySQL server configuration 
+file (my.cnf).
+
+Common logging options include the general query log, error log, and binary log.
+
+
+To enable general query logging, you can set the 
+general_log option to ON, and to enable binary logging, 
+you can set the log_bin option to ON.
+
+Once logging is enabled, you can view the logs using 
+MySQL client commands such as SHOW VARIABLES LIKE 'general_log'; 
+and SHOW BINARY LOGS;.
 
 
 
+PostgreSQL:
+**********
+In PostgreSQL, logging settings are configured in the postgresql.conf file.
 
+Common logging options include log_statement, 
+log_duration, and log_connections, among others.
+
+
+Once logging is configured, you can view the logs using
+PostgreSQL utility commands such as pg_log and pg_stat_activity.
 
 
