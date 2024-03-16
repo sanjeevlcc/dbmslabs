@@ -4,6 +4,7 @@
 Transaction Processing, Concurrency Control and Recovery Techniques
 ==========================================================================
 
+
 SYLLABUS
 ------------------
         Introduction to Transaction Processing: 
@@ -48,6 +49,301 @@ executing and managing transactions in a reliable and efficient manner.
 
 
 
+
+
+==========================================================================
+Concepts of read, write, commit, and rollback in the
+context of database transactions
+==========================================================================
+
+// Relation os DISK, RAM and CPU
++------------------------+  +------------+  +------------------+
+|          CPU           |  |    RAM     |  |    Hard Disk     |
++------------------------+  +------------+  +------------------+
+
+
+// Initially data is been brought from HD via RAM to CPU
++------------------------+         +------------+        +------------------+
+|          CPU           | <====   |    RAM     |  <==== |    Hard Disk     |
++------------------------+         +------------+        +------------------+
+
+// CPU logically process and send back to HD via RAM
++------------------------+         +------------+        +------------------+
+|          CPU           | ====>   |    RAM     |  ====> |    Hard Disk     |
++------------------------+         +------------+        +------------------+
+
+// CPU performs (add, sub etc , eg A=A + 10) and send to RAM for temp hold
+finally commit saves to HD via RDBMS software.
++------------------------+         +----------------+        +------------------+
+|          CPU           | <====>  |    RAM         |  ====> |    Hard Disk     |
+|  ALU + - * /           |         |RD/WR/rollback  |        |       Commit     |
++------------------------+         +----------------+        +------------------+
+
+
+
+
+EXAMPLE SCNERIO
+---------------------
+
+                -------------------------
+                Before transctions
+                A = 1500, B= 1200
+                --------------------------
+
+
+        R(A)        "Read(A)" fetches the current value of A. A= 1500 [RAM]
+        A=A-300      Deduct rs 300 from account from A                [CPU]
+        W(A)        "Write(A)" subtracts 300 from A.        A = 1200  [RAM]
+        
+        R(B)        "Read(B)" fetches the current value of B. B= 1200 [RAM]
+        B=B+300      Add on rs 300 to account B                       [CPU]
+        W(B)        "Write(B)" adds 300 to B.                 B= 1500 [RAM]
+        
+        COMMIT      Changes is been saved in DBMS                     [ Hard Disk ]
+
+
+                -------------------------
+                After transctions
+                A = 1200, B= 1300
+                --------------------------
+
+
+
+
+
+
+Read OPERATION: 
+------------------
+        In a database transaction, a read operation involves 
+        retrieving data from the database without making 
+        any changes to it. 
+        
+        Reads are typically performed to access existing 
+        data for processing or display purposes. 
+        
+        For example, a SELECT query in SQL is a 
+        read operation that retrieves data from 
+        the database tables.
+
+
+        EXAMPLE
+        ------------
+                sita=200, ram=300
+                read(sita)
+                read(ram)
+                commit
+
+
+        -------------------------
+        Before transactions
+        Sita = 200, Ram = 300
+        --------------------------
+
+      +-----------------------+     +-----------------------+
+      |       Read(Sita)      |     |       Read(Ram)       |
+      |   Fetch Sita=200      |     |   Fetch Ram=300       |
+      +-----------------------+     +-----------------------+
+                     |                           |
+                     |                           |
+      +----------------------------------------------------+
+      |                        COMMIT                      |
+      |              Apply changes to the database         |
+      +----------------------------------------------------
+
+        -------------------------
+        After transactions
+        No changes made as there are no write operations.
+        Sita = 200, Ram = 300
+        --------------------------
+
+
+                "Read(Sita)" fetches the current 
+                value of the variable Sita (200).
+                
+                "Read(Ram)" fetches the current
+                value of the variable Ram (300).
+                
+                The "Commit" statement finalizes 
+                the transaction, but since there are 
+                no write operations, there are no 
+                changes applied to the database.
+                
+                The values of Sita and Ram remain 
+                unchanged after the transaction.
+
+
+
+
+Write OPERATION: 
+------------------
+        A write operation in a database transaction involves 
+        modifying data in the database. 
+        
+        This modification could be inserting new records, updating 
+        existing records, or deleting records from the database tables.
+        
+        For example, INSERT, UPDATE, and DELETE statements 
+        in SQL are write operations that modify data in 
+        the database.
+
+
+
+        EXAMPLE
+        ------------
+        sita=200, ram=300
+        read(sita)
+        sita = sita -50
+        read(ram)
+        ram=ram + 50
+        commit
+
+        -------------------------
+        Before transactions
+        Sita = 200, Ram = 300
+        --------------------------
+
+      +-----------------------+     +-----------------------+
+      |       Read(Sita)      |     |       Read(Ram)       |
+      |   Fetch Sita=200      |     |   Fetch Ram=300      |
+      +-----------------------+     +-----------------------+
+                     |                           |
+                     |                           |
+      +-----------------------+     +-----------------------+
+      |  Update Sita=Sita-50  |     |   Update Ram=Ram+50  |
+      |   Sita=200-50=150     |     |   Ram=300+50=350     |
+      +-----------------------+     +-----------------------+
+                     |                           |
+                     |                           |
+      +----------------------------------------------------+
+      |                        COMMIT                      |
+      |              Apply changes to the database         |
+      +----------------------------------------------------
+
+        -------------------------
+        After transactions
+        Sita = 150, Ram = 350
+        --------------------------
+
+                "Read(Sita)" fetches the current 
+                value of the variable Sita (200).
+                
+                "Read(Ram)" fetches the current 
+                value of the variable Ram (300).
+                
+                The values of Sita and Ram 
+                are updated accordingly.
+                
+                The "Commit" statement finalizes the 
+                transaction, and the changes are 
+                applied to the database.
+                
+                The values of Sita and Ram are 
+                updated to 150 and 350, respectively, 
+                after the transaction.
+
+
+
+Rollback OPERATION: 
+------------------
+        Rolling back a transaction means undoing all the changes 
+        made by the transaction and restoring the database to 
+        its state before the transaction began. 
+        
+        This operation is typically used to discard the effects
+        of a transaction that encountered an error or did 
+        not complete successfully. 
+        
+        Rolling back ensures that the database remains in 
+        a consistent state and that incomplete or erroneous 
+        transactions do not leave behind any unintended changes. 
+        
+        In most database systems, the ROLLBACK statement is
+        used to initiate a rollback of a transaction.
+
+
+                -------------------------
+                Before transactions
+                Sita = 200, Ram = 300
+                --------------------------
+
+      +-----------------------+     +-----------------------+
+      |       Read(Sita)      |     |       Read(Ram)       |
+      |   Fetch Sita=200      |     |   Fetch Ram=300      |
+      +-----------------------+     +-----------------------+
+                     |                           |
+                     |                           |
+      +-----------------------+     +-----------------------+
+      |  Update Sita=Sita-50  |     |   Update Ram=Ram+50  |
+      |   Sita=200-50=150     |     |   Ram=300+50=350     |
+      +-----------------------+     +-----------------------+
+                     |                           |
+                     |                           |
+      +----------------------------------------------------+
+      |                       ROLLBACK                     |
+      |              Undo changes made to the database    |
+      +----------------------------------------------------
+
+                -------------------------
+                After transactions
+                No changes made as the transaction was rolled back.
+                Sita = 200, Ram = 300
+                --------------------------
+                
+
+                        "Read(Sita)" fetches the current
+                        value of the variable Sita (200).
+                        
+                        "Read(Ram)" fetches the current
+                        value of the variable Ram (300).
+                        
+                        The values of Sita and Ram 
+                        are updated accordingly.
+                        
+                        The "Rollback" statement is executed,
+                        undoing the changes made to the database.
+                        
+                        Since the transaction was rolled back,
+                        the values of 
+                        Sita and Ram remain unchanged 
+                        at 200 and 300, respectively.
+
+
+
+Commit OPERATION: 
+------------------
+        Committing a transaction in a database context means
+        making all the changes performed within the transaction
+        permanent and visible to other transactions. 
+        
+        Once a transaction is committed, its effects are durable 
+        and cannot be undone. 
+        
+        Committing ensures that the changes made by the transaction 
+        are preserved even in the event of system failures. 
+        
+        In many database systems, the COMMIT statement is used to
+        finalize and commit a transaction.
+
+
+
+           +-----------+   +-----------+   +-----------+
+           |   Read A  |   |   Read B  |   |   Read B  |
+           +-----------+   +-----------+   +-----------+
+           |   A=1500  |   |   B=1200  |   |   B=1200  |
+           +-----------+   +-----------+   +-----------+
+                    |             |             |
+                    |             |             |
+           +----------------+  +----------------+   
+           |   Write A      |  |   Write B      |  
+           |   (A=A-300)    |  |   (B=B+300)    |  
+           +----------------+  +----------------+   
+           |   A=1200       |  |   B=1500       |
+           +----------------+  +----------------+   
+                              |
+                              |
+                       +--------------+
+                       |   Commit     |
+                       +--------------+
 
 
 
@@ -114,9 +410,9 @@ ACID
            +---------------------------+
                          |
                          |
-                  +--------------+
-                  |   Commit     |
-                  +--------------+
+                  +-----------------------+
+                  |   Commit/ROLLBACK     |
+                  +-----------------------+
 
         In this example:
         --------------
@@ -206,88 +502,6 @@ Scalability:
 
 
 
-
-==========================================================================
-Concepts of read, write, commit, and rollback in the
-context of database transactions
-==========================================================================
-
-+------------------------+  +------------+  +------------------+
-|          CPU           |  |    RAM     |  |    Hard Disk     |
-+------------------------+  +------------+  +------------------+
-
-
-+------------------------+         +------------+        +------------------+
-|          CPU           | <====   |    RAM     |  <==== |    Hard Disk     |
-+------------------------+         +------------+        +------------------+
-
-
-+------------------------+         +------------+        +------------------+
-|          CPU           | ====>   |    RAM     |  ====> |    Hard Disk     |
-+------------------------+         +------------+        +------------------+
-
-
-
-
-Read: 
-------
-        In a database transaction, a read operation involves 
-        retrieving data from the database without making 
-        any changes to it. 
-        
-        Reads are typically performed to access existing 
-        data for processing or display purposes. 
-        
-        For example, a SELECT query in SQL is a 
-        read operation that retrieves data from 
-        the database tables.
-
-Write: 
----------
-        A write operation in a database transaction involves 
-        modifying data in the database. 
-        
-        This modification could be inserting new records, updating 
-        existing records, or deleting records from the database tables.
-        
-        For example, INSERT, UPDATE, and DELETE statements 
-        in SQL are write operations that modify data in 
-        the database.
-
-
-
-Rollback: 
------------
-        Rolling back a transaction means undoing all the changes 
-        made by the transaction and restoring the database to 
-        its state before the transaction began. 
-        
-        This operation is typically used to discard the effects
-        of a transaction that encountered an error or did 
-        not complete successfully. 
-        
-        Rolling back ensures that the database remains in 
-        a consistent state and that incomplete or erroneous 
-        transactions do not leave behind any unintended changes. 
-        
-        In most database systems, the ROLLBACK statement is
-        used to initiate a rollback of a transaction.
-
-
-Commit: 
---------
-        Committing a transaction in a database context means
-        making all the changes performed within the transaction
-        permanent and visible to other transactions. 
-        
-        Once a transaction is committed, its effects are durable 
-        and cannot be undone. 
-        
-        Committing ensures that the changes made by the transaction 
-        are preserved even in the event of system failures. 
-        
-        In many database systems, the COMMIT statement is used to
-        finalize and commit a transaction.
 
 
 
