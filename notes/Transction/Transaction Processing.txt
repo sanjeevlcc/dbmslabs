@@ -770,8 +770,291 @@ Disadvantages of Parallel Schedule:
 
 
 ==========================================================================
-
+Problems in concurrency
 ==========================================================================
+
+        Concurrency in database systems refers to the 
+        ability of multiple transactions to execute 
+        simultaneously without interfering with each other. 
+        
+        However, concurrency can lead to several problems, which 
+        are typically addressed through concurrency control mechanisms. 
+
+Here are some common problems in concurrency and their types:
+--------------------------------------------------------------------
+
+1. Lost Update:
+-----------------
+        Occurs when two or more transactions attempt 
+        to update the same data concurrently, resulting in one transaction 
+        overwriting the changes made by another transaction.
+        
+        This can lead to data inconsistency as the 
+        changes made by one transaction are lost.
+
+        T1:                                T2:
+        +------+                          +------+
+        | Read |                          | Read |
+        |  B   |                          |  B   |
+        +------+                          +------+
+        |      |                          |      |
+        |      |                          |      |
+        |      |                          |      |
+        | Write|                          | Write|
+        |  B   |                          |  B   |
+        +------+                          +------+
+
+
+        Both T1 and T2 perform a read operation 
+        followed by a write operation on variable B.
+        
+        The Lost Update problem may occur if T1 and T2 both read the 
+        same value of B and 
+        then perform their write operations independently,
+        potentially overwriting each other's changes.
+
+
+
+
+2. Dirty Read: or uncomitted read
+---------------------------------- read after write
+
+        Occurs when one transaction reads data that has been
+        modified by another transaction that has not yet been committed.
+        
+        If the modifying transaction is later rolled back, the
+        data read by the first transaction becomes invalid or "dirty".
+
+
+                                A = 200
+                                --------
+                `         T1                   T2:
+                +------------------+   +------------------+
+         >----> |   Read(A)        |   |                  |  A=200 (T1) [RAM]
+         ^rollBK|   Write(A)       |   |                  |  A = A-40 = 160
+         ^      |                  |   |   Read(A)        |  A = 160 (T2) [RAM], dirty read
+         ^      |                  |   |   Write(A)       |  A = A * 10% = 160+16= 176 [RAM]
+         ^      |                  |   |   Commit         |  A = 176 [HD]
+         ^<---- |    Failure       |   |                  |  
+                |                  |   |                  |
+                +------------------+   +------------------+
+        
+
+                T1 reads the value of A, which is initially 200, 
+                and then writes the value of A as 160.
+                
+                T2 reads the value of A, which is updated 
+                by T1 to 160, and then writes the value of 
+                A as 176 after applying a 10% increment.
+                
+                T1 experiences a failure before committing
+                its changes.
+                
+                T2 commits its changes successfully, resulting 
+                in the final value of A being 176 in
+                the database (HD). 
+                
+                However, T1's changes are lost due to the failure. 
+                This scenario represents a lost update problem.
+
+
+
+
+3. Incorrect Summary Problem
+----------------------------
+The Incorrect summary problem occurs when there 
+is an incorrect sum of the two data.
+
+This happens when a transaction tries to sum two
+data using an aggregate function and the
+value of any one of the data get changed by another transaction.
+
+        Example: 
+        ----------
+        Consider a situation, where one transaction is applying 
+        the aggregate function on some recordswhile another 
+        transaction is updating these records. 
+        
+        The aggregate function may calculate some values 
+        before the values have been updated and others 
+        after they are updated. 
+
+
+                +--------------+--------------------+
+                     T1:       |        T2:         |
+                +--------------+--------------------+
+                               |  sum=0             |
+                               |  Read(A)           |
+                               |  sum = sum + A     |
+                               |                    |
+                  Read(B)      |                    |
+                  B = B - N    |                    |
+                  Write (B)    |                    |
+                               |                    |
+                               |  Read(B)           |
+                               |  sum = sum + B     |
+                               |  Read(B)           |
+                               |  sum = sum + C     |
+                               |                    |
+                  Read(C)      |                    |
+                  c = c + n    |                    |
+                  Write(c)     |                    |
+                +--------------+--------------------+  
+
+
+
+
+                In the above example, transaction 2 is 
+                calculating the sum of some records while 
+                transaction 1 is updating them. 
+                Therefore the aggregate function may calculate 
+                some values before they have been updated and others 
+                after they have been updated. 
+                
+                
+                The Incorrect Summary Problem arises when T2 reads data 
+                that has been modified by T1 but does not reflect 
+                those changes accurately, leading to
+                inconsistencies in the calculated sum.
+
+
+        
+        T1 (Transaction 1):
+                Reads the value of B, subtracts N from it, and 
+                then writes the updated value back to B.
+                
+                Reads the value of C, adds n to it,
+                and then writes the updated value back to C.
+        
+        T2 (Transaction 2):
+                Initializes the sum to 0.
+                Reads the value of A, adds it to the sum.
+                Reads the value of B, adds it to the sum.
+                Reads the value of B again (possibly an error, as 
+                        it should read C), and adds it to the sum.
+                Reads the value of C, adds it to the sum.
+        
+        
+        
+        Remarks:
+                Transaction T1 performs updates on variables B and C.
+                
+                Transaction T2 calculates the sum of variables A, B, and C.
+                
+                There's a potential inconsistency in Transaction T2, as 
+                it reads the value of B twice without any updates in between. 
+                
+                The second read should possibly be for variable C, as it's 
+                trying to calculate the sum of A, B, and C.
+                
+                This potential inconsistency could lead to incorrect or 
+                unexpected results in the calculated sum.
+                
+                Proper coordination or synchronization mechanisms should 
+                be employed to ensure data consistency and reliability 
+                in concurrent transactions.
+
+
+
+
+
+
+
+
+
+3. Non-Repeatable Read:
+-----------------------
+        Occurs when a transaction reads the same data multiple times 
+        within its execution, but obtains different results due to 
+        concurrent updates by other transactions.
+        
+        This inconsistency arises because the data read by the 
+        transaction changes between reads.
+
+        T1:                                   T2:
+        +------+                             +------+
+        | Read |                             | Read |
+        |  B   |                             |  B   |
+        +------+                             +------+
+        |      |                             |      |
+        |      |                             |      |
+        |      |                             |      |
+        | Read |                             | Read |
+        |  B   |                             |  B   |
+        +------+                             +------+
+
+
+        Both T1 and T2 perform a read operation on variable B.
+        
+        T1 reads the value of B.
+        
+        While T1 is still active, T2 also reads the value of B.
+        
+        T1 then reads the value of B again, but it has
+        been modified by T2 in the meantime.
+        
+        As a result, T1 obtains different values of B in 
+        its consecutive reads, which is the essence 
+        of the Non-Repeatable Read problem.
+        
+
+
+4. Phantom Read:
+-----------------
+        Occurs when a transaction reads a set of records that 
+        satisfy a certain condition, but while the transaction is
+        still executing, another transaction inserts or deletes 
+        records that also meet the condition.
+        
+        When the first transaction reads the same set of records again, 
+        it observes the newly inserted or deleted records, causing phantom
+        or unexpected results.
+                
+                
+                T1:                                   T2:
+                +------+                             +------+
+                | Read |                             | Read |
+                |  B   |                             |  B   |
+                +------+                             +------+
+                |      |                             |      |
+                +------+                             |      |
+                |Delete|                             |      |
+                |  B   |                             |      |
+                +------+                             |      |
+                |      |                             +------+
+                |      |                             | Read |
+                |      |                             |  B   |
+                +------+                             +------+
+
+
+        Transaction T1 reads data from table B.
+        
+        While T1 is still active, Transaction T2 reads data from table B.
+        
+        After T2 has read data from B, T1 deletes some records from table B.
+        
+        T2 then reads data from table B again.
+        
+        The rows read by T2 in the second read may include 
+        new rows that were inserted after T1's delete operation, 
+        which were not visible during T2's initial read.
+        
+        This inconsistency in the dataset observed by
+        T2 is what characterizes the Phantom Read problem.
+
+
+
+
+
+
+
+
+
+        Types of Concurrency Control:
+        -----------------------------------
+                1. Locking-Based Concurrency Control:
+                2. Timestamp-Based Concurrency Control:
+                3. Multiversion Concurrency Control (MVCC):
 
 
 ==========================================================================
