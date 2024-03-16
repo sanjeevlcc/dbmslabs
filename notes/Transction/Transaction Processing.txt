@@ -509,20 +509,244 @@ Scalability:
 
 
 ==========================================================================
+Transaction States
+==========================================================================
 
+                +------------------------+         +----------------+        +------------------+
+                |          CPU           | <====>  |    RAM         |  ====> |    Hard Disk     |
+                |  ALU + - * /           |         |RD/WR/rollback  |        |       Commit     |
+                +------------------------+         +----------------+        +------------------+
+
+        
+        Started: 
+        ----------
+                The initial state when a transaction begins.
+        
+        Active: 
+        ----------
+                The processing stage where database operations occur.
+        
+        Partially Committed (Optional):
+        ------------------------------
+                An intermediate state (not present in all systems) where some but 
+                not all operations of the transaction have been committed. 
+                
+                This might be used for large transactions to ensure partial 
+                rogress even if the entire transaction fails.
+        
+        Committed: 
+        ----------
+                The successful completion state. Changes are permanent.
+        
+        Failed: 
+        ----------
+                An error occurs during the active state, leading 
+                to transaction failure.
+        
+        Aborted: 
+        ----------
+                The user intentionally cancels the transaction 
+                before completion.
+        
+        Terminated: 
+        ----------
+                External factors, such as system crashes or 
+                timeouts, can force the transaction termination.
+        
+
+
+       +-----------+
+       |  Started  |
+       +-----------+
+                |
+                v                   (Successful Operations)
+       +-----------+
+       |  Active   |                [RAM]
+       +-----------+
+                |                   (Partial Commit)
+                v                   (Optional)
+       +---------------------+
+       | Partially Committed |      (Not all operations complete)/ [read/ write]
+       +---------------------+
+                |                
+                v                   (Successful Completion)
+       +-----------+
+       | Committed |                [Hard Disk]
+       +-----------+
+                |
+                v                    (Failure or Error)
+       +-----------+
+       |   Failed   |                [Rollback]
+       +-----------+
+                |                    (User Action)
+                v
+       +------------+
+       |  Aborted   |                [kill/restart]
+       +------------+
+                |                    (External Termination)
+                v
+       +------------+
+       | Terminated |
+       +------------+
+
+
+
+
+
+==========================================================================
+Transaction Schedule
 ==========================================================================
 
 
+                                                Serial Schedule:
+                                                +----+----+----+
+                                                | T1 | T2 | T3 |
+                                                +----+----+----+
+
+                        Parallel Schedule:
+                        +----+----+----+
+                        | T1 | T2 | T3 |
+                        +----+----+----+
+                        |    | T1 |    |
+                        |    | T2 |    |
+                        | T3 |    |    |
+                        +----+----+----+
 
 
-==========================================================================
 
-==========================================================================
+        A schedule in the context of databases refers to the 
+        order in which transactions are executed by the 
+        database management system. 
+
+        A schedule defines the sequence of operations (reads and writes) 
+        performed by transactions in a database system.
+        
+        It determines the timing and interleaving
+        of transactions' execution.
+
+
+
+        Types of Schedules
+        --------------------
+                serial
+                parallel
 
 
 
 
+Types of Schedules:
+--------------------
 
+Serial Schedule: 
+----------------
+        Transactions are executed one after another in a 
+        sequential manner. 
+        Each transaction completes before the next one starts.
+
+
+                        +----+----+----+----+----+
+                        | T1 | T2 | T3 | T4 | T5 |
+                        +----+----+----+----+----+
+                        
+                        
+                                +----+----+----+
+                                | T1 | T2 | T3 |
+                                +----+----+----+
+                                | T1 |    |    |
+                                |    | T2 |    |
+                                |    |    | T3 |
+                                +----+----+----+
+
+                                
+Parallel Schedule: 
+----------------
+        Transactions are executed concurrently, allowing multiple transactions 
+        to run simultaneously.
+        Interleaved operations from different transactions may occur.
+
+                +----+----+----+
+                | T1 | T2 | T3 |
+                +----+----+----+
+                |    | T1 |    |
+                |    | T2 |    |
+                | T3 |    |    |
+                +----+----+----+
+
+                                +----+----+----+
+                                | T1 | T2 | T3 |
+                                +----+----+----+
+                                | T1 |    |    |
+                                |    | T2 | T1 |
+                                |    |    | T3 |
+                                +----+----+----+
+
+                                                +----+----+----+
+                                                | T1 | T2 | T3 |
+                                                +----+----+----+
+                                                | T1 |    |    |
+                                                |    |    | T3 |
+                                                |    | T2 | T1 |
+                                                +----+----+----+
+
+
+Advantages of Serial Schedule:
+----------------------------------
+        Simplicity: 
+        -------------
+                Serial schedules are straightforward to implement 
+                and analyze due to their sequential nature.
+        
+        Deterministic:
+        -------------
+                The outcome of serial schedules is predictable since
+                transactions execute one after another without concurrency.
+
+
+
+Disadvantages of Serial Schedule:
+----------------------------------
+        Low Throughput:
+        -------------
+                Serial schedules may result in lower throughput 
+                as transactions are executed sequentially, leading 
+                to potential performance bottlenecks.
+        
+        Potential for Delays:
+        --------------------------
+                If one transaction takes a long time to execute, it 
+                can delay the execution of subsequent transactions, 
+                affecting overall system responsiveness.
+
+Advantages of Parallel Schedule:
+----------------------------------
+        Higher Throughput:
+        --------------------------
+                Parallel schedules can achieve higher throughput by 
+                allowing multiple transactions to execute concurrently, 
+                utilizing available system resources more efficiently.
+        
+        Improved Performance:
+        --------------------------
+                Parallel execution can lead to reduced transaction 
+                latency and faster response times, especially in
+                systems with high concurrency requirements.
+
+
+Disadvantages of Parallel Schedule:
+-----------------------------------------
+        Complexity:
+        -------------
+                Parallel schedules are more complex to manage and 
+                analyze due to the potential for concurrency-related 
+                issues such as data conflicts and race conditions.
+        
+        Concurrency Control Overhead: 
+        --------------------------
+                Ensuring data consistency and integrity in parallel 
+                schedules requires the implementation of sophisticated
+                concurrency control mechanisms, which may introduce 
+                overhead and complexity.
+                
 
 
 
